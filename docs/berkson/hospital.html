@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="调整住院筛选的比例，看原本独立的两种病为什么在住院人群中出现关联。《大白话概率论》伯克森悖论交互实验。">
+  <title>只看住院的人，为什么结论变了？｜伯克森悖论交互实验</title>
+  <link rel="icon" href="data:,">
+  <style>:root{color-scheme:light;--paper:#fcfdfb;--ink:#233029;--muted:#56645e;--line:#d3dfd8;--green:#26725f;--green-bg:#f0f7f3;--copper:#a96239;--copper-bg:#fcf5ef;--soft:#f6f9f5;--gray:#e2e8e2;--body:system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:1.0625rem/1.9 var(--body)}[hidden]{display:none!important}h1,h2,h3,h4,p{margin:0;overflow-wrap:anywhere}h1{font:750 clamp(1.85rem,2.7vw,2.65rem)/1.5 "Songti SC",SimSun,serif;margin:1rem 0}h2{font-size:1.5rem;line-height:1.65}h3{font-size:1.2rem;line-height:1.7}h4{font-size:1.1rem;line-height:1.7}p+p{margin-top:.8rem}a{color:var(--green);text-underline-offset:.2em}strong{font-weight:720}button,input{font:inherit}button{min-height:44px;padding:.65rem 1rem;border:1px solid #b8cbbc;border-radius:5px;background:#fff;color:var(--ink);cursor:pointer;line-height:1.6}button:hover{background:var(--soft);border-color:var(--green)}button[aria-pressed=true]{background:#e9f2eb;border-color:var(--green)}:focus-visible{outline:3px solid var(--copper);outline-offset:4px}input[type=number]{width:5.6rem;max-width:100%;min-height:44px;padding:.35rem .6rem;border:1px solid #b4c6b9;border-radius:5px;background:#fff;font-weight:650;color:var(--ink)}input[type=range]{width:100%;min-height:32px;margin:1rem 0 .5rem;accent-color:var(--green);touch-action:pan-y}.shell{width:min(1600px,calc(100% - 64px));margin-inline:auto}.masthead{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:68px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:.7rem;font-size:.95rem;font-weight:700}.stamp{display:grid;place-items:center;width:29px;height:29px;background:var(--green);color:#fff;font-family:serif;border-radius:3px}.draft{font-size:.85rem;color:var(--muted)}.intro{padding:1.7rem 0 2.5rem}.book-reference{display:flex;align-items:center;justify-content:space-between;gap:1rem 2rem;color:var(--muted);font-size:.88rem}.book-reference p+p{margin-top:.2rem}.book-reference>a{white-space:nowrap}.lead{font-size:1.1rem}.intro>p:last-child{margin-top:.8rem}.section-intro{margin:1rem 0 1.75rem;line-height:2;max-width:82em;color:var(--muted)}.controls-region{margin-top:.5rem}.live-summary{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 2rem;position:sticky;top:0;z-index:2;padding:1rem 0;background:var(--paper);border-bottom:1px solid var(--line);margin-bottom:1.75rem;font-size:.95rem}.summary-rates{display:flex;align-items:baseline;flex-wrap:wrap;gap:.5rem 2rem}.summary-rates strong{font-size:1.65rem;color:var(--green);font-variant-numeric:tabular-nums;line-height:1.5}#summary-verdict{color:var(--muted)}.admission-panel{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2rem;padding:1.75rem;border:1px solid var(--line);border-radius:7px;background:var(--green-bg);align-items:center}.admission-calculation{border-left:1px solid #c4dacf;padding-left:1.75rem;min-width:0}.admission-calculation p{line-height:2}.admission-calculation p+p{margin-top:.8rem}.input-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.3rem}.input-heading>label{font-weight:650}.input-heading>span{display:flex;align-items:center;gap:.45rem}.range-labels{display:flex;justify-content:space-between;gap:1rem;font-size:.875rem;color:var(--muted)}.prevalence-settings{margin-top:2.5rem}.prevalence-settings>p{margin:.75rem 0 1.25rem;color:var(--muted)}.control-grid,.comparison-grid,.calculation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem;align-items:start}.parameter-card{padding:1.5rem;border:1px solid var(--line);border-radius:7px;background:var(--soft);min-width:0}.local-calculation{border-top:1px solid var(--line);padding-top:.8rem;margin-top:.5rem;font-size:1rem}.presets{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}.input-error{color:#9e3328;margin-top:1rem}.input-error:empty{display:none}.model-note{margin-top:1.2rem;color:var(--muted);font-size:.95rem}.lesson-section{margin-top:4rem}.comparison-card{padding:1.75rem;border:1px solid var(--line);border-radius:7px;min-width:0}.selected-card{border-color:#bfd4c8;background:var(--soft)}.card-intro{color:var(--muted);margin-top:.65rem;line-height:1.9}.count-table{table-layout:fixed;width:100%;margin:1.25rem 0 0;border-collapse:collapse;text-align:center;font-size:1rem;font-variant-numeric:tabular-nums}.count-table caption{text-align:left;font-size:.95rem;padding-bottom:.6rem;color:var(--muted)}.count-table col:first-child{width:26%}.count-table th,.count-table td{border:1px solid var(--line);padding:.8rem .6rem;vertical-align:middle}.count-table th{font-weight:650}.count-table thead,.count-table tfoot{background:var(--green-bg)}.count-table .pneumonia-row{background:var(--copper-bg)}.count-table .excluded-cell{color:var(--muted);background:#eef0ed}.excluded-note{margin:.8rem 0 0;font-size:.95rem;color:var(--muted)}.rate-comparisons{margin-top:1.75rem}.rate-block+.rate-block{margin-top:1.6rem;padding-top:1.4rem;border-top:1px solid var(--line)}.rate-block h4{font-size:1.05rem}.fraction-explanation{font-size:1rem;margin:.55rem 0}.rate-equation{font-size:1rem;font-variant-numeric:tabular-nums}.rate-equation strong{font-size:1.65rem;color:var(--copper);white-space:nowrap;line-height:1.6}.rate-bar{height:18px;border-radius:3px;background:var(--gray);overflow:hidden;margin:.7rem 0 .4rem}.rate-bar>span{display:block;height:100%;background:var(--copper);transition:width .2s ease}.rate-bar.unavailable{background:repeating-linear-gradient(135deg,#eef1ed,#eef1ed 5px,#dfe5de 5px,#dfe5de 7px)}.bar-labels{display:flex;justify-content:space-between;gap:1rem;font-size:.875rem;color:var(--muted)}.bar-labels>span:first-child{color:#92512d}.comparison-conclusion{border-top:1px solid var(--line);padding-top:1rem;margin-top:1.75rem;font-weight:650;line-height:2}.group-card{padding:1.6rem;border:1px solid var(--line);border-left:4px solid var(--green);border-radius:7px;min-width:0}.group-card[data-group=neither]{border-left-color:var(--copper)}.group-card>p{margin-top:.8rem;line-height:2}.population-formula{font-variant-numeric:tabular-nums}.formula-term{white-space:nowrap}.admission-flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr);align-items:center;gap:1rem;text-align:center;border-top:1px solid var(--line);padding-top:1.2rem;margin-top:1.25rem}.flow-label{font-size:.9rem;color:var(--muted);line-height:1.8}.flow-value{display:block;font-size:clamp(1.4rem,2.1vw,1.85rem);font-variant-numeric:tabular-nums;line-height:1.7;white-space:nowrap}.flow-rate{font-size:.95rem;line-height:1.8}.flow-arrow{height:2px;position:relative;background:var(--green);margin:.75rem .1rem}.flow-arrow::after{content:"";position:absolute;right:0;top:-4px;width:10px;height:10px;border-top:2px solid var(--green);border-right:2px solid var(--green);transform:rotate(45deg)}.total-calculation{margin-top:2rem;padding:1.5rem 1.75rem;background:var(--green-bg);border-left:4px solid var(--green)}.total-calculation p{margin-top:.6rem;line-height:2}.explanation-section>div:first-of-type>p{margin-top:1rem;line-height:2;max-width:82em}.try-again{padding:1.75rem;margin-top:2.5rem;background:var(--soft);border:1px solid var(--line);border-radius:7px}.try-again>p{margin-top:1rem;line-height:2}.try-again>button{margin-top:1.3rem}.footer{margin-top:4rem;padding:1.5rem 0 2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+@media(max-width:1100px){.shell{width:calc(100% - 40px)}.control-grid,.comparison-grid,.calculation-grid{gap:1.25rem}.comparison-card,.group-card{padding:1.3rem}.admission-panel{gap:1.5rem}.admission-calculation{padding-left:1.5rem}.flow-value{font-size:1.5rem}.admission-flow{gap:.6rem}}
+@media(max-width:850px){.control-grid,.comparison-grid,.calculation-grid,.admission-panel{grid-template-columns:1fr;gap:2rem}.book-reference{align-items:flex-start;flex-direction:column;gap:.75rem}.admission-calculation{border-left:0;border-top:1px solid #c4dacf;padding:1.2rem 0 0}.comparison-card,.group-card{padding:1.5rem}.summary-label{flex-basis:100%}.live-summary{gap:.4rem 1rem}.summary-rates{justify-content:space-between;gap:.5rem 1.5rem;flex:1}#summary-verdict{flex-basis:100%}.controls-region input{scroll-margin-top:175px}}
+@media(max-width:600px){body{font-size:1rem}.shell{width:calc(100% - 32px)}.masthead{min-height:60px;gap:.5rem}.brand{font-size:.84rem;gap:.5rem}.draft{font-size:.75rem}.stamp{width:25px;height:25px}.intro{padding:1.1rem 0 2rem}.book-reference{font-size:.875rem}.intro h1{font-size:1.8rem;line-height:1.5}.lead{font-size:1rem}h2{font-size:1.3rem;line-height:1.7}h3{font-size:1.1rem}h4{font-size:1.05rem}.section-intro{font-size:1rem;margin:.9rem 0 1.5rem}.admission-panel,.parameter-card,.comparison-card,.group-card{padding:1.2rem 1rem}.input-heading{gap:.6rem;align-items:baseline}.input-heading>label{font-size:.95rem}input[type=number]{width:5rem}.range-labels{font-size:.875rem;gap:.75rem}.local-calculation,.admission-calculation,.model-note{font-size:.95rem}.prevalence-settings{margin-top:2rem}.summary-label,.summary-rates,#summary-verdict{font-size:.9rem}.summary-rates{gap:.5rem 1rem}.summary-rates strong{font-size:1.4rem}.live-summary{padding:.75rem 0}.presets{gap:.7rem}.presets button{font-size:.95rem}.lesson-section{margin-top:3rem}.count-table{font-size:.9375rem}.count-table th,.count-table td{padding:.75rem .3rem}.count-table caption{font-size:.9rem}.count-table tbody th{font-size:.9rem}.card-intro,.excluded-note{font-size:.95rem}.fraction-explanation,.rate-equation{font-size:.95rem}.rate-equation strong{font-size:1.5rem}.rate-block h4{font-size:1rem}.comparison-conclusion{font-size:.95rem}.admission-flow{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr) minmax(0,1.1fr);gap:.45rem}.flow-label,.flow-rate{font-size:.875rem}.flow-value{font-size:1.25rem}.group-card>p{font-size:.95rem}.total-calculation{padding:1.2rem 1rem}.try-again{padding:1.2rem 1rem}.footer{font-size:.82rem;margin-top:3rem}}
+@media(max-width:360px){.brand{font-size:.78rem}.flow-value{font-size:1.1rem}.admission-flow{gap:.3rem}.summary-rates strong{font-size:1.2rem}.summary-rates{gap:.5rem}.summary-rates>span{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;flex:1}.count-table{font-size:.875rem}.count-table tbody th{font-size:.875rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+input[aria-invalid=true]{border:2px solid #9e3328;background:#fff5f3}
+.back-link{margin-top:1rem;font-size:.95rem}.input-error:empty{display:none}
+@media(max-width:600px){.summary-rates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.5rem 1rem}.summary-rates>span{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:.1rem;white-space:nowrap}}
+
+/* Formal operation zones: shared across the probability experiments. */
+body .operate-panel{background:#faf5e8;border:1.5px solid #dccaa0;border-radius:8px;padding:1.4rem 1.5rem;min-width:0;margin:1.1rem 0 1.5rem}
+.operate-badge{display:inline-block;width:fit-content;max-width:100%;color:#7c5812;background:#f2e6c9;border:1px solid #dccaa0;border-radius:4px;font-weight:700;font-size:.9rem;line-height:1.7;padding:.2rem .65rem;margin:0 0 .9rem}
+.operate-panel>.operate-badge{grid-column:1/-1}.operate-panel .controls:not(.operate-panel){background:transparent;border:0;border-top:1px solid #dccaa0;border-radius:0;padding:1rem 0 0;margin:1rem 0 0}.operate-panel .actions:last-child{margin-bottom:0}
+.operate-panel button,.operate-panel input[type=number],.operate-panel select{border-color:#c6b27d}.operate-panel button:hover,.operate-panel button[aria-pressed=true],.operate-panel button[aria-current=step]{background:#eee0b9;border-color:#9e792e;color:#67480d}.operate-panel button[aria-pressed=true]{box-shadow:inset 0 0 0 1px #9e792e}.operate-panel input[type=range],.operate-panel input[type=checkbox],.operate-panel input[type=radio]{accent-color:#7c5812}
+.operate-panel button:focus-visible,.operate-panel input:focus-visible,.operate-panel select:focus-visible{outline-color:#7c5812}.operate-panel input[aria-invalid=true]{border-color:#a23b30;background:#fff3f1}.operate-panel button.primary,.operate-panel button#next-step{background:#7c5812;color:#fff;border-color:#7c5812}
+.operate-panel button.btn-secondary{border-color:#d8cfba;color:#6f6b60;background:#fffdfa;box-shadow:none}.operate-panel button.btn-secondary:hover{background:#f4f0e7;border-color:#b9ab8b}.operate-panel button:disabled{opacity:.5}
+.plot-heading{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:.7rem 1rem}.plot-heading h2,.plot-heading h3{flex:1 1 240px}.plot-heading .operate-badge{background:#faf5e8;margin:0;flex:0 1 auto}.direct-interaction>.operate-badge{background:#faf5e8}
+body .result{background:#f3f8f3;border-left:4px solid #26725f;padding:1.1rem 1.3rem;margin:1.2rem 0;line-height:1.9;min-width:0}.card.soft{background:#fff}.operate-panel .event{background:#fffdf8;border-left-color:#b79248}.operate-panel .parameter-block,.operate-panel .parameter-card,.operate-panel .prior-block{background:transparent}.operate-panel .threshold-panel{background:transparent}.sampling{border-top-color:#dccaa0}.transient-panel:has(>button[hidden]){display:none}.operate-panel>.choice.log-choice{display:flex;flex-basis:100%;margin:.8rem 0 0}.operate-panel .day-grid{margin:.8rem 0}.operate-panel .presets button span{color:inherit}
+@media(max-width:600px){body .operate-panel{padding:1.1rem 1rem}.operate-badge{font-size:.875rem}.plot-heading{display:block}.plot-heading .operate-badge{margin-top:.75rem}.operate-panel .controls:not(.operate-panel){padding-top:.85rem}.operate-panel .control label{flex-wrap:wrap}body .result{padding:1rem}.compact-operate{margin:.8rem 0}}
+
+.plot-heading .operate-badge{white-space:normal;overflow-wrap:anywhere;min-width:0}.operate-panel .operate-badge{white-space:normal}.operate-panel .rule-explanation{background:transparent}
+
+.operate-panel .admission-panel{background:transparent;border-color:#dccaa0}
+
+body .direct-interaction button{border-color:#c6b27d}body .direct-interaction button:hover,body .direct-interaction button[aria-pressed=true]{background:#eee0b9;border-color:#9e792e;color:#67480d}body .direct-interaction button:focus-visible{outline-color:#7c5812}
+</style>
+  
+  
+<style>.operate-widget{border:1px solid #dccaa0;border-radius:10px;padding:1.2rem;margin-top:1.1rem;background:#fffaf0;min-width:0}.operate-widget h2,.operate-widget h3{font-size:1.1rem;margin:0 0 .7rem;line-height:1.7}.operate-widget .control{min-width:0}.operate-widget .affects{color:#6b531f;font-size:.9rem;line-height:1.8;margin:.8rem 0 0}.linked-output{border:1px solid #cadce9;border-left:5px solid #467caa;border-radius:9px;background:#f7fbff;padding:.8rem 1rem;margin:1.2rem 0;min-width:0;overflow-wrap:anywhere}.linked-label{display:block;width:fit-content;max-width:100%;font:600 .82rem/1.7 sans-serif;color:#24547b;background:#e6eff8;padding:.18rem .55rem;border-radius:4px;margin:0 0 .65rem}.linked-output>.result{margin:.45rem 0}.linked-output.is-updated{animation:output-change .8s ease-out}.story-bridge{padding:1.5rem 0 .6rem;max-width:none}.story-bridge p,.story-copy p{line-height:1.95}.method-steps{line-height:1.95;margin:1rem 0 0}.extension{border-top:1px solid var(--line,#ccd6d2);padding-top:1.6rem;margin-top:2.2rem}.fixed-reference{font-weight:600;color:#4d5a56;margin:1rem 0 .4rem}.situation-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1rem 0}.situation-list span{padding:.6rem;border:1px solid #ccd6d2;text-align:center;border-radius:5px}.situation-list .excluded{color:#78817d;background:#eff0ed;text-decoration:line-through}.progression{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.progression>section{padding:1rem;border:1px solid #ccd6d2;border-radius:8px}.progression h3{font-size:1rem;line-height:1.8}.progression p{line-height:1.9}.story-copy strong{font-weight:700}.story-copy .term{white-space:nowrap}@keyframes output-change{from{box-shadow:0 0 0 4px #90badd88}to{box-shadow:0 0 0 0 transparent}}@media(max-width:650px){.operate-widget{padding:1rem .85rem}.linked-output{padding:.75rem .7rem}.progression{grid-template-columns:1fr}.situation-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(prefers-reduced-motion:reduce){.linked-output.is-updated{animation:none;outline:2px solid #90badd}}
+
+.linked-output:has(>.live-summary){position:sticky;top:0;z-index:2}.linked-output>.live-summary{position:static;margin:0;border-bottom:0;padding:.3rem .5rem}
+
+.linked-output:has(#joined[hidden]){display:none}
+
+@media(max-width:650px){.linked-output:has(>.live-summary){position:static}}
+</style><style>/* Controls and their live figures share a workspace; explanations continue below. */
+body .lab-workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:1.25rem;align-items:start;margin:1.2rem 0 2rem;min-width:0;scroll-margin-top:16px}
+.lab-workspace-controls,.lab-workspace-stage{min-width:0}.lab-workspace--sticky-controls>.lab-workspace-controls{position:sticky;top:16px}.lab-workspace--sticky-stage>.lab-workspace-stage{position:sticky;top:16px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;align-items:start}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+body .lab-workspace .operate-panel{margin:0 0 .7rem;padding:.9rem;background:#faf5e8;border:1.5px solid #dccaa0;border-radius:7px;min-width:0}body .lab-workspace .operate-widget{padding:.6rem 0;margin:0;border:0;border-top:1px solid #dccaa0;background:transparent;border-radius:0}.lab-workspace .operate-widget:first-of-type{border-top:0;padding-top:0}.lab-workspace .operate-widget h2,.lab-workspace .operate-widget h3{font-size:1rem;line-height:1.65;margin:0 0 .4rem}.lab-workspace .operate-badge{font-size:.8rem;line-height:1.6;padding:.15rem .45rem;margin:0 0 .5rem}.lab-workspace .plot-heading .operate-badge{margin-top:.25rem}.lab-workspace .controls:not(.operate-panel){padding:0!important;margin:.5rem 0!important;border:0!important;gap:.65rem .75rem;grid-template-columns:repeat(2,minmax(0,1fr))}.lab-workspace .controls:not(.operate-panel):has(>.control:only-child){grid-template-columns:1fr}.lab-workspace .control label{flex-wrap:wrap;gap:.25rem;font-size:.9rem}.lab-workspace .control label>span:first-child{font-weight:600}.lab-workspace input[type=number]{width:5rem;min-width:0;min-height:40px;font-size:1rem}.lab-workspace input[type=range]{margin:.3rem 0 0;min-height:26px}.lab-workspace button{min-height:42px;padding:.4rem .6rem;font-size:.9rem;line-height:1.6}.lab-workspace .actions,.lab-workspace .presets{gap:.4rem;margin:.6rem 0}.lab-workspace .actions:last-child{margin-bottom:0}.lab-workspace .control-help,.lab-workspace .affects,.lab-workspace .operate-widget>p,.lab-workspace .operate-panel>p{font-size:.85rem;line-height:1.75;margin:.4rem 0}.lab-workspace .operate-panel p+p{margin-top:.4rem}.lab-workspace .operate-panel details{margin-top:.6rem;padding-top:.6rem}.lab-workspace .operate-panel summary{font-size:.9rem}
+body .lab-workspace .card,body .lab-workspace .plot-card{padding:.9rem;margin:0;min-width:0}.lab-workspace h2,.lab-workspace h3{font-size:1.1rem;line-height:1.6}.lab-workspace p{line-height:1.8}.lab-workspace .plot{height:230px;min-height:0;margin-top:.5rem}.lab-workspace .plot.square{width:min(100%,280px);height:auto;aspect-ratio:1;margin-inline:auto}.lab-workspace .plot text{font-size:12px}.lab-workspace .legend{font-size:.8rem;line-height:1.7;gap:.3rem .7rem;margin-top:.5rem}.lab-workspace .caption{font-size:.85rem;line-height:1.8}.lab-workspace .linked-output{border:0;border-radius:0;padding:0;margin:.5rem 0;background:transparent;box-shadow:none}.lab-workspace .linked-label{font-size:.75rem;line-height:1.7;padding:0;background:transparent;margin:0 0 .3rem;color:#456277}.lab-workspace .linked-output:has(>.live-summary){position:static}.lab-workspace .linked-output.is-updated{animation:none}.lab-workspace .linked-output>.plot{margin-top:.25rem}
+body .lab-workspace .result,body .lab-workspace .summary,body .lab-workspace .live-summary{margin:.5rem 0;padding:.75rem .85rem;font-size:.95rem;line-height:1.8;background:#f3f8f3;border-left:4px solid #26725f;position:static}.lab-workspace .result strong{font-size:1.15rem}.lab-workspace .result p+p{margin-top:.35rem}.lab-workspace .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.6rem 0}.lab-workspace .metric{padding:.55rem}.lab-workspace .metric span{font-size:.8rem}.lab-workspace .metric strong{font-size:1.25rem}.lab-workspace .formula,.lab-workspace .formulas{font-size:.9rem;line-height:1.9;margin-top:.5rem}.lab-workspace table{font-size:.85rem;margin-top:.5rem}.lab-workspace th,.lab-workspace td{padding:.45rem .25rem}.lab-workspace .plot-frame{min-width:0;padding:0}.lab-workspace .plot-frame svg{display:block;width:100%;height:245px}.lab-followup{margin:1rem 0 2rem}.lab-followup>h3{margin:.8rem 0}.lab-workspace .lab-paired-result{margin-top:.6rem}.lab-workspace-stage>.lab-core-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}.lab-workspace .lab-secondary-controls{margin-top:.75rem}.lab-workspace .bean-grid{width:100%;height:240px}.lab-workspace .door-grid{gap:.5rem;grid-template-columns:repeat(5,minmax(0,1fr));margin:.6rem 0}.lab-workspace .door{min-height:66px;padding:.35rem;font-size:.85rem}.lab-workspace .family-grid{max-width:340px;margin-inline:auto}.lab-workspace .experiment-paths{display:block;margin:0}.lab-workspace .experiment-path{margin-bottom:.5rem}
+/* Page-specific figures retain their labels and computational units. */
+body[data-workspace-page=beta] .lab-workspace-stage #curve-card{margin:0}body[data-workspace-page=beta] .lab-workspace-stage #density{height:245px}body[data-workspace-page=beta] .lab-workspace .beta-metrics{display:grid}body[data-workspace-page=beta] .lab-workspace #prior-summary{font-size:.85rem}body[data-workspace-page=beta] .lab-workspace #counts{font-size:.9rem}
+body[data-workspace-page=berkson] .lab-workspace .example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}body[data-workspace-page=berkson] .lab-workspace .example-grid button{padding:.5rem}body[data-workspace-page=berkson] .lab-workspace .threshold-panel{padding:0;margin:.5rem 0}body[data-workspace-page=berkson] .lab-workspace .plot-toolbar{padding:0;margin:0}
+body[data-workspace-page=bayes] .lab-workspace .reading-width{width:100%;max-width:none}body[data-workspace-page=bayes] .lab-workspace .scene{padding:0;margin:0}body[data-workspace-page=bayes] .lab-workspace .interaction-region{display:block}body[data-workspace-page=bayes] .lab-workspace .groups{margin:.5rem 0;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .group{padding:.8rem}body[data-workspace-page=bayes] .lab-workspace .population{margin:.3rem 0;padding:.4rem}body[data-workspace-page=bayes] .lab-workspace .group-count strong,body[data-workspace-page=bayes] .lab-workspace .positive-count strong{font-size:1.5rem}body[data-workspace-page=bayes] .lab-workspace .answer-equation{margin:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .answer-value strong{font-size:1.7rem}body[data-workspace-page=bayes] .lab-workspace .answer{padding:.85rem}body[data-workspace-page=bayes] .lab-workspace .parameter-block{margin:.5rem 0;padding:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .method-fields{display:grid;grid-template-columns:1fr;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .number-line{margin:.3rem 0}body[data-workspace-page=bayes] .lab-workspace .step-navigation{display:flex;flex-wrap:wrap}
+body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{gap:.7rem;grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-card,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-card{padding:.8rem}body[data-workspace-page=simpson] .lab-workspace .parameter-card,body[data-workspace-page=berkson-hospital] .lab-workspace .parameter-card{padding:.5rem 0}body[data-workspace-page=simpson] .lab-workspace .control-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .control-grid{grid-template-columns:1fr;gap:.6rem}
+body[data-workspace-page=one-way-anova] .lab-workspace #energy,body[data-workspace-page=one-way-anova] .lab-workspace #f-reference{height:145px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #stick{height:115px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #assembled{height:150px}
+@media(min-width:1400px){body .lab-workspace{grid-template-columns:380px minmax(0,1fr)}.lab-workspace .plot{height:250px}.lab-workspace .plot.square{max-width:300px;width:min(100%,300px)}}
+@media(min-width:960px) and (max-width:1100px){body .lab-workspace{grid-template-columns:310px minmax(0,1fr);gap:1rem}.lab-workspace .card,.lab-workspace .plot-card{padding:.7rem}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}.lab-workspace .plot text{font-size:11px}}
+@media(max-width:959px){body .lab-workspace{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0 1.5rem}.lab-workspace>.lab-workspace-controls,.lab-workspace>.lab-workspace-stage{position:static!important;width:100%}.lab-workspace .plot{height:270px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.lab-core-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{grid-template-columns:1fr;gap:1rem}.lab-workspace .plot.square{width:min(100%,340px);max-width:340px}.lab-workspace .lab-mobile-feedback{display:block;font-size:.9rem;line-height:1.8;margin:.4rem 0;padding:.75rem .85rem;background:#f3f8f3;border-left:4px solid #26725f;overflow-wrap:anywhere}.lab-workspace .lab-mobile-feedback:empty{display:none}.lab-workspace .lab-mobile-feedback strong{font-size:1.1rem;color:#26725f}.lab-workspace .plot-frame svg{height:280px}.lab-workspace .controls:not(.operate-panel){grid-template-columns:1fr}.lab-workspace-stage>.lab-core-grid>.card{width:100%}.lab-workspace .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{grid-template-columns:1fr}}
+@media(min-width:960px){.lab-mobile-feedback{display:none}}
+.lab-workspace .plot-frame{height:245px!important}.lab-workspace .threshold-panel{display:block;gap:.6rem}.lab-workspace .input-heading{flex-wrap:wrap;gap:.4rem}.lab-workspace .input-heading>label{min-width:0}.lab-workspace .plot-heading>span{white-space:normal}.lab-workspace .plot-caption{font-size:.85rem;line-height:1.8;margin-top:.5rem}.lab-workspace .quick-reading{font-size:.9rem;line-height:1.8;margin:.5rem 0;padding:.65rem .8rem;background:#f3f8f3;border-left:4px solid #26725f}.lab-workspace .example-card{padding:.65rem}.lab-workspace .example-card p{font-size:.8rem;margin-top:.4rem;line-height:1.7}.lab-workspace .example-card button{margin-top:.5rem}.lab-workspace .workspace-control-stack{display:block!important;border:0!important;padding:0!important;margin:0!important;background:transparent!important}.lab-workspace .workspace-control-stack>.operate-widget.operate-panel{padding:.8rem;border:1.5px solid #dccaa0;border-radius:7px;margin:0 0 .75rem;background:#faf5e8}.lab-workspace .workspace-control-stack>.operate-badge{display:none}
+body .lab-workspace .operate-panel:not(:has(button,input,select,summary)){padding:0;border:0;background:transparent;margin:0}.lab-workspace .operate-panel:not(:has(button,input,select,summary))>.operate-badge{display:none}
+body .lab-workspace .controls.operate-panel{display:block}.lab-workspace .people-table input[type=number]{width:100%;max-width:100%}.lab-mobile-feedback>div+div{margin-top:.5rem}
+.lab-workspace .plot-frame{height:auto!important}.lab-workspace .metric strong{white-space:nowrap}.lab-mobile-slot{display:none}
+@media(max-width:959px){.lab-workspace .metric-grid{grid-template-columns:1fr}.lab-mobile-slot{display:block}.lab-mobile-slot .door-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.lab-workspace .admission-panel{display:block;padding:0;margin:.5rem 0}.lab-workspace #other-calculation{font-size:.85rem;line-height:1.8;margin:.5rem 0 1rem}
+@media(max-width:600px){body[data-workspace-page=bayes] .lab-workspace .groups{grid-template-columns:1fr!important}body[data-workspace-page=bayes] .lab-workspace .group{grid-template-columns:1fr;gap:.65rem}body[data-workspace-page=bayes] .lab-workspace .group-source,body[data-workspace-page=bayes] .lab-workspace .flow-transform,body[data-workspace-page=bayes] .lab-workspace .group-result{grid-column:1/-1;text-align:center}body[data-workspace-page=bayes] .lab-workspace .flow-arrow{width:2px;height:1.5rem;margin:.5rem auto}body[data-workspace-page=bayes] .lab-workspace .flow-arrow::after{top:auto;bottom:0;right:-4px;transform:rotate(135deg)}body[data-workspace-page=bayes] .lab-workspace .flow-rate{min-height:0}}
+@media(min-width:960px){body[data-workspace-page=bayes] .lab-workspace-stage{position:static!important;top:auto!important}}
+</style><style>/* The approved confidence-interval control pane, shared by probability labs. */
+.lab-desktop-feedback{display:none}
+@media(min-width:960px){
+  body .lab-workspace>.lab-workspace-controls{
+    position:sticky;
+    top:16px;
+    max-height:calc(100vh - 32px);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior-y:auto;
+    scrollbar-gutter:stable;
+    scrollbar-width:auto;
+    scrollbar-color:#a88e57 #f3ecd9;
+    padding-inline-end:8px;
+    scroll-padding-block:12px;
+  }
+  body .lab-workspace>.lab-workspace-controls[data-scrollable="true"]{overscroll-behavior-y:contain}
+  .lab-workspace-controls>.operate-panel:not(:has(~.operate-panel)),
+  .lab-workspace-controls>.workspace-control-stack>.operate-panel:not(:has(~.operate-panel)){margin-bottom:0}
+  .lab-workspace-controls::-webkit-scrollbar{width:14px}
+  .lab-workspace-controls::-webkit-scrollbar-track{background:#f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb{background:#a88e57;border:3px solid #f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb:hover{background:#7c5812}
+  .lab-workspace-controls :is(button,input,select){scroll-margin-block:12px}
+  body .lab-workspace .lab-desktop-feedback{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1.25rem;margin:0 0 .75rem}
+  body[data-workspace-page="bayes"] .lab-workspace-controls .linked-output:has(>#mobile-result-summary){display:none}
+}
+</style></head>
+<body data-revised="2026-11-25-full" data-workspace-page="berkson-hospital">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../index.html">实验目录</a></header>
+  <main class="shell">
+    <p class="back-link"><a href="index.html">返回散点图主实验</a></p>
+    <section class="intro" aria-labelledby="title">
+      <div class="book-reference">
+        <div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p>第3.5节 条件独立、伯克森悖论和辛普森悖论 · <strong>3.5.2 伯克森悖论，纸书第90—92页</strong></p></div>
+        <a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf#page=2">阅读公开样章（PDF）</a>
+      </div>
+      <h1 id="title">只看住院的人，为什么骨折组的肺炎比例更低？</h1>
+      <p class="lead" id="population-premise">假设医院在统计10万名居民，其中5%的人骨折，3%的人患肺炎。我们先让两种病互不相干：无论有没有骨折，患肺炎的比例都是3%。</p>
+      <p>现在，你只能看到住院患者的记录。在这群人里，骨折患者患肺炎的比例，竟然可能低于没有骨折的人。人的患病情况没变，只看其中一部分人，为什么会得到不同的比较结果？</p>
+    <p>骨折和肺炎原本是两件互不影响的事，为什么只统计住院病人的病历，反而显得“骨折的人更不容易得肺炎”？下面先让你看全体人群，再只留下住院的人来比。</p></section>
+
+    <section class="lab-workspace" data-feedback="#live-summary"><div class="lab-workspace-controls"><section class="controls-region workspace-control-stack" aria-labelledby="controls-title"><span class="operate-badge">你可以操作</span>
+      <h2 id="controls-title">改变住院筛选，看看比较结果怎样变</h2>
+      <p class="section-intro">现在假设，只要骨折或患肺炎就要住院，两种病都有的人也一样。两种病都没有的人，按你设置的比例住院，代表因为其他原因住院的人。起初这个比例是0%，所以这组人都不住院。</p>
+      
+      <div class="prevalence-settings">
+        <h3>全体人群中，有多少人骨折、多少人患肺炎？</h3>
+        <p>你可以改变下面两个比例。两种病在全体人群中保持独立，四组人数会按新比例重新计算。</p>
+        <div class="control-grid">
+          </div>
+      </div>
+      <p class="model-note">人数按比例推算；出现小数时，可以把它看作反复统计同样人群时的平均人数。</p>
+    <section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>可选操作项一：设置“两种病都没有的人”有多少也住进医院</h3><div class="admission-panel">
+        <div>
+          <h3>两种病都没有的人，有多少也住院？</h3>
+          <div class="input-heading"><label for="other-range">这组人的住院比例</label><span><input id="other-number" type="number" min="0" max="100" step="1" value="0" aria-label="两种病都没有的人的住院比例" aria-describedby="other-error"><span>%</span></span></div>
+          <input id="other-range" type="range" min="0" max="100" step="1" value="0" aria-describedby="other-calculation">
+          <div class="range-labels"><span>0%：这组全不住院</span><span>100%：这组全住院</span></div>
+          <p id="other-error" class="input-error" role="status"></p>
+        </div>
+        </div>
+      <p>对应影响下方：他们可能因为胃疼、阑尾炎等别的毛病住院；这里只改变这一组住院人数。</p></section><div class="admission-calculation" id="other-calculation"></div>
+      <section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>可选操作项二：调整全体10万人里的骨折比例与肺炎比例</h3><section class="parameter-card" aria-labelledby="fracture-title">
+            <h4 id="fracture-title">全体人群中的骨折比例</h4>
+            <div class="input-heading"><label for="fracture-range">骨折占多少？</label><span><input id="fracture-number" type="number" min="0" max="100" step="1" value="5" aria-label="全体人群中的骨折比例" aria-describedby="fracture-error"><span>%</span></span></div>
+            <input id="fracture-range" type="range" min="0" max="100" step="1" value="5" aria-describedby="fracture-calculation">
+            <p id="fracture-calculation" class="local-calculation"></p>
+            <p id="fracture-error" class="input-error" role="status"></p>
+          </section>
+          <section class="parameter-card" aria-labelledby="pneumonia-title">
+            <h4 id="pneumonia-title">全体人群中的肺炎比例</h4>
+            <div class="input-heading"><label for="pneumonia-range">肺炎占多少？</label><span><input id="pneumonia-number" type="number" min="0" max="100" step="1" value="3" aria-label="全体人群中的肺炎比例" aria-describedby="pneumonia-error"><span>%</span></span></div>
+            <input id="pneumonia-range" type="range" min="0" max="100" step="1" value="3" aria-describedby="pneumonia-calculation">
+            <p id="pneumonia-calculation" class="local-calculation"></p>
+            <p id="pneumonia-error" class="input-error" role="status"></p>
+          </section>
+        <p>对应影响下方：重新算出全体10万人的四组人数，以及全体、住院两张对比表。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>可选操作项三：一键试三种住院范围</h3><div class="presets"><button type="button" data-preset="initial" class="btn-secondary">恢复起始设置</button><button type="button" data-preset="everyone">让所有人都住院</button><button type="button" data-preset="diseases">只让这两种病的患者住院</button></div>
+      <p>对应影响下方：恢复起始、全体住院、只让这两种病的患者住院；按按钮上写的范围重新设置参数。</p></section></section><div class="try-again operate-panel"><span class="operate-badge">你可以操作</span>
+        <section class="operate-widget"><h3>可选操作项四：快捷对照：让所有人都住院再比一次</h3><p>把“两种病都没有的人的住院比例”改为100%。这样，所有人都住院，两种病的比例保持你现在的设置。看看住院人群和全体人群的比较结果是否一样。</p>
+        <div class="actions"><button type="button" data-preset="everyone">让所有人都住院</button>
+        
+      </div><p>对应影响下方：把住院范围改为所有人，比较筛选前后的两种比例。</p></section></div></div><div class="lab-workspace-stage"><output class="live-summary result" id="live-summary" aria-live="polite" aria-atomic="true" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化">
+        <span class="summary-label">住院者中，患肺炎的比例</span>
+        <span class="summary-rates"><span>骨折组 <strong id="summary-fracture"></strong></span><span>无骨折组 <strong id="summary-no-fracture"></strong></span></span>
+        <span id="summary-verdict"></span>
+      </output>
+
+    <div class="comparison-grid">
+        <section class="comparison-card" id="population-card" aria-labelledby="population-title" data-linked-label="只随「操作二（全体骨折与肺炎比例）」变化">
+          <h3 id="population-title">全体100,000人</h3>
+          <p class="card-intro">这组包含所有人，没有按住院情况筛选。</p>
+          <div id="population-table"></div>
+          <p class="comparison-conclusion" id="population-conclusion"></p>
+        </section>
+        <section class="comparison-card selected-card" id="hospital-card" aria-labelledby="hospital-title" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化">
+          <h3 id="hospital-title">只看住院的人</h3>
+          <p class="card-intro" id="hospital-count"></p>
+          <div id="hospital-table"></div>
+          <p class="excluded-note" id="excluded-note"></p>
+          <p class="comparison-conclusion" id="hospital-conclusion"></p>
+        </section>
+      </div>
+    </div></section><section class="lab-followup"><div class="rate-comparisons" id="population-rates"></div>
+          <div class="rate-comparisons" id="hospital-rates"></div>
+          </section><section class="lesson-section" aria-labelledby="calculation-title">
+      <h2 id="calculation-title">四组人数和住院人数，分别怎么算？</h2>
+      <p class="section-intro" id="multiplication-intro"></p>
+      <div class="calculation-grid" id="group-calculations" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化"></div>
+      <div class="total-calculation" id="hospital-total-equation"></div>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="comparison-title">
+      <h2 id="comparison-title">先看全体人群，再只看住院的人</h2>
+      <p class="section-intro">四组人数已经算出来了。现在，我们分别在全体人群和住院人群中问同一个问题：骨折的人中，有多少比例患肺炎？没有骨折的人中，又有多少比例患肺炎？表格保留四种情况，后面的除法就用表格里的这些人数。</p>
+      </section>
+
+    <section class="lesson-section explanation-section" aria-labelledby="explanation-title">
+      <h2 id="explanation-title">筛选为什么改变了两种病的关系？</h2>
+      <div id="explanation" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化"></div>
+      <p id="everyone-result" role="status" aria-atomic="true" class="result" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化"></p>
+    </section>
+    <noscript><p>请启用JavaScript，才能调整比例并查看计算。</p></noscript>
+  </main>
+  <footer class="shell footer">《大白话概率论》第3.5.2节 · 武辰 · <a href="index.html">返回散点图主实验</a></footer>
+
+
+<script>(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.BerksonModel = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const TOTAL = 100000;
+  const INITIAL = Object.freeze({ fracture: 5, pneumonia: 3, other: 0 });
+  const fraction = (part, total) => total > 0 ? part / total : null;
+  function scenario(fracture, pneumonia, other) {
+    for (const value of [fracture, pneumonia, other]) {
+      if (!Number.isInteger(value) || value < 0 || value > 100) {
+        throw new RangeError('比例须为0到100之间的整数');
+      }
+    }
+    const population = {
+      both: 10 * fracture * pneumonia,
+      fractureOnly: 10 * fracture * (100 - pneumonia),
+      pneumoniaOnly: 10 * (100 - fracture) * pneumonia,
+      neither: 10 * (100 - fracture) * (100 - pneumonia)
+    };
+    const hospital = { ...population, neither: population.neither * other / 100 };
+    for (const group of [population, hospital]) {
+      group.fractureTotal = group.both + group.fractureOnly;
+      group.noFractureTotal = group.pneumoniaOnly + group.neither;
+      group.total = group.fractureTotal + group.noFractureTotal;
+      group.withFracture = fraction(group.both, group.fractureTotal);
+      group.withoutFracture = fraction(group.pneumoniaOnly, group.noFractureTotal);
+    }
+    const comparable = hospital.withFracture !== null && hospital.withoutFracture !== null;
+    const difference = comparable ? hospital.withoutFracture - hospital.withFracture : null;
+    return {
+      fracture, pneumonia, other, population, hospital,
+      excluded: population.neither - hospital.neither,
+      comparable, difference,
+      status: !comparable ? 'unavailable' : Math.abs(difference) < 1e-12 ? 'equal' : 'negative'
+    };
+  }
+  return { TOTAL, INITIAL, scenario };
+});
+</script><script>(()=>{let armed=false;for(const type of ['input','change','click','pointerdown','keydown'])document.addEventListener(type,()=>{armed=true},{capture:true});for(const node of document.querySelectorAll('[data-linked-label]')){const shell=document.createElement('div');shell.className='linked-output';const badge=document.createElement('span');badge.className='linked-label';badge.textContent=node.dataset.linkedLabel;node.before(shell);shell.append(badge,node);let timer,last=node.innerHTML;new MutationObserver(()=>{const current=node.innerHTML;if(current===last)return;last=current;if(!armed)return;shell.dataset.changeCount=String(Number(shell.dataset.changeCount||0)+1);shell.classList.remove('is-updated');requestAnimationFrame(()=>shell.classList.add('is-updated'));clearTimeout(timer);timer=setTimeout(()=>shell.classList.remove('is-updated'),850)}).observe(node,{childList:true,characterData:true,subtree:true})}})();
+</script><script>(() => {
+  'use strict';
+  const { TOTAL, INITIAL, scenario } = window.BerksonModel;
+  const $ = id => document.getElementById(id);
+  const state = { ...INITIAL };
+  const f = value => new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 2 }).format(value);
+  const pct = value => value === null ? '—' : `${(value * 100).toFixed(2)}%`;
+  const term = text => `<span class="formula-term">${text}</span>`;
+  const sum = values => values.map(value => term(f(value))).join('<wbr>＋');
+  const groupInfo = [
+    { key: 'both', title: '同时骨折、患肺炎', fYes: true, pYes: true },
+    { key: 'fractureOnly', title: '只有骨折，没有肺炎', fYes: true, pYes: false },
+    { key: 'pneumoniaOnly', title: '只有肺炎，没有骨折', fYes: false, pYes: true },
+    { key: 'neither', title: '两种病都没有', fYes: false, pYes: false }
+  ];
+
+  function table(prefix, c, selected) {
+    return `<table class="count-table" id="${prefix}-count-table">
+      <caption>${selected ? '按当前规则预计住院的人数' : '按当前比例计算的全体人数'}（人）</caption>
+      <colgroup><col><col><col></colgroup>
+      <thead><tr><th scope="col">患者</th><th scope="col">有骨折</th><th scope="col">无骨折</th></tr></thead>
+      <tbody>
+        <tr class="pneumonia-row"><th scope="row">有肺炎</th><td id="${prefix}-both">${f(c.both)}</td><td id="${prefix}-pneumonia-only">${f(c.pneumoniaOnly)}</td></tr>
+        <tr><th scope="row">无肺炎</th><td id="${prefix}-fracture-only">${f(c.fractureOnly)}</td><td id="${prefix}-neither"${selected && c.neither === 0 ? ' class="excluded-cell"' : ''}>${f(c.neither)}</td></tr>
+      </tbody>
+      <tfoot><tr><th scope="row">合计</th><td id="${prefix}-fracture-total">${f(c.fractureTotal)}</td><td id="${prefix}-no-fracture-total">${f(c.noFractureTotal)}</td></tr></tfoot>
+    </table>`;
+  }
+
+  function rates(prefix, c, selected) {
+    return [
+      { key: 'fracture', name: '骨折', numerator: c.both, denominator: c.fractureTotal, rate: c.withFracture },
+      { key: 'no-fracture', name: '无骨折', numerator: c.pneumoniaOnly, denominator: c.noFractureTotal, rate: c.withoutFracture }
+    ].map(g => `<div class="rate-block" id="${prefix}-${g.key}-comparison">
+      <h4>${g.name}组：患肺炎的比例是多少？</h4>
+      <p class="fraction-explanation">${selected ? '住院者中，' : '全体人群中，'}${g.name === '骨折' ? '骨折患者' : '没有骨折的人'}共${f(g.denominator)}人，其中${f(g.numerator)}人有肺炎。</p>
+      <p class="rate-equation" id="${prefix}-${g.key}-equation">${g.rate === null
+        ? '这一组没有人，分母是0，无法计算比例。'
+        : `${term(`${f(g.numerator)}÷${f(g.denominator)}`)}<wbr>${Math.abs(g.rate * 100 - Number((g.rate * 100).toFixed(2))) < 1e-10 ? '＝' : '≈'}<strong id="${prefix}-${g.key}-rate">${pct(g.rate)}</strong>`}</p>
+      <div class="rate-bar${g.rate === null ? ' unavailable' : ''}" role="img" aria-label="${g.rate === null ? '该组无人，无法计算患肺炎比例' : `${g.name}组患肺炎占${pct(g.rate)}，未患肺炎占${pct(1 - g.rate)}`}"><span style="width:${g.rate === null ? 0 : g.rate * 100}%"></span></div>
+      <div class="bar-labels"><span>${g.rate === null ? '该组无人' : '棕色：有肺炎'}</span><span>${g.rate === null ? '' : '灰色：无肺炎'}</span></div>
+    </div>`).join('');
+  }
+
+  function calculations(s) {
+    $('group-calculations').innerHTML = groupInfo.map(info => {
+      const fp = info.fYes ? s.fracture : 100 - s.fracture;
+      const pp = info.pYes ? s.pneumonia : 100 - s.pneumonia;
+      const admission = info.key === 'neither' ? s.other : 100;
+      const n = s.population[info.key], h = s.hospital[info.key];
+      return `<section class="group-card" data-group="${info.key}">
+        <h3>${info.title}</h3>
+        <p>${info.fYes ? `骨折占${s.fracture}%` : `没有骨折占100%−${s.fracture}%＝${fp}%`}；${info.pYes ? `肺炎占${s.pneumonia}%` : `没有肺炎占100%−${s.pneumonia}%＝${pp}%`}。</p>
+        <p class="population-formula">全体中的人数：<br>${term(`${f(TOTAL)}×${fp}%×${pp}%`)}<wbr>＝${term(`${f(n)}人`)}。</p>
+        <div class="admission-flow" aria-label="这组共${f(n)}人，按${admission}%的比例住院，预计住院${f(h)}人">
+          <div><span class="flow-label">这组人数</span><strong class="flow-value">${f(n)}</strong></div>
+          <div><p class="flow-rate">住院比例<br>${admission}%</p><div class="flow-arrow" aria-hidden="true"></div></div>
+          <div><span class="flow-label">住院人数</span><strong class="flow-value">${f(h)}</strong></div>
+        </div>
+        <p>住院人数：${term(`${f(n)}×${admission}%`)}<wbr>＝${term(`${f(h)}人`)}。</p>
+      </section>`;
+    }).join('');
+    $('hospital-total-equation').innerHTML = `<h3>四组住院人数相加，得到住院总人数</h3><p>${sum(groupInfo.map(g => s.hospital[g.key]))}<wbr>＝${term(`${f(s.hospital.total)}人`)}。</p>`;
+  }
+
+  function explain(s) {
+    const { population: p, hospital: h } = s;
+    if (h.total === 0) {
+      $('explanation').innerHTML = '<p>当前没有住院者，所以没有可比较的住院人群。你可以提高两种病的比例，或者让两种病都没有的人也有一部分住院，再观察筛选的影响。</p>';
+    } else if (!s.comparable) {
+      $('explanation').innerHTML = `<p>当前住院者中，${h.fractureTotal === 0 ? '骨折组' : '无骨折组'}没有人，这一组没有人，分母是0，没法算出患肺炎的比例。我们无法拿一个不存在的组来做两组比较。</p><p>你可以把骨折和肺炎的比例恢复为5%和3%，再改变住院比例，观察两组都有人的情况。</p>`;
+    } else if (s.status === 'equal') {
+      $('explanation').innerHTML = s.other === 100 && s.pneumonia > 0 && s.pneumonia < 100
+        ? `<p>现在全部${f(TOTAL)}人都住院，住院人群与全体人群完全相同。骨折组和无骨折组患肺炎的比例都为${pct(h.withFracture)}，原来独立的两种病，在这个比较中也没有出现关联。</p><p>把两种病都没有的人的住院比例调低，住院人群就会少掉一部分“既没骨折、也没肺炎”的人。你可以观察无骨折组患肺炎的比例怎样上升。</p>`
+        : `<p>现在全体人群的肺炎比例为${s.pneumonia}%，两组住院者患肺炎的比例也相同。当前设置下，住院筛选没有让两组产生比例差异。你可以把肺炎比例调到0%和100%之间，再改变住院筛选。</p>`;
+    } else {
+      $('explanation').innerHTML = `<p>骨折组的${f(p.fractureTotal)}人全部住院，所以组里有肺炎的比例仍是${pct(h.withFracture)}。无骨折组就不同了：有肺炎的${f(p.pneumoniaOnly)}人全部住院，两种病都没有的${f(p.neither)}人却只有${s.other}%住院，也就是${f(h.neither)}人。</p><p>这样，无骨折组里有肺炎的人全留下了，没有肺炎的人只留下${s.other}%。只看住院者时，这组患肺炎的比例就升到了${pct(h.withoutFracture)}。${s.other === 0 ? '当前无骨折的住院者全都有肺炎：他们如果也没有肺炎，就不会被这条规则选进医院。' : ''}</p><p>我们没有改变任何人的患病情况，只改变了你能看到哪些人。在这个模型里，骨折和肺炎都能让人住院；按“是否住院”筛选后，原本独立的两种病，在筛选出来的人群里出现了关联。这就是伯克森悖论。</p>`;
+    }
+    $('everyone-result').textContent = s.other === 100
+      ? s.comparable ? `现在全部${f(TOTAL)}人都住院，两组患肺炎的比例同为${pct(h.withFracture)}。` : '现在全部人都住院；当前有一组人数为0，所以仍不能做两组比例比较。'
+      : '这个按钮只把住院比例改成100%，保留你设置的骨折和肺炎比例。';
+  }
+
+  function render() {
+    const s = scenario(state.fracture, state.pneumonia, state.other);
+    const { population: p, hospital: h } = s;
+    $('population-premise').textContent = `我们设一组${f(TOTAL)}人的假想人群，其中${s.fracture}%的人骨折，${s.pneumonia}%的人患肺炎。先假定有没有骨折和得不得肺炎互不相干：无论有没有骨折，患肺炎的比例都沿用${s.pneumonia}%。`;
+    $('multiplication-intro').innerHTML = `没有骨折的人占${100 - s.fracture}%。在这群人里，患肺炎的比例仍沿用${s.pneumonia}%。所以，只有肺炎、没有骨折的人占${term(`${100 - s.fracture}%×${s.pneumonia}%`)}，人数就是${term(`${f(TOTAL)}×${100 - s.fracture}%×${s.pneumonia}%＝${f(p.pneumoniaOnly)}人`)}。其余三组也这样算，下面分别列出每组人数、住院比例和住院人数。`;
+    $('fracture-calculation').textContent = `骨折人数：${f(TOTAL)}×${s.fracture}%＝${f(p.fractureTotal)}人。`;
+    $('pneumonia-calculation').textContent = `肺炎人数：${f(TOTAL)}×${s.pneumonia}%＝${f(p.both + p.pneumoniaOnly)}人。`;
+    $('other-calculation').innerHTML = `<p>没有骨折占${term(`100%−${s.fracture}%＝${100 - s.fracture}%`)}；没有肺炎占${term(`100%−${s.pneumonia}%＝${100 - s.pneumonia}%`)}。</p><p>两种病独立：没有骨折的这群人里，没有肺炎的比例也沿用${100 - s.pneumonia}%。把两个比例相乘，再乘总人数，得到两种病都没有的人数：${term(`${f(TOTAL)}×${100 - s.fracture}%×${100 - s.pneumonia}%`)}<wbr>＝${term(`${f(p.neither)}人`)}。</p><p>这组预计住院：${term(`${f(p.neither)}×${s.other}%`)}<wbr>＝<strong>${term(`${f(h.neither)}人`)}</strong>。</p>`;
+    $('summary-fracture').textContent = pct(h.withFracture);
+    $('summary-no-fracture').textContent = pct(h.withoutFracture);
+    $('summary-verdict').textContent = h.total === 0 ? '当前没有住院者。' : !s.comparable ? '有一组无人，无法比较。' : s.status === 'equal' ? '两组相同。' : `骨折组更低，约差${(s.difference * 100).toFixed(2)}个百分点。`;
+    $('population-table').innerHTML = table('population', p, false);
+    $('hospital-table').innerHTML = table('hospital', h, true);
+    $('hospital-count').textContent = `按当前规则，预计有${f(h.total)}人住院。下面只保留这些人的记录。`;
+    $('excluded-note').textContent = `两种病都没有的人中，${f(s.excluded)}人没有住院，因此没有进入住院记录。`;
+    $('population-rates').innerHTML = rates('population', p, false);
+    $('hospital-rates').innerHTML = rates('hospital', h, true);
+    $('population-conclusion').textContent = p.withFracture === null || p.withoutFracture === null
+      ? '全体人群中有一组人数为0，不能计算这一组患肺炎的比例。'
+      : `全体人群里，两组患肺炎的比例都是${pct(p.withFracture)}，和我们设定的两种病独立一致。`;
+    $('hospital-conclusion').textContent = h.total === 0 ? '当前没有住院者，不能计算比例。' : !s.comparable ? '住院者中有一组人数为0，不能做两组比较。' : s.status === 'equal' ? `住院者中，两组患肺炎的比例同为${pct(h.withFracture)}。` : `住院者中，骨折组患肺炎为${pct(h.withFracture)}，低于无骨折组的${pct(h.withoutFracture)}。`;
+    calculations(s);
+    explain(s);
+    document.querySelectorAll('[data-preset]').forEach(button => {
+      const active = button.dataset.preset === 'initial'
+        ? Object.keys(INITIAL).every(key => state[key] === INITIAL[key])
+        : button.dataset.preset === 'everyone' ? state.other === 100 : state.other === 0;
+      button.setAttribute('aria-pressed', String(active));
+    });
+  }
+
+  function sync() {
+    for (const key of Object.keys(INITIAL)) for (const suffix of ['range', 'number']) {
+      $(`${key}-${suffix}`).value = state[key];
+      $(`${key}-${suffix}`).removeAttribute('aria-invalid');
+    }
+    for (const key of Object.keys(INITIAL)) $(`${key}-error`).textContent = '';
+    render();
+  }
+  for (const key of Object.keys(INITIAL)) {
+    const number = $(`${key}-number`);
+    const label = { other: '两种病都没有的人的住院比例', fracture: '骨折比例', pneumonia: '肺炎比例' }[key];
+    for (const suffix of ['range', 'number']) $(`${key}-${suffix}`).addEventListener('input', event => {
+      if (event.target.value === '' && !event.target.validity.badInput) {
+        event.target.removeAttribute('aria-invalid');
+        $(`${key}-error`).textContent = '';
+        return;
+      }
+      const value = event.target.valueAsNumber;
+      if (!Number.isInteger(value) || value < 0 || value > 100) {
+        event.target.setAttribute('aria-invalid', 'true');
+        $(`${key}-error`).textContent = `${label}填0到100之间的整数即可，暂时仍按${state[key]}%计算。`;
+        return;
+      }
+      state[key] = value;
+      event.target.removeAttribute('aria-invalid');
+      $(`${key}-${suffix === 'range' ? 'number' : 'range'}`).value = value;
+      $(`${key}-${suffix === 'range' ? 'number' : 'range'}`).removeAttribute('aria-invalid');
+      $(`${key}-error`).textContent = '';
+      render();
+    });
+    number.addEventListener('blur', () => {
+      if (number.value === '') {
+        number.setAttribute('aria-invalid', 'true');
+        $(`${key}-error`).textContent = `${label}还没填，暂时仍按${state[key]}%计算。`;
+      }
+    });
+  }
+  document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => {
+    if (button.dataset.preset === 'initial') Object.assign(state, INITIAL);
+    else state.other = button.dataset.preset === 'everyone' ? 100 : 0;
+    sync();
+  }));
+  sync();
+  document.documentElement.dataset.labReady = 'true';
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),boards=[...document.querySelectorAll('.lab-workspace')];
+  let timer;const feedbacks=[];
+  function arrange(){
+    for(const board of boards){
+      const controls=board.querySelector(':scope>.lab-workspace-controls'),stage=board.querySelector(':scope>.lab-workspace-stage');
+      if(!controls||!stage)continue;
+      const c=controls.getBoundingClientRect().height,s=stage.getBoundingClientRect().height;
+      board.classList.remove('lab-workspace--sticky-controls','lab-workspace--sticky-stage');
+      if(wide.matches){const pinStage=s<c;board.classList.add(pinStage?'lab-workspace--sticky-stage':'lab-workspace--sticky-controls');stage.style.top=pinStage?Math.min(16,innerHeight-s-16)+'px':''}
+    }
+    for(const {panel,output} of feedbacks){const hidden=!!panel.closest('[hidden]')||!panel.getClientRects().length;if(output.hidden!==hidden)output.hidden=hidden}
+  }
+  // A full, explicitly named result beside mobile controls avoids blind button presses.
+  for(const board of boards){
+    for(const panel of board.querySelectorAll('.lab-workspace-controls .operate-panel')){
+      if(!panel.querySelector('button,input,select'))continue;
+      if(panel.querySelector('.operate-panel')||panel.matches('#step-navigation,#lesson-actions,#playback-settings,#experiment-actions,.transient-panel'))continue;
+      const selector=panel.closest('[data-feedback]')?.dataset.feedback||board.dataset.feedback;
+      if(!selector)continue;
+      const sources=[...new Set(selector.split(',').flatMap(part=>[...document.querySelectorAll(part.trim())]))];if(!sources.length)continue;
+      const output=document.createElement('div');output.className='lab-mobile-feedback';output.setAttribute('role','status');panel.after(output);
+      feedbacks.push({panel,output});
+      let last;const update=()=>{const html=sources.map(source=>'<div>'+source.innerHTML+'</div>').join('');if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id')};
+      update();const observer=new MutationObserver(update);for(const source of sources)observer.observe(source,{childList:true,subtree:true,characterData:true});
+    }
+  }
+  // Keep the named probability and both positive counts visible above Bayes' full flow.
+  for(const board of boards.filter(n=>n.dataset.desktopFeedback)){
+    const source=document.querySelector(board.dataset.desktopFeedback),stage=board.querySelector('.lab-workspace-stage');
+    if(!source||!stage)continue;
+    const output=document.createElement('div');output.className='lab-desktop-feedback result';output.setAttribute('role','status');stage.prepend(output);
+    let last;const update=()=>{
+      if(output.hidden!==source.hidden)output.hidden=source.hidden;
+      const html=source.innerHTML;if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id');
+    };
+    update();new MutationObserver(update).observe(source,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+  }
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(arrange,100)};
+  for(const slot of document.querySelectorAll('[data-mobile-content]')){
+    const homes=[...document.querySelectorAll(slot.dataset.mobileContent)].map(node=>{const item=node.closest('.linked-output')||node,home=document.createComment('desktop position');item.before(home);return {item,home}});
+    const place=()=>{for(const {item,home}of homes)if(wide.matches)home.after(item);else slot.append(item)};
+    place();wide.addEventListener('change',place);
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);
+  for(const board of boards){new ResizeObserver(schedule).observe(board);new MutationObserver(schedule).observe(board,{attributes:true,attributeFilter:['hidden'],subtree:true})}
+  arrange();
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),panes=[...document.querySelectorAll('.lab-workspace>.lab-workspace-controls')];
+  let timer;
+  const update=()=>{
+    for(const pane of panes){
+      const value=String(wide.matches&&pane.scrollHeight>pane.clientHeight);
+      if(pane.dataset.scrollable!==value)pane.dataset.scrollable=value;
+    }
+  };
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(update,60)};
+  const observer=new ResizeObserver(update);
+  for(const pane of panes){
+    observer.observe(pane);for(const child of pane.children)observer.observe(child);
+    pane.addEventListener('toggle',update,true);
+    new MutationObserver(schedule).observe(pane,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','open']});
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);wide.addEventListener('change',schedule);update();
+})();
+</script></body></html>

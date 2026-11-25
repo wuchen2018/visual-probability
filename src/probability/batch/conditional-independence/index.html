@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="从袋子里随机拿出一枚硬币、连续抛两次，比较看清硬币前后两次结果的关系。">
+  <title>用同一枚硬币连抛两次，知道手里是哪种硬币后，关系为什么变了？｜武辰的概率论交互实验</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../_probability/lab.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="../_probability/models.js" defer></script>
+  <script src="../_probability/lab.js" defer></script>
+  <script src="../_probability/story.js" defer></script><script src="app.js" defer></script>
+<link rel="stylesheet" href="../_probability/story.css"><link rel="stylesheet" href="../_probability/workspace.css"><script src="../_probability/workspace.js" defer></script><link rel="stylesheet" href="../_probability/scroll-controls.css"><script src="../_probability/scroll-controls.js" defer></script></head>
+<body data-workspace-page="conditional-independence">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../probability/index.html">实验目录</a></header>
+  <main class="shell">
+    <div class="book-reference"><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式 · <strong>3.5.1 从独立到条件独立 · 纸书第88页起</strong></p><p><a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf">阅读公开样章（PDF）</a></p></div>
+    <section class="intro story-copy" aria-labelledby="title"><h1 id="title">用同一枚硬币连抛两次，知道手里是哪种硬币后，关系为什么变了？</h1><p class="lead">想象桌子上有一个不透明的袋子，袋子里面装着很多硬币，这些硬币分为两种：第一种是<strong>正常硬币</strong>，一面是正面、一面是反面，抛一次出现正面和反面的机会各占50%；第二种是不正常的<strong>双正面硬币</strong>，两面全都是正面，怎么抛都必定出现正面。</p><p>我们按这个规则反复做实验：每次伸手从袋子里随机拿出一枚硬币，拿在手里<strong>连续抛两次</strong>，记下这两次的结果之后，把这枚硬币放回袋子里；然后再伸手从袋子里重新拿一枚出来继续做下一轮。</p><p>现在问题来了：<strong>如果第1抛出现了正面，会改变你对第2抛的判断吗？</strong>下面说的“第1抛”“第2抛”，指的都是刚从袋子里拿出来的同一枚硬币，连续抛两次里面的第1下和第2下，不是“第一回从袋子里拿硬币”。</p><p>在你还没看清手里这枚硬币是哪一种时，第1抛出正面，可能会让你心里嘀咕：“我是不是拿到双正面硬币了？”，从而猜第2抛也更容易出正面。可如果你在抛之前就已经低头看清了手里这枚是正常硬币，还是双正面硬币，第1抛的结果还会影响第2抛吗？</p></section>
+
+    <section class="lab-workspace" data-feedback="#result"><div class="lab-workspace-controls"><section class="coin-controls workspace-control-stack" aria-label="改变硬币比例与已知条件"><span class="operate-badge">你可以操作</span><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h2>操作一：调整袋子里双正面硬币的比例</h2><div class="controls one"><div class="control">
+        <label for="q-number"><span>袋子里双正面硬币的比例</span><span><input id="q-number" data-num="q" type="number" min="0" max="100" step="1" value="50" aria-describedby="bag-description error-q">%</span></label>
+        <input data-range="q" type="range" min="0" max="100" step="1" value="50" aria-label="袋子里双正面硬币的比例">
+        <p class="control-help" id="bag-description"></p>
+        <p class="error" id="error-q" role="status"></p>
+        
+      </div></div><p class="affects">对应影响下方：8,000轮预计结果表里的次数，以及还没看清硬币时的概率和算式。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h2>操作二：选择你分析这轮结果时，事先看没看清手里这枚硬币是哪一种</h2><div class="actions" role="group" aria-label="选择是否已经看清手里的硬币"><button type="button" id="mixed">还没看清手里拿的是哪种硬币（全混在一起看）</button><button type="button" id="fair">已经看清：手里拿的这枚是正常硬币</button><button type="button" id="double">已经看清：手里拿的这枚是双正面硬币</button></div><p class="affects">对应影响下方：蓝色标亮区域里的图表、概率和原因解释。</p></section></section></div><div class="lab-workspace-stage"><div id="population-note" class="result" aria-live="polite" aria-atomic="true" data-linked-label="随上方操作一、二变化"></div><p class="quick-result result" id="quick-result" role="status" aria-atomic="true" data-linked-label="随上方操作一、二变化"></p>
+
+    <div class="two results-grid">
+      <section class="card" aria-labelledby="joint-title">
+        <h2 id="joint-title">两次结果的四种组合</h2>
+        <p id="counts" class="caption"></p>
+        <div id="joint" data-linked-label="随上方操作一、二变化"></div>
+        <p class="caption" id="table-guide">行看第1抛，列看第2抛。绿色深浅表示每格的概率，文字给出预计次数。棕色边框圈出第1抛为正的一行，知道第1抛为正后就只看这一行。</p>
+      </section>
+      <section class="card" aria-labelledby="comparison-title">
+        <h2 id="comparison-title">第1抛的信息，会改变第2抛的概率吗？</h2>
+        <svg class="plot" id="comparison" role="img" aria-label="看第1抛结果前后，第2抛正面概率的比较" data-linked-label="随上方操作一、二变化"></svg>
+        <div id="result" class="result" data-linked-label="随上方操作一、二变化"></div>
+      </section>
+    </div>
+
+    </div></section><section class="section" aria-labelledby="calculation-title">
+      <h2 id="calculation-title">这些概率怎样从两种硬币算出来？</h2>
+      <p id="calculation-scope" class="caption"></p>
+      <div id="calculation" class="calculation-grid" data-linked-label="随上方操作一、二变化"></div>
+    </section>
+    <section class="section" aria-labelledby="explanation-title">
+      <h2 id="explanation-title">为什么看清手里是哪种硬币后，两次结果就独立了？</h2>
+      <div id="interpretation" class="interpretation result" data-linked-label="随上方操作一、二变化"></div>
+    </section>
+    <noscript><p>请启用JavaScript，才能操作这个实验。</p></noscript>
+  </main>
+  <footer class="shell footer">3.5.1 从独立到条件独立 · 武辰</footer>
+
+
+</body></html>

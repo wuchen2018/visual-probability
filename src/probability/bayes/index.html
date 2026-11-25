@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="沿用《大白话概率论》的10万人检测例子，自定义患病比例，即时查看人数、检测计算和阳性后患病的概率。">
+  <meta name="theme-color" content="#14523f">
+  <title>检测阳性，患病的概率就是99%吗？｜武辰的交互实验</title>
+  <link rel="stylesheet" href="lab.css?v=20261122-gemini">
+  <link rel="icon" href="data:,">
+  <script src="../batch/_probability/story.js" defer></script><script type="module" src="app.js?v=20261122-gemini"></script>
+<link rel="stylesheet" href="../batch/_probability/story.css"><link rel="stylesheet" href="../batch/_probability/workspace.css"><script src="../batch/_probability/workspace.js" defer></script><link rel="stylesheet" href="../batch/_probability/scroll-controls.css"><script src="../batch/_probability/scroll-controls.js" defer></script></head>
+<body data-revised="2026-11-25-full" data-workspace-page="bayes">
+  <a class="skip" href="#lesson">跳到实验</a>
+  <header class="shell masthead">
+    <a class="brand" href="https://wuchen2018.pages.dev/"><span class="stamp" aria-hidden="true">武</span>武辰的交互实验</a>
+    <a href="https://github.com/wuchen2018/probability-book">《大白话概率论》</a>
+  </header>
+  <main id="main">
+    <section class="intro shell" aria-labelledby="page-title">
+      <div class="book-reference">
+        <div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p><strong>第3.4节 贝叶斯公式</strong> · 纸书第77—88页</p></div>
+        <a href="https://wuchen2018.github.io/probability-book/samples/bayes-theorem.pdf" id="sample-link">阅读公开样章（PDF）</a>
+      </div>
+      <h1 id="page-title">检测阳性，患病的概率就是99%吗？</h1>
+      <p class="lead">比如你去医院做了一项罕见病检测。听说检测号称“99%准”：真正患病的人里，99%能测出阳性；没病的人里，1%会被误判成阳性。结果单子一出来：阳性。你可能会想，那我有99%的概率真的得病了吧？</p><p>假如参加检测的人里，只有0.1%原本患病，阳性后真正患病的概率其实还不到10%。为什么差这么多？我们让10万人一起参加检测，把阳性的人分成“确实患病”和“被误判”两组，数一数就知道了。下面的人群患病比例和检测准确率都可以改。</p></section>
+    <section class="lesson shell" id="lesson" data-mode="experiment" aria-label="贝叶斯检测实验">
+      <div class="operate-panel compact-operate transient-panel"><span class="operate-badge">你可以操作</span><button type="button" class="mode-return" id="back-to-experiment" hidden="">返回暖米黄区域，自己改参数</button></div>
+      <section class="lab-workspace" data-feedback="#mobile-result-summary" data-desktop-feedback="#mobile-result-summary"><div class="lab-workspace-controls"><div class="interaction-region" id="interaction-region">
+      <output id="mobile-result-summary" class="mobile-result-summary" aria-live="off" hidden="" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+        <span class="summary-probability"><span>阳性后患病概率</span><strong id="summary-posterior"></strong></span>
+        <span class="summary-counts"><span id="summary-tp"></span><span id="summary-fp"></span></span>
+      </output>
+      <section id="experiment-controls" class="experiment-controls reading-width workspace-control-stack" aria-label="自己改变检测参数"><div class="operate-panel"><span class="operate-badge">你可以操作</span><p id="input-error" class="error" role="status"></p>
+      </div><span class="operate-badge">你可以操作</span>
+        <section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作一：设置参加检测的人群里，原本有多少人患病</h3><section class="parameter-block prior-block" aria-labelledby="prior-title">
+        <h2 id="prior-title">人群里有多少人患病？</h2>
+        <p class="block-intro">我们固定让10万人参加检测。你可以拖动滑块，也可以直接输入患病的比例。</p>
+        <div class="prior-field">
+          <label for="prior">患病比例（患病率）</label>
+          <div class="number-line"><input id="prior-number" type="number" min="0" max="100" step="any" value="0.1" aria-label="人群中实际患病的比例，百分比"><span>%</span></div>
+          <input id="prior" type="range" min="0" max="100" step="any" value="0.1">
+        </div>
+        <div class="presets"><button type="button" id="higher-prior">换成有症状的人群（10%）</button><button type="button" id="book-example" class="btn-secondary">恢复默认数值</button></div>
+        <p class="scenario-explanation">从一般人群里筛查，和有症状才来检测，参加检测的人不同，患病比例也可能不同。本例把前一种情况设为0.1%，后一种设为10%，看看结果会怎样变。</p>
+        <p id="population-explanation" class="population-explanation"></p>
+        </section>
+        <p>对应影响下方：固定10万人，只改变实际患病和没有患病各有多少；整张检测人数图与最终概率一起重算。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作二：设置检测工具本身准不准</h3><details id="method-settings" class="method-settings parameter-block" open="">
+          <summary>检测能查出多少患者？又会误判多少健康人？</summary>
+          <p id="current-method" class="block-intro"></p>
+          <div class="method-fields">
+            <div class="field">
+              <label for="sensitivity">患病的人，有多少会测出阳性？</label>
+              <div class="number-line"><input id="sensitivity-number" type="number" min="0" max="100" step="any" value="99" aria-label="患者测出阳性的比例，百分比"><span>% · 灵敏度</span></div>
+              <input id="sensitivity" type="range" min="0" max="100" step="any" value="99">
+            </div>
+            <div class="field">
+              <label for="false-positive">健康的人，有多少会被误判为阳性？</label>
+              <div class="number-line"><input id="false-positive-number" type="number" min="0" max="100" step="any" value="1" aria-label="健康人被误判为阳性的比例，百分比"><span>% · 假阳性率</span></div>
+              <input id="false-positive" type="range" min="0" max="100" step="any" value="1">
+            </div>
+          </div>
+        </details>
+        <p>对应影响下方：保持原本患病人数不变，只改测出真阳性、误判假阳性的比例。</p></section></section>
+      </div>
+      <div id="experiment-actions" class="experiment-actions operate-panel"><span class="operate-badge">你可以操作</span><button type="button" id="back-to-lesson">分四步再看一遍</button></div>
+      <nav id="step-navigation" class="step-navigation operate-panel" aria-label="选择讲解步骤" hidden=""><span class="operate-badge">你可以操作</span>
+        <button type="button" data-step="1" aria-current="step"><span class="step-number">1</span>分人群</button>
+        <button type="button" data-step="2"><span class="step-number">2</span>做检测</button>
+        <button type="button" data-step="3"><span class="step-number">3</span>只看阳性</button>
+        <button type="button" data-step="4"><span class="step-number">4</span>算概率</button>
+      </nav>
+      <div class="lesson-actions operate-panel" id="lesson-actions" hidden=""><span class="operate-badge">你可以操作</span>
+        <button type="button" id="previous-step" class="quiet" disabled>上一步</button>
+        <button type="button" class="primary" id="next-step">下一步：做检测</button>
+      </div>
+      <details class="playback-settings reading-width operate-panel" id="playback-settings" open="" hidden=""><span class="operate-badge">你可以操作</span>
+        <summary>自动播放</summary>
+        <div class="playback-controls"><button type="button" id="autoplay">开始自动播放</button><label for="pace">播放速度<select id="pace"><option value="1">正常</option><option value="1.5">慢一些</option><option value="2">更慢</option></select></label></div>
+        <p class="help">每一步会停下来，让你看清人数和计算。你可以随时暂停，也可以自己点“下一步”。</p>
+      </details>
+      </div><div class="lab-workspace-stage"><header class="step-copy reading-width" id="step-copy" aria-live="polite" aria-atomic="true" hidden="">
+        <p id="step-label" class="eyebrow">第1步 / 共4步</p>
+        <h2 id="step-title">先把10万人分成两组</h2>
+        <p id="step-description">患病率是0.1%，也就是每1000人中约有1人患病。10万人中，约100人患病，另外99,900人没有患病。</p>
+      </header>
+      <div class="scene" id="scene" data-step="1">
+        <div class="population" id="population"><span>参加检测</span><strong>100,000<span class="unit">人</span></strong></div>
+        <div class="groups" id="groups" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+          <h2 class="counts-title" id="counts-title">两组阳性的人数是怎样算出来的？</h2>
+          <p class="counts-intro" id="counts-intro"></p>
+          <section class="group sick-group" aria-labelledby="sick-label">
+            <p class="group-derivation" id="sick-derivation"></p>
+            <div class="group-source" id="sick-source"><h3 id="sick-label">实际患病</h3><p class="group-count" id="sick-origin"><strong id="sick-count"></strong><span class="unit">人</span></p></div>
+            <div class="detection" id="sick-results" hidden="">
+              <div class="flow-transform" id="sick-transform"><p class="flow-rate" id="sick-rate"></p><span class="flow-arrow" aria-hidden="true"></span><p class="calculation-line" id="sick-calculation"></p></div>
+              <div class="group-result"><p class="positive-name" id="tp-label">测出阳性</p><p class="positive-count"><strong id="tp-count"></strong><span class="unit">人</span></p><p class="positive-note" id="tp-note"></p></div>
+              <p class="negative" id="sick-negative"></p>
+            </div>
+            <p class="group-explanation" id="sick-explanation"></p>
+          </section>
+          <section class="group healthy-group" aria-labelledby="healthy-label">
+            <p class="group-derivation" id="healthy-derivation"></p>
+            <div class="group-source" id="healthy-source"><h3 id="healthy-label">没有患病</h3><p class="group-count" id="healthy-origin"><strong id="healthy-count"></strong><span class="unit">人</span></p></div>
+            <div class="detection" id="healthy-results" hidden="">
+              <div class="flow-transform" id="healthy-transform"><p class="flow-rate" id="healthy-rate"></p><span class="flow-arrow" aria-hidden="true"></span><p class="calculation-line" id="healthy-calculation"></p></div>
+              <div class="group-result"><p class="positive-name" id="fp-label">被误判为阳性</p><p class="positive-count"><strong id="fp-count"></strong><span class="unit">人</span></p><p class="positive-note" id="fp-note"></p></div>
+              <p class="negative" id="healthy-negative"></p>
+            </div>
+            <p class="group-explanation" id="healthy-explanation"></p>
+          </section>
+        </div>
+        <p class="scene-note" id="scene-note"></p>
+        <section id="answer" class="answer result" aria-labelledby="answer-title" hidden="" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+          <h3 id="answer-title">阳性的人里，确实患病的人占多少？</h3>
+          <p id="positive-total-explanation" class="positive-total-explanation"></p>
+          <div class="answer-equation" aria-label="真阳性人数除以全部阳性人数">
+            <span class="fraction"><span><strong id="numerator"></strong><small>患病且测出阳性的人</small></span><span><strong id="denominator"></strong><small>全部阳性的人</small></span></span>
+            <span class="answer-value"><span class="approximately" id="approximately">≈</span><strong id="posterior"></strong></span>
+          </div>
+          <p id="answer-explanation" aria-live="polite" aria-atomic="true"></p>
+          <div class="positive-composition">
+            <div id="positive-bar" class="composition" role="img"><span id="true-share"></span><span id="false-share"></span></div>
+            <div class="legend"><span id="true-legend"></span><span id="false-legend"></span></div>
+          </div>
+          <p id="why-result" class="why-result"></p>
+        </section>
+      </div>
+      </div></section><div class="after-lesson reading-width" id="after-lesson" hidden="" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+        <details id="denominator-explanation" class="explanation" open=""><summary>“患者中有99%测出阳性”和“阳性后患病的概率”，分母为什么不同？</summary><p id="comparison-explanation"></p></details>
+        <details class="explanation" open=""><summary>把刚才的人数计算写成公式</summary><p>分子只数“确实患病，而且测出阳性”的人；分母把两组测出阳性的人加起来。</p><p class="formula">阳性后患病的概率 = 真阳性人数 ÷（真阳性人数 + 假阳性人数）</p><div id="expanded-calculation"></div></details>
+      </div>
+    </section>
+  </main>
+  <footer class="shell footer"><p>《大白话概率论》第3.4节 · 武辰</p><nav><a href="https://github.com/wuchen2018/probability-book/tree/main/demos/bayes">查看源码</a><a href="https://wuchen2018.pages.dev/">更多文章与视频</a></nav></footer>
+
+
+</body></html>

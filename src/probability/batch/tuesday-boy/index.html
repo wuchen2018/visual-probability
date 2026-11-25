@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="从至少一个男孩的1/3，到星期二男孩的13/27，观察附加条件更具体时概率怎样接近一半。">
+  <title>已知“有个星期二出生的男孩”，另一个也是男孩的概率为什么会变成48.15%？｜武辰的概率论交互实验</title>
+  <link rel="icon" href="data:,"><link rel="stylesheet" href="../_probability/lab.css"><link rel="stylesheet" href="styles.css">
+  <script src="../_probability/models.js" defer></script><script src="../_probability/lab.js" defer></script><script src="../_probability/story.js" defer></script><script src="app.js" defer></script>
+<link rel="stylesheet" href="../_probability/story.css"><link rel="stylesheet" href="../_probability/workspace.css"><script src="../_probability/workspace.js" defer></script><link rel="stylesheet" href="../_probability/scroll-controls.css"><script src="../_probability/scroll-controls.js" defer></script></head>
+<body data-workspace-page="tuesday-boy">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../probability/index.html">实验目录</a></header>
+  <main class="shell">
+    <div class="book-reference"><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式 · <strong>3.6 星期二男孩问题 · 纸书第95页起</strong></p><p>此小节尚未提供样章，详情可参考纸质书。</p></div>
+    <section class="intro story-copy"><h1>已知“有个星期二出生的男孩”，另一个也是男孩的概率为什么会变成48.15%？</h1><p class="lead">先看一道大家常被绕晕的问题：假如一户人家有两个孩子，每个孩子生男生女机会各占一半，大孩和小孩互不影响。如果只告诉你：<strong>“这户人家里至少有一个是男孩”</strong>，那么另一个孩子也是男孩的机会有多大？</p><p>很多人第一反应是50%，其实答案是<strong>1/3，约33.33%</strong>。因为按大孩、小孩的顺序，两孩家庭一共有“男男、男女、女男、女女”这4种同样常见的情况。知道了“至少有一个男孩”，就把“女女”排除了，剩下的“男男、男女、女男”这3种里，两个都是男孩只占1种，所以是1/3。</p><div class="situation-list" aria-label="按大孩小孩顺序列出四种性别组合"><span>男男</span><span>男女</span><span>女男</span><span class="excluded">女女：排除</span></div><p>现在把已知的信息再说得更具体一点：如果告诉你的不是“至少有一个男孩”，而是<strong>“这户人家里至少有一个在星期二出生的男孩”</strong>，这时两个孩子都是男孩的机会还是1/3吗？听起来“孩子出生在星期几”好像跟另一个孩子是男是女毫无关系，可答案却一下变成了<strong>13/27，约48.15%</strong>！如果再继续往上加更具体的特征，比如“至少有一个星期二出生、而且还喜欢唱跳rap篮球的男孩”，算出来的概率还会继续贴近<strong>50%</strong>。</p><p><strong>为什么一条听着无关紧要的细节，会让算出来的概率发生这么大变化？</strong>我们把每个孩子的“性别＋出生星期”列出来，再数一数符合条件的家庭。</p></section>
+<section class="story-bridge"><h2>先说清图里的196格从哪里来</h2><p>这里沿用书里的假设：每个孩子出生在周一到周日的机会相等，出生星期与性别互不影响，两个孩子也互不影响。每个孩子就有2×7＝14种“性别＋星期”的可能。区分大孩、小孩后，一户人家共有14×14＝196种同样常见的情况。</p><p>下面的图把大孩的14种情况排成行，小孩的14种情况排成列。每一个格子，都同时记下大孩和小孩是什么情况。</p></section>
+
+    <section class="lab-workspace" data-feedback="#result"><div class="lab-workspace-controls"><section class="workspace-control-stack" aria-label="改变已知条件"><span class="operate-badge">你可以操作</span><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h2>操作一：选出已知条件有多具体</h2><p>勾选的天数越多，条件越宽泛。全选七天，就等于只说“至少有一个男孩”；只勾星期二，就具体到了“至少有一个星期二出生的男孩”。观察概率怎样往50%移动。</p><div class="actions presets"><button type="button" id="all-days">全选七天（等于只说“至少一个男孩”，概率＝1/3）</button><button type="button" id="only-tuesday">只选星期二（至少一个星期二男孩，概率≈48.15%）</button></div><div class="day-grid"><label><input type="checkbox" data-day="0">星期一</label><label><input type="checkbox" data-day="1" checked>星期二</label><label><input type="checkbox" data-day="2">星期三</label><label><input type="checkbox" data-day="3">星期四</label><label><input type="checkbox" data-day="4">星期五</label><label><input type="checkbox" data-day="5">星期六</label><label><input type="checkbox" data-day="6">星期日</label></div><p class="affects">对应影响下方：入选家庭的格子、分子分母算式和当前概率。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h2>操作二：对比本题的家庭条件和直觉里常混淆的情况</h2><div class="actions" role="group" aria-label="选择要比较的已知条件"><button type="button" id="family">情况一（本题）：只知道这户人家至少有一个符合条件的男孩</button><button type="button" id="random">情况二（对照）：已经随机碰到其中一个孩子，且发现他符合条件</button></div><p class="affects">对应影响下方：情况说明、格子图和算式。情况二已经明确了一个具体孩子，另一个孩子为男孩的机会是50%。</p></section></section></div><div class="lab-workspace-stage"><p id="quick-result" class="quick-result result" role="status" aria-atomic="true" data-linked-label="随上方操作一、二联动更新"></p><p class="result" id="method-note" data-linked-label="随上方操作一、二联动更新"></p>
+
+    <div class="two results-grid">
+      <section class="card" aria-labelledby="family-space-title"><div class="plot-heading"><h2 id="family-space-title"></h2><span class="operate-badge">你可以直接点击格子，或用方向键移动</span></div><p class="caption" id="grid-guide"></p><div class="legend"><span><i class="grid-key both-key"></i>入选且两个男孩</span><span><i class="grid-key other-key"></i>入选、一男一女</span><span><i class="grid-key gray-key"></i>没有入选</span><span><i class="grid-key active-key"></i>正在查看</span></div><p class="caption">男一表示“男孩，星期一出生”，女二表示“女孩，星期二出生”。点格子看家庭详情；也可选中格子后用方向键移动。</p><div id="families" class="direct-interaction" data-linked-label="随上方操作一、二联动更新"></div></section>
+      <section class="card" aria-labelledby="answer-title"><h2 id="answer-title">入选的情况里，有多少是两个男孩？</h2><div id="result" class="result" data-linked-label="随上方操作一、二联动更新"></div><div id="calculation" class="formula" data-linked-label="随上方操作一、二联动更新"></div></section>
+    </div>
+    </div></section><section class="section"><h2>情况一：为什么条件越具体，概率就越接近50%？</h2><div id="day-explanation" class="lesson-text" data-linked-label="随上方操作一、二联动更新"></div></section>
+    <section class="section story-copy"><h2>情况二：已经看到一个具体的孩子，为什么另一个是男孩的机会为50%？</h2><p>情况一只知道“这户人家至少有一个符合条件的男孩”，还没有确定是哪一个孩子。情况二则是已经随机碰到其中一个孩子，眼前这个孩子是男孩，又出生在勾出的星期里。</p><p>在情况二里，这些信息说的都是眼前这个孩子。另一个孩子仍有14种同样可能的情况，7种男孩、7种女孩，所以是7÷14＝50%。两幅图分别记录眼前这个孩子是大孩、还是小孩；它们用来帮助你看清自己心里想到的是哪一道题。</p></section>
+    <noscript><p>请启用JavaScript，才能改变星期并查看格子。</p></noscript>
+  </main><footer class="shell footer">3.6 星期二男孩问题 · 武辰</footer>
+
+
+</body></html>

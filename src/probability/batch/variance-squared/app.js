@@ -1,0 +1,6 @@
+(()=>{'use strict';const L=Lab,C=Third,$=L.$,base=[10,20,40,50];
+function render(v){const signed=base.reduce((s,x)=>s.add(new C.R(x).sub(v.c)),new C.R(0)),absolute=base.reduce((s,x)=>s.add(Math.abs(x-v.c)),new C.R(0)),squared=base.reduce((s,x)=>s.add(new C.R(x).sub(v.c).pow(2)),new C.R(0));
+ $('sums').innerHTML=`<p>中心c＝${v.c}。偏差直接相加＝${base.map(x=>`(${x}−${v.c})`).join('＋')} ${C.val(signed)}。</p><p>绝对值之和＝${base.map(x=>`|${x}−${v.c}|`).join('＋')} ${C.val(absolute)}。</p><p>平方和＝${base.map(x=>`(${x}−${v.c})²`).join('＋')} ${C.val(squared)}。在c＝30时，分别是0、60、1000。</p>`;
+ for(const [id,fn,max,ticks]of [['absolute',x=>C.sum(base.map(y=>Math.abs(y-x))),120,[0,60,120]],['squared',x=>C.sum(base.map(y=>(y-x)**2)),3000,[0,1000,2000,3000]]])L.plot(id,{x:[10,50],y:[0,max],xticks:[10,30,50],yticks:ticks,xlabel:'选择的中心 c',ylabel:id==='absolute'?'绝对值总和':'平方总和',series:[{data:L.series(fn,10,50,240),color:id==='absolute'?'#a96239':'#26725f'}],guides:[{a:{x:v.c,y:0},b:{x:v.c,y:max},dash:true,color:'#5579a2'}],points:[{x:v.c,y:fn(v.c),key:'c',drag:true,r:7}]});
+ window.currentModel={...v,signed:+signed,absolute:+absolute,squared:+squared};}
+L.bind(render);$('c25').onclick=()=>L.set({c:25});$('c30').onclick=()=>L.set({c:30});for(const id of ['absolute','squared'])L.drag(id,p=>L.set({c:Math.max(10,Math.min(50,Math.round(p.x*2)/2))}));})();

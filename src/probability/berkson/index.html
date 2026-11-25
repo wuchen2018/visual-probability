@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="拖动散点图中的筛选线，观察长相与演技、红颜多薄命、帅哥出渣男背后的选择偏差。《大白话概率论》伯克森悖论交互实验。">
+  <title>我们看见了谁？｜伯克森悖论散点图实验</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script src="model.js" defer></script>
+  <script src="../batch/_probability/story.js" defer></script><script src="app.js" defer></script>
+<link rel="stylesheet" href="../batch/_probability/story.css"><link rel="stylesheet" href="../batch/_probability/workspace.css"><script src="../batch/_probability/workspace.js" defer></script><link rel="stylesheet" href="../batch/_probability/scroll-controls.css"><script src="../batch/_probability/scroll-controls.js" defer></script></head>
+<body data-revised="2026-11-25-full" data-workspace-page="berkson">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span></header>
+  <main class="shell">
+    <div class="book-reference"><div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p>第3.5节 · <strong>3.5.2 伯克森悖论，纸书第90—92页</strong> · 散点图见第91页图3-13</p></div><a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf#page=4">阅读公开样章（PDF）</a></div>
+    <section class="intro" aria-labelledby="title">
+      <h1 id="title">你注意到的演员，为什么像是长相和演技只能占一样？</h1>
+      <p class="lead" id="scenario-intro"></p>
+    </section>
+
+    <section class="experiment" aria-label="散点图交互实验">
+      <section class="lab-workspace" data-feedback=".rule-explanation"><div class="lab-workspace-controls"><div class="workspace-control-stack"><div class="operate-panel"><span class="operate-badge">你可以操作</span><p id="reading-guide" class="reading-guide"></p>
+      <div class="plot-toolbar"><div class="presets"><button type="button" data-threshold="0">不筛选：全部出现</button><button type="button" data-threshold="120" class="btn-secondary">恢复120分</button></div></div></div><span class="operate-badge">你可以操作</span><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作一：选择你想讨论的生活例子</h3><div class="scenario-picker" role="group" aria-label="选择要看的例子"><button type="button" data-scenario="actors" aria-pressed="true">演员：长相与演技</button><button type="button" data-scenario="beauty" aria-pressed="false">“红颜多薄命”</button><button type="button" data-scenario="dating" aria-pressed="false">“帅哥出渣男”</button></div>
+      <p>对应影响下方：切换长相、人生顺遂程度等坐标含义，以及对应的筛选前提。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作二：改变筛选门槛（也可拖动图上的绿色菱形）</h3><div class="threshold-panel">
+        <div class="threshold-control">
+          <div class="input-heading"><label for="threshold-number">被选中的门槛</label><span><input type="number" id="threshold-number" value="120" min="0" max="200" step="1" aria-describedby="threshold-error"><span>分</span></span></div>
+          <input type="range" id="threshold-range" value="120" min="0" max="200" step="1" aria-label="调整被选中的门槛">
+          <div class="range-labels"><span>0分：所有人都出现</span><span>200分：要求最高</span></div>
+          <p id="threshold-error" class="input-error" role="status"></p>
+        </div>
+        
+      </div>
+      <p>对应影响下方：改变哪些点留进筛选图，以及留下的人呈现出怎样的趋势。人物本身的分数位置不动。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作三：换一组随机人群，或开关趋势线</h3><label class="trend-toggle"><input type="checkbox" id="show-trend" checked>显示趋势线</label><div class="actions"><button type="button" id="new-population">不管刚才选了谁，重新随机生成700个人物</button></div><p>对应影响下方：重新生成700个普通人物；开关只控制趋势线是否显示，点某个人不会重新抽人群。</p></section></div><div class="operate-panel" data-feedback="#person-detail"><span class="operate-badge">你可以操作</span><section class="operate-widget"><h3>操作四：点下面4个典型人物，去散点图里找出他</h3><div class="example-grid" id="examples"></div><p>对应影响下方：只高亮定位这个人，不改变人群和门槛。</p></section></div>
+      </div><div class="lab-workspace-stage"><div class="rule-explanation result" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群）」变化"><p id="selection-rule" class="selection-rule"></p><p id="selection-count" aria-live="polite" aria-atomic="true"></p></div>
+      <div class="plot-grid">
+        <section class="plot-card" aria-labelledby="all-title"><div class="plot-heading"><h2 id="all-title"></h2><span id="all-count"></span><span class="operate-badge">你可以直接在图上拖动绿色菱形门槛，或点击圆点</span></div><p class="plot-subtitle">灰点和绿点合起来，是完整的人群。</p><div class="plot-frame"><svg id="all-plot" role="img" aria-label="全体人物散点图" aria-describedby="plot-help" tabindex="0" class="direct-interaction" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群与趋势线）」变化"></svg></div><p class="plot-caption" id="all-caption"></p></section>
+        <section class="plot-card selected-card" aria-labelledby="selected-title"><div class="plot-heading"><h2 id="selected-title"></h2><span id="selected-count"></span><span class="operate-badge">你可以直接在图上拖动绿色菱形门槛，或点击圆点</span></div><p class="plot-subtitle">只保留绿色的点，坐标和刻度保持相同。</p><div class="plot-frame"><svg id="selected-plot" role="img" aria-label="筛选后人物散点图" aria-describedby="plot-help" tabindex="0" class="direct-interaction" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群与趋势线）」变化"></svg></div><p class="plot-caption" id="selected-caption"></p></section>
+      </div>
+      <div class="legend"><span><i class="dot selected-dot" aria-hidden="true"></i>绿点：达到门槛</span><span><i class="dot excluded-dot" aria-hidden="true"></i>灰点：没达到门槛</span><span><i class="person-key" aria-hidden="true"></i>橙圈：当前查看的人</span><span><i class="handle-key" aria-hidden="true"></i>菱形：拖动门槛</span><span><i class="dashed-key" aria-hidden="true"></i>虚线：筛选门槛</span><span id="trend-legend"><i class="trend-key" aria-hidden="true"></i>棕线：整群点的趋势</span></div>
+      </div></section><section class="lesson-section"><h2>图中选中的人，具体是什么情况？</h2><p class="point-detail" id="person-detail" aria-live="polite" aria-atomic="true" data-linked-label="随当前人物、生活例子与门槛变化（点击人物或操作一～四）"></p><p class="point-detail" id="selected-person-detail" aria-live="polite" aria-atomic="true" data-linked-label="随当前人物、生活例子与门槛变化（点击人物或操作一～四）"></p></section><p class="plot-help" id="plot-help">拖动虚线上的绿色菱形、虚线本身或上方滑块，就能改变门槛。点击一个点，橙圈会标出这个人，分数和入选原因显示在你点击的图下。也可以先点图，再用方向键调整门槛。</p>
+      <p class="change-explanation" id="change-explanation" aria-live="polite" aria-atomic="true" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群与趋势线）」变化"></p>
+      <p class="data-note">图里的主体是电脑随机生成的700个普通人物，另外特意固定放进4个“40分、80分”的典型对照人物，加起来共704人，方便你点击比较谁留下、谁被刷掉。两项分数都在0—100之间。拖动筛选线时，每个人的分数和位置都不变，变的只是谁能进入筛选图。</p>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="why-title">
+      <h2 id="why-title">低的一项，为什么要靠另一项补上？</h2>
+      <p class="section-intro" id="compensation-intro"></p>
+      <p class="lesson-explanation" id="scenario-explanation"></p>
+      <p class="lesson-explanation" id="berkson-explanation"></p>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="how-title">
+      <h2 id="how-title">这条线怎样决定谁会出现？</h2>
+      <p class="section-intro" id="boundary-explanation"></p>
+      <p class="lesson-explanation">棕色实线根据各自图里的点计算，概括整群点的倾斜方向；虚线由你设置的门槛决定。你可以取消“显示趋势线”，只看人物和筛选过程，也可以换一组模拟人物再试。</p>
+      <p class="lesson-explanation">再听到“这两个特点好像总是反着来”，可以先问一句：我们看到的这些人，是怎样被选出来的？</p>
+      <p class="other-example"><a href="hospital/index.html">另一个例子：只看住院者，比较结果怎样变化？</a></p>
+    </section>
+    <noscript><p>请启用JavaScript，才能拖动筛选线并查看散点图。</p></noscript>
+  </main>
+  <footer class="shell footer">《大白话概率论》第3.5.2节 · 武辰</footer>
+
+
+</body></html>

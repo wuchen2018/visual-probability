@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="从袋子里随机拿出一枚硬币、连续抛两次，比较看清硬币前后两次结果的关系。">
+  <title>用同一枚硬币连抛两次，知道手里是哪种硬币后，关系为什么变了？｜武辰的概率论交互实验</title>
+  <link rel="icon" href="data:,">
+  <style>:root{color-scheme:light;--paper:#fcfdfb;--ink:#233029;--muted:#56645e;--line:#d3dfd8;--green:#26725f;--copper:#a96239;--soft:#f3f8f3;--font:system-ui,"PingFang SC","Microsoft YaHei",sans-serif}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--paper);font:17px/1.9 var(--font)}h1,h2,h3,p{margin:0;overflow-wrap:anywhere}h1{font:750 clamp(1.8rem,2.8vw,2.65rem)/1.5 "Songti SC",SimSun,serif;margin:.8rem 0 1rem}h2{font-size:1.45rem;line-height:1.6}h3{font-size:1.15rem;line-height:1.7}p+p{margin-top:.85rem}a{color:var(--green);text-underline-offset:.2em}button,input,select{font:inherit}button{min-height:44px;padding:.55rem 1rem;border:1px solid #b8cbbc;border-radius:5px;background:#fff;color:var(--ink);cursor:pointer;line-height:1.6}button:hover,button[aria-pressed=true]{border-color:var(--green);background:#eaf3ec}button[aria-pressed=true]{font-weight:700}button:disabled{opacity:.5;cursor:default}input[type=number]{width:6rem;min-height:44px;border:1px solid #b4c6b9;border-radius:5px;padding:.3rem .5rem;color:var(--ink);background:white}input[aria-invalid=true]{border:2px solid #a23b30;background:#fff3f1}input[type=range]{display:block;width:100%;min-height:30px;margin:.75rem 0 .2rem;accent-color:var(--green);touch-action:pan-y}input[type=checkbox],input[type=radio]{width:18px;height:18px;accent-color:var(--green)}:focus-visible{outline:3px solid var(--copper);outline-offset:3px}[hidden]{display:none!important}.shell{width:min(1600px,calc(100% - 64px));margin-inline:auto}.masthead{min-height:65px;display:flex;align-items:center;justify-content:space-between;gap:1rem;border-bottom:1px solid var(--line);font-size:.95rem}.brand{font-weight:700}.stamp{display:inline-grid;place-items:center;background:var(--green);color:#fff;width:28px;height:28px;border-radius:3px;margin-right:.6rem}.book-reference{margin-top:1.6rem;font-size:.875rem;line-height:1.85;color:var(--muted)}.book-reference p+p{margin-top:.2rem}.intro{padding:1.1rem 0 2rem}.lead{font-size:1.1rem;line-height:2;max-width:86em}.lead+p{margin-top:1rem}.section{margin-top:3.5rem}.section>p{margin-top:1rem;line-height:2}.section:first-child{margin-top:0}.two,.three,.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem;align-items:start}.three{grid-template-columns:repeat(3,minmax(0,1fr))}.controls{gap:1.25rem 2rem;padding:1.4rem 1.6rem;border:1px solid var(--line);border-radius:7px;background:transparent;margin:1.2rem 0 1.5rem}.controls.one{grid-template-columns:1fr}.control{min-width:0}.control label{display:flex;align-items:center;justify-content:space-between;gap:1rem;font-weight:650}.control label>span:last-child{display:flex;align-items:center;gap:.5rem}.control-help{font-size:.9rem;color:var(--muted);margin-top:.45rem}.error{color:#a23b30;font-size:.9rem;margin-top:.5rem}.error:empty{display:none}.actions{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem;margin:1.25rem 0}.choice{display:flex;align-items:center;gap:.5rem;min-height:44px}.card{min-width:0;padding:1.5rem;border:1px solid var(--line);border-radius:7px}.card>p{margin-top:.8rem}.card.soft{background:#fff}.plot{display:block;width:100%;height:340px;margin-top:1rem;touch-action:pan-y;overflow:visible;user-select:none}.plot text{font-family:var(--font);font-size:14px;fill:var(--muted)}.plot .axislabel{fill:var(--ink)}.plot .gridline{stroke:#e4ebe5;stroke-width:1}.plot .axis{stroke:#9eafa3;stroke-width:1.2}.plot .drag-hit{cursor:grab;touch-action:none}.plot .visible-point{pointer-events:none}.caption{font-size:.95rem;color:var(--muted);line-height:1.9}.legend{display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;color:var(--muted);font-size:.875rem;margin-top:.7rem}.legend span{display:flex;align-items:center;gap:.45rem}.legend i{display:inline-block;width:20px;border-top:3px solid var(--green)}.legend i.copper{border-color:var(--copper)}.legend i.blue{border-color:#5579a2}.result{margin:1.5rem 0;padding:1.2rem 1.5rem;border-left:4px solid var(--green);background:var(--soft);line-height:2;font-size:1.05rem}.result strong{font-size:1.4rem;color:var(--green)}.result p+p{margin-top:.6rem}.formula{font-size:1rem;line-height:2.1;font-variant-numeric:tabular-nums;margin-top:1rem}.term{white-space:nowrap}table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:1rem;font-size:1rem;font-variant-numeric:tabular-nums}th,td{border:1px solid var(--line);padding:.7rem .5rem;text-align:center;overflow-wrap:anywhere}th{background:#fff;font-weight:650}td input[type=number]{width:100%;min-width:0}.heat button{width:100%;padding:.45rem .2rem;border:0;min-height:48px;font-size:.95rem}.heat td{padding:.2rem}.heat th{font-size:.95rem}.heat .chosen-row{outline:2px solid var(--copper);outline-offset:-2px}.notes{margin-top:1rem;color:var(--muted);font-size:.95rem}details{border-top:1px solid var(--line);margin-top:1.5rem;padding-top:1rem}summary{cursor:pointer;font-weight:650}.chips{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}.chips span{background:#fff;border:1px solid var(--line);padding:.2rem .55rem;border-radius:3px}.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem;margin-top:1.2rem}.metric{padding:1rem;border:1px solid var(--line);border-radius:5px}.metric span{display:block;font-size:.9rem;color:var(--muted)}.metric strong{display:block;font-size:1.65rem;color:var(--green);line-height:1.6;overflow-wrap:anywhere}.door-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1rem;margin-top:1rem}.door{min-height:100px;background:#eef5ef;line-height:1.8}.door.chosen{border:3px solid var(--copper)}.door.open{background:#f8f2eb;color:var(--muted)}.day-grid{display:flex;flex-wrap:wrap;gap:.6rem}.day-grid label{display:flex;align-items:center;gap:.4rem;padding:.4rem .65rem;border:1px solid var(--line);border-radius:4px}.family-grid{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:2px;margin-top:1rem;aspect-ratio:1.2}.family-cell{min-height:0;min-width:0;padding:0;border:0;border-radius:1px;background:#e1e6e1}.family-cell.both{background:var(--green)}.family-cell.other{background:#8ba8bf}.family-cell.active{outline:2px solid var(--copper);outline-offset:-2px}.catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.5rem}.catalog a{display:block;padding:1.3rem;border:1px solid var(--line);border-radius:7px;text-decoration:none;color:var(--ink)}.catalog a:hover{border-color:var(--green)}.catalog strong{font-size:1.2rem}.catalog p{margin-top:.6rem;color:var(--muted);font-size:.95rem}.footer{border-top:1px solid var(--line);padding:1.5rem 0 2rem;margin-top:4rem;font-size:.875rem;color:var(--muted)}
+@media(max-width:1100px){.shell{width:calc(100% - 40px)}.two,.three{gap:1.25rem}.card{padding:1.2rem}.three{grid-template-columns:repeat(2,minmax(0,1fr))}.catalog{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:850px){.two,.three{grid-template-columns:1fr;gap:2rem}.plot{height:340px}.controls{gap:1.25rem}.metric-grid{gap:.75rem}.card{padding:1.4rem}.door-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){body{font-size:16px}.shell{width:calc(100% - 32px)}.masthead{font-size:.85rem;min-height:60px}.stamp{width:25px;height:25px;margin-right:.4rem}.masthead>a{font-size:.8rem;white-space:nowrap}.book-reference{font-size:.875rem;margin-top:1.1rem}.intro{padding:1rem 0 1.7rem}.lead{font-size:1rem}h1{font-size:1.8rem}h2{font-size:1.3rem}h3{font-size:1.1rem}.section{margin-top:3rem}.controls{grid-template-columns:1fr;padding:1.1rem 1rem;margin:1rem 0 1.4rem}.control label{font-size:.95rem;gap:.6rem}input[type=number]{width:5rem}.control-help{font-size:.875rem}.card{padding:1.2rem .7rem}.plot{height:300px}.caption{font-size:.9rem}.actions button{font-size:.95rem;padding:.55rem .7rem}.result{padding:1.1rem 1rem;font-size:1rem}.result strong{font-size:1.25rem}.formula{font-size:.95rem}.metric-grid{grid-template-columns:1fr;gap:.8rem}.metric{display:flex;align-items:center;justify-content:space-between;gap:.8rem}.metric strong{font-size:1.35rem}.metric span{font-size:.9rem}.door-grid{gap:.6rem}.door{min-height:90px;font-size:.9rem;padding:.5rem .3rem}table{font-size:.9rem}td,th{padding:.65rem .3rem}.heat th,.heat button{font-size:.875rem}.family-grid{aspect-ratio:1}.catalog{grid-template-columns:1fr}.footer{margin-top:3rem}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+.family-grid.random-space{aspect-ratio:.6}@media(max-width:600px){.family-grid.random-space{aspect-ratio:.5}}
+.heat .heat-value{display:block;width:100%;min-height:48px;padding:.45rem .2rem;font-size:.95rem}.heat .cell-note{display:block;font-size:.9rem;line-height:1.8;color:var(--muted)}.heat caption{text-align:left;padding-bottom:.6rem;font-size:.95rem;color:var(--muted)}@media(max-width:600px){.heat .heat-value{font-size:.875rem}.heat .cell-note{font-size:.875rem}}
+
+/* Formal operation zones: shared across the probability experiments. */
+body .operate-panel{background:#faf5e8;border:1.5px solid #dccaa0;border-radius:8px;padding:1.4rem 1.5rem;min-width:0;margin:1.1rem 0 1.5rem}
+.operate-badge{display:inline-block;width:fit-content;max-width:100%;color:#7c5812;background:#f2e6c9;border:1px solid #dccaa0;border-radius:4px;font-weight:700;font-size:.9rem;line-height:1.7;padding:.2rem .65rem;margin:0 0 .9rem}
+.operate-panel>.operate-badge{grid-column:1/-1}.operate-panel .controls:not(.operate-panel){background:transparent;border:0;border-top:1px solid #dccaa0;border-radius:0;padding:1rem 0 0;margin:1rem 0 0}.operate-panel .actions:last-child{margin-bottom:0}
+.operate-panel button,.operate-panel input[type=number],.operate-panel select{border-color:#c6b27d}.operate-panel button:hover,.operate-panel button[aria-pressed=true],.operate-panel button[aria-current=step]{background:#eee0b9;border-color:#9e792e;color:#67480d}.operate-panel button[aria-pressed=true]{box-shadow:inset 0 0 0 1px #9e792e}.operate-panel input[type=range],.operate-panel input[type=checkbox],.operate-panel input[type=radio]{accent-color:#7c5812}
+.operate-panel button:focus-visible,.operate-panel input:focus-visible,.operate-panel select:focus-visible{outline-color:#7c5812}.operate-panel input[aria-invalid=true]{border-color:#a23b30;background:#fff3f1}.operate-panel button.primary,.operate-panel button#next-step{background:#7c5812;color:#fff;border-color:#7c5812}
+.operate-panel button.btn-secondary{border-color:#d8cfba;color:#6f6b60;background:#fffdfa;box-shadow:none}.operate-panel button.btn-secondary:hover{background:#f4f0e7;border-color:#b9ab8b}.operate-panel button:disabled{opacity:.5}
+.plot-heading{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:.7rem 1rem}.plot-heading h2,.plot-heading h3{flex:1 1 240px}.plot-heading .operate-badge{background:#faf5e8;margin:0;flex:0 1 auto}.direct-interaction>.operate-badge{background:#faf5e8}
+body .result{background:#f3f8f3;border-left:4px solid #26725f;padding:1.1rem 1.3rem;margin:1.2rem 0;line-height:1.9;min-width:0}.card.soft{background:#fff}.operate-panel .event{background:#fffdf8;border-left-color:#b79248}.operate-panel .parameter-block,.operate-panel .parameter-card,.operate-panel .prior-block{background:transparent}.operate-panel .threshold-panel{background:transparent}.sampling{border-top-color:#dccaa0}.transient-panel:has(>button[hidden]){display:none}.operate-panel>.choice.log-choice{display:flex;flex-basis:100%;margin:.8rem 0 0}.operate-panel .day-grid{margin:.8rem 0}.operate-panel .presets button span{color:inherit}
+@media(max-width:600px){body .operate-panel{padding:1.1rem 1rem}.operate-badge{font-size:.875rem}.plot-heading{display:block}.plot-heading .operate-badge{margin-top:.75rem}.operate-panel .controls:not(.operate-panel){padding-top:.85rem}.operate-panel .control label{flex-wrap:wrap}body .result{padding:1rem}.compact-operate{margin:.8rem 0}}
+
+.plot-heading .operate-badge{white-space:normal;overflow-wrap:anywhere;min-width:0}.operate-panel .operate-badge{white-space:normal}.operate-panel .rule-explanation{background:transparent}
+
+body .direct-interaction button{border-color:#c6b27d}body .direct-interaction button:hover,body .direct-interaction button[aria-pressed=true]{background:#eee0b9;border-color:#9e792e;color:#67480d}body .direct-interaction button:focus-visible{outline-color:#7c5812}
+</style>
+  <style>.coin-controls>h2{margin-bottom:1rem}.mode-label{font-weight:650}.quick-result{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);font-size:1rem;line-height:2}.quick-result strong{color:var(--green);font-size:1.2rem}.results-grid{margin-top:2rem}.results-grid h2{font-size:1.25rem}.heat .cell-probability{font-weight:700;font-size:1.1rem}.heat .heat-value{padding:.8rem .2rem;cursor:default}.heat .heat-corner{white-space:pre-line}.results-grid .heat caption{font-size:.9rem}.calculation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem 2rem;margin-top:1.5rem}.calculation-card{padding:1.5rem;border:1px solid var(--line);border-radius:7px;min-width:0}.calculation-card p{margin-top:.8rem;line-height:2}.calculation-card:last-child{grid-column:1/-1}.equation{font-variant-numeric:tabular-nums;color:var(--green);line-height:2.2!important}.interpretation{margin-top:1.3rem;padding:1.5rem;border-left:4px solid var(--green);background:var(--soft);border-radius:4px}.interpretation p{line-height:2}.empty-message{padding:1.2rem;border:1px solid var(--line);border-radius:5px}.plot .bar-value{fill:var(--ink);font-weight:700;font-size:15px}.definition{font-weight:650}.results-grid .result{margin-bottom:0}
+@media(max-width:850px){.calculation-grid{grid-template-columns:1fr;gap:1.5rem}.calculation-card:last-child{grid-column:auto}}
+@media(max-width:600px){.coin-controls>h2{font-size:1.3rem}.results-grid h2{font-size:1.15rem}.heat .cell-probability{font-size:1rem}.calculation-card,.interpretation{padding:1.2rem 1rem}.quick-result{font-size:.95rem}.quick-result strong{font-size:1.1rem}.plot .bar-value{font-size:14px}.calculation-card .term{max-width:100%}}
+</style>
+  
+  
+  
+<style>.operate-widget{border:1px solid #dccaa0;border-radius:10px;padding:1.2rem;margin-top:1.1rem;background:#fffaf0;min-width:0}.operate-widget h2,.operate-widget h3{font-size:1.1rem;margin:0 0 .7rem;line-height:1.7}.operate-widget .control{min-width:0}.operate-widget .affects{color:#6b531f;font-size:.9rem;line-height:1.8;margin:.8rem 0 0}.linked-output{border:1px solid #cadce9;border-left:5px solid #467caa;border-radius:9px;background:#f7fbff;padding:.8rem 1rem;margin:1.2rem 0;min-width:0;overflow-wrap:anywhere}.linked-label{display:block;width:fit-content;max-width:100%;font:600 .82rem/1.7 sans-serif;color:#24547b;background:#e6eff8;padding:.18rem .55rem;border-radius:4px;margin:0 0 .65rem}.linked-output>.result{margin:.45rem 0}.linked-output.is-updated{animation:output-change .8s ease-out}.story-bridge{padding:1.5rem 0 .6rem;max-width:none}.story-bridge p,.story-copy p{line-height:1.95}.method-steps{line-height:1.95;margin:1rem 0 0}.extension{border-top:1px solid var(--line,#ccd6d2);padding-top:1.6rem;margin-top:2.2rem}.fixed-reference{font-weight:600;color:#4d5a56;margin:1rem 0 .4rem}.situation-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1rem 0}.situation-list span{padding:.6rem;border:1px solid #ccd6d2;text-align:center;border-radius:5px}.situation-list .excluded{color:#78817d;background:#eff0ed;text-decoration:line-through}.progression{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.progression>section{padding:1rem;border:1px solid #ccd6d2;border-radius:8px}.progression h3{font-size:1rem;line-height:1.8}.progression p{line-height:1.9}.story-copy strong{font-weight:700}.story-copy .term{white-space:nowrap}@keyframes output-change{from{box-shadow:0 0 0 4px #90badd88}to{box-shadow:0 0 0 0 transparent}}@media(max-width:650px){.operate-widget{padding:1rem .85rem}.linked-output{padding:.75rem .7rem}.progression{grid-template-columns:1fr}.situation-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(prefers-reduced-motion:reduce){.linked-output.is-updated{animation:none;outline:2px solid #90badd}}
+
+.linked-output:has(>.live-summary){position:sticky;top:0;z-index:2}.linked-output>.live-summary{position:static;margin:0;border-bottom:0;padding:.3rem .5rem}
+
+.linked-output:has(#joined[hidden]){display:none}
+
+@media(max-width:650px){.linked-output:has(>.live-summary){position:static}}
+</style><style>/* Controls and their live figures share a workspace; explanations continue below. */
+body .lab-workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:1.25rem;align-items:start;margin:1.2rem 0 2rem;min-width:0;scroll-margin-top:16px}
+.lab-workspace-controls,.lab-workspace-stage{min-width:0}.lab-workspace--sticky-controls>.lab-workspace-controls{position:sticky;top:16px}.lab-workspace--sticky-stage>.lab-workspace-stage{position:sticky;top:16px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;align-items:start}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+body .lab-workspace .operate-panel{margin:0 0 .7rem;padding:.9rem;background:#faf5e8;border:1.5px solid #dccaa0;border-radius:7px;min-width:0}body .lab-workspace .operate-widget{padding:.6rem 0;margin:0;border:0;border-top:1px solid #dccaa0;background:transparent;border-radius:0}.lab-workspace .operate-widget:first-of-type{border-top:0;padding-top:0}.lab-workspace .operate-widget h2,.lab-workspace .operate-widget h3{font-size:1rem;line-height:1.65;margin:0 0 .4rem}.lab-workspace .operate-badge{font-size:.8rem;line-height:1.6;padding:.15rem .45rem;margin:0 0 .5rem}.lab-workspace .plot-heading .operate-badge{margin-top:.25rem}.lab-workspace .controls:not(.operate-panel){padding:0!important;margin:.5rem 0!important;border:0!important;gap:.65rem .75rem;grid-template-columns:repeat(2,minmax(0,1fr))}.lab-workspace .controls:not(.operate-panel):has(>.control:only-child){grid-template-columns:1fr}.lab-workspace .control label{flex-wrap:wrap;gap:.25rem;font-size:.9rem}.lab-workspace .control label>span:first-child{font-weight:600}.lab-workspace input[type=number]{width:5rem;min-width:0;min-height:40px;font-size:1rem}.lab-workspace input[type=range]{margin:.3rem 0 0;min-height:26px}.lab-workspace button{min-height:42px;padding:.4rem .6rem;font-size:.9rem;line-height:1.6}.lab-workspace .actions,.lab-workspace .presets{gap:.4rem;margin:.6rem 0}.lab-workspace .actions:last-child{margin-bottom:0}.lab-workspace .control-help,.lab-workspace .affects,.lab-workspace .operate-widget>p,.lab-workspace .operate-panel>p{font-size:.85rem;line-height:1.75;margin:.4rem 0}.lab-workspace .operate-panel p+p{margin-top:.4rem}.lab-workspace .operate-panel details{margin-top:.6rem;padding-top:.6rem}.lab-workspace .operate-panel summary{font-size:.9rem}
+body .lab-workspace .card,body .lab-workspace .plot-card{padding:.9rem;margin:0;min-width:0}.lab-workspace h2,.lab-workspace h3{font-size:1.1rem;line-height:1.6}.lab-workspace p{line-height:1.8}.lab-workspace .plot{height:230px;min-height:0;margin-top:.5rem}.lab-workspace .plot.square{width:min(100%,280px);height:auto;aspect-ratio:1;margin-inline:auto}.lab-workspace .plot text{font-size:12px}.lab-workspace .legend{font-size:.8rem;line-height:1.7;gap:.3rem .7rem;margin-top:.5rem}.lab-workspace .caption{font-size:.85rem;line-height:1.8}.lab-workspace .linked-output{border:0;border-radius:0;padding:0;margin:.5rem 0;background:transparent;box-shadow:none}.lab-workspace .linked-label{font-size:.75rem;line-height:1.7;padding:0;background:transparent;margin:0 0 .3rem;color:#456277}.lab-workspace .linked-output:has(>.live-summary){position:static}.lab-workspace .linked-output.is-updated{animation:none}.lab-workspace .linked-output>.plot{margin-top:.25rem}
+body .lab-workspace .result,body .lab-workspace .summary,body .lab-workspace .live-summary{margin:.5rem 0;padding:.75rem .85rem;font-size:.95rem;line-height:1.8;background:#f3f8f3;border-left:4px solid #26725f;position:static}.lab-workspace .result strong{font-size:1.15rem}.lab-workspace .result p+p{margin-top:.35rem}.lab-workspace .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.6rem 0}.lab-workspace .metric{padding:.55rem}.lab-workspace .metric span{font-size:.8rem}.lab-workspace .metric strong{font-size:1.25rem}.lab-workspace .formula,.lab-workspace .formulas{font-size:.9rem;line-height:1.9;margin-top:.5rem}.lab-workspace table{font-size:.85rem;margin-top:.5rem}.lab-workspace th,.lab-workspace td{padding:.45rem .25rem}.lab-workspace .plot-frame{min-width:0;padding:0}.lab-workspace .plot-frame svg{display:block;width:100%;height:245px}.lab-followup{margin:1rem 0 2rem}.lab-followup>h3{margin:.8rem 0}.lab-workspace .lab-paired-result{margin-top:.6rem}.lab-workspace-stage>.lab-core-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}.lab-workspace .lab-secondary-controls{margin-top:.75rem}.lab-workspace .bean-grid{width:100%;height:240px}.lab-workspace .door-grid{gap:.5rem;grid-template-columns:repeat(5,minmax(0,1fr));margin:.6rem 0}.lab-workspace .door{min-height:66px;padding:.35rem;font-size:.85rem}.lab-workspace .family-grid{max-width:340px;margin-inline:auto}.lab-workspace .experiment-paths{display:block;margin:0}.lab-workspace .experiment-path{margin-bottom:.5rem}
+/* Page-specific figures retain their labels and computational units. */
+body[data-workspace-page=beta] .lab-workspace-stage #curve-card{margin:0}body[data-workspace-page=beta] .lab-workspace-stage #density{height:245px}body[data-workspace-page=beta] .lab-workspace .beta-metrics{display:grid}body[data-workspace-page=beta] .lab-workspace #prior-summary{font-size:.85rem}body[data-workspace-page=beta] .lab-workspace #counts{font-size:.9rem}
+body[data-workspace-page=berkson] .lab-workspace .example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}body[data-workspace-page=berkson] .lab-workspace .example-grid button{padding:.5rem}body[data-workspace-page=berkson] .lab-workspace .threshold-panel{padding:0;margin:.5rem 0}body[data-workspace-page=berkson] .lab-workspace .plot-toolbar{padding:0;margin:0}
+body[data-workspace-page=bayes] .lab-workspace .reading-width{width:100%;max-width:none}body[data-workspace-page=bayes] .lab-workspace .scene{padding:0;margin:0}body[data-workspace-page=bayes] .lab-workspace .interaction-region{display:block}body[data-workspace-page=bayes] .lab-workspace .groups{margin:.5rem 0;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .group{padding:.8rem}body[data-workspace-page=bayes] .lab-workspace .population{margin:.3rem 0;padding:.4rem}body[data-workspace-page=bayes] .lab-workspace .group-count strong,body[data-workspace-page=bayes] .lab-workspace .positive-count strong{font-size:1.5rem}body[data-workspace-page=bayes] .lab-workspace .answer-equation{margin:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .answer-value strong{font-size:1.7rem}body[data-workspace-page=bayes] .lab-workspace .answer{padding:.85rem}body[data-workspace-page=bayes] .lab-workspace .parameter-block{margin:.5rem 0;padding:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .method-fields{display:grid;grid-template-columns:1fr;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .number-line{margin:.3rem 0}body[data-workspace-page=bayes] .lab-workspace .step-navigation{display:flex;flex-wrap:wrap}
+body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{gap:.7rem;grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-card,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-card{padding:.8rem}body[data-workspace-page=simpson] .lab-workspace .parameter-card,body[data-workspace-page=berkson-hospital] .lab-workspace .parameter-card{padding:.5rem 0}body[data-workspace-page=simpson] .lab-workspace .control-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .control-grid{grid-template-columns:1fr;gap:.6rem}
+body[data-workspace-page=one-way-anova] .lab-workspace #energy,body[data-workspace-page=one-way-anova] .lab-workspace #f-reference{height:145px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #stick{height:115px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #assembled{height:150px}
+@media(min-width:1400px){body .lab-workspace{grid-template-columns:380px minmax(0,1fr)}.lab-workspace .plot{height:250px}.lab-workspace .plot.square{max-width:300px;width:min(100%,300px)}}
+@media(min-width:960px) and (max-width:1100px){body .lab-workspace{grid-template-columns:310px minmax(0,1fr);gap:1rem}.lab-workspace .card,.lab-workspace .plot-card{padding:.7rem}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}.lab-workspace .plot text{font-size:11px}}
+@media(max-width:959px){body .lab-workspace{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0 1.5rem}.lab-workspace>.lab-workspace-controls,.lab-workspace>.lab-workspace-stage{position:static!important;width:100%}.lab-workspace .plot{height:270px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.lab-core-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{grid-template-columns:1fr;gap:1rem}.lab-workspace .plot.square{width:min(100%,340px);max-width:340px}.lab-workspace .lab-mobile-feedback{display:block;font-size:.9rem;line-height:1.8;margin:.4rem 0;padding:.75rem .85rem;background:#f3f8f3;border-left:4px solid #26725f;overflow-wrap:anywhere}.lab-workspace .lab-mobile-feedback:empty{display:none}.lab-workspace .lab-mobile-feedback strong{font-size:1.1rem;color:#26725f}.lab-workspace .plot-frame svg{height:280px}.lab-workspace .controls:not(.operate-panel){grid-template-columns:1fr}.lab-workspace-stage>.lab-core-grid>.card{width:100%}.lab-workspace .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{grid-template-columns:1fr}}
+@media(min-width:960px){.lab-mobile-feedback{display:none}}
+.lab-workspace .plot-frame{height:245px!important}.lab-workspace .threshold-panel{display:block;gap:.6rem}.lab-workspace .input-heading{flex-wrap:wrap;gap:.4rem}.lab-workspace .input-heading>label{min-width:0}.lab-workspace .plot-heading>span{white-space:normal}.lab-workspace .plot-caption{font-size:.85rem;line-height:1.8;margin-top:.5rem}.lab-workspace .quick-reading{font-size:.9rem;line-height:1.8;margin:.5rem 0;padding:.65rem .8rem;background:#f3f8f3;border-left:4px solid #26725f}.lab-workspace .example-card{padding:.65rem}.lab-workspace .example-card p{font-size:.8rem;margin-top:.4rem;line-height:1.7}.lab-workspace .example-card button{margin-top:.5rem}.lab-workspace .workspace-control-stack{display:block!important;border:0!important;padding:0!important;margin:0!important;background:transparent!important}.lab-workspace .workspace-control-stack>.operate-widget.operate-panel{padding:.8rem;border:1.5px solid #dccaa0;border-radius:7px;margin:0 0 .75rem;background:#faf5e8}.lab-workspace .workspace-control-stack>.operate-badge{display:none}
+body .lab-workspace .operate-panel:not(:has(button,input,select,summary)){padding:0;border:0;background:transparent;margin:0}.lab-workspace .operate-panel:not(:has(button,input,select,summary))>.operate-badge{display:none}
+body .lab-workspace .controls.operate-panel{display:block}.lab-workspace .people-table input[type=number]{width:100%;max-width:100%}.lab-mobile-feedback>div+div{margin-top:.5rem}
+.lab-workspace .plot-frame{height:auto!important}.lab-workspace .metric strong{white-space:nowrap}.lab-mobile-slot{display:none}
+@media(max-width:959px){.lab-workspace .metric-grid{grid-template-columns:1fr}.lab-mobile-slot{display:block}.lab-mobile-slot .door-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.lab-workspace .admission-panel{display:block;padding:0;margin:.5rem 0}.lab-workspace #other-calculation{font-size:.85rem;line-height:1.8;margin:.5rem 0 1rem}
+@media(max-width:600px){body[data-workspace-page=bayes] .lab-workspace .groups{grid-template-columns:1fr!important}body[data-workspace-page=bayes] .lab-workspace .group{grid-template-columns:1fr;gap:.65rem}body[data-workspace-page=bayes] .lab-workspace .group-source,body[data-workspace-page=bayes] .lab-workspace .flow-transform,body[data-workspace-page=bayes] .lab-workspace .group-result{grid-column:1/-1;text-align:center}body[data-workspace-page=bayes] .lab-workspace .flow-arrow{width:2px;height:1.5rem;margin:.5rem auto}body[data-workspace-page=bayes] .lab-workspace .flow-arrow::after{top:auto;bottom:0;right:-4px;transform:rotate(135deg)}body[data-workspace-page=bayes] .lab-workspace .flow-rate{min-height:0}}
+@media(min-width:960px){body[data-workspace-page=bayes] .lab-workspace-stage{position:static!important;top:auto!important}}
+</style><style>/* The approved confidence-interval control pane, shared by probability labs. */
+.lab-desktop-feedback{display:none}
+@media(min-width:960px){
+  body .lab-workspace>.lab-workspace-controls{
+    position:sticky;
+    top:16px;
+    max-height:calc(100vh - 32px);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior-y:auto;
+    scrollbar-gutter:stable;
+    scrollbar-width:auto;
+    scrollbar-color:#a88e57 #f3ecd9;
+    padding-inline-end:8px;
+    scroll-padding-block:12px;
+  }
+  body .lab-workspace>.lab-workspace-controls[data-scrollable="true"]{overscroll-behavior-y:contain}
+  .lab-workspace-controls>.operate-panel:not(:has(~.operate-panel)),
+  .lab-workspace-controls>.workspace-control-stack>.operate-panel:not(:has(~.operate-panel)){margin-bottom:0}
+  .lab-workspace-controls::-webkit-scrollbar{width:14px}
+  .lab-workspace-controls::-webkit-scrollbar-track{background:#f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb{background:#a88e57;border:3px solid #f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb:hover{background:#7c5812}
+  .lab-workspace-controls :is(button,input,select){scroll-margin-block:12px}
+  body .lab-workspace .lab-desktop-feedback{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1.25rem;margin:0 0 .75rem}
+  body[data-workspace-page="bayes"] .lab-workspace-controls .linked-output:has(>#mobile-result-summary){display:none}
+}
+</style></head>
+<body data-workspace-page="conditional-independence">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../index.html">实验目录</a></header>
+  <main class="shell">
+    <div class="book-reference"><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式 · <strong>3.5.1 从独立到条件独立 · 纸书第88页起</strong></p><p><a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf">阅读公开样章（PDF）</a></p></div>
+    <section class="intro story-copy" aria-labelledby="title"><h1 id="title">用同一枚硬币连抛两次，知道手里是哪种硬币后，关系为什么变了？</h1><p class="lead">想象桌子上有一个不透明的袋子，袋子里面装着很多硬币，这些硬币分为两种：第一种是<strong>正常硬币</strong>，一面是正面、一面是反面，抛一次出现正面和反面的机会各占50%；第二种是不正常的<strong>双正面硬币</strong>，两面全都是正面，怎么抛都必定出现正面。</p><p>我们按这个规则反复做实验：每次伸手从袋子里随机拿出一枚硬币，拿在手里<strong>连续抛两次</strong>，记下这两次的结果之后，把这枚硬币放回袋子里；然后再伸手从袋子里重新拿一枚出来继续做下一轮。</p><p>现在问题来了：<strong>如果第1抛出现了正面，会改变你对第2抛的判断吗？</strong>下面说的“第1抛”“第2抛”，指的都是刚从袋子里拿出来的同一枚硬币，连续抛两次里面的第1下和第2下，不是“第一回从袋子里拿硬币”。</p><p>在你还没看清手里这枚硬币是哪一种时，第1抛出正面，可能会让你心里嘀咕：“我是不是拿到双正面硬币了？”，从而猜第2抛也更容易出正面。可如果你在抛之前就已经低头看清了手里这枚是正常硬币，还是双正面硬币，第1抛的结果还会影响第2抛吗？</p></section>
+
+    <section class="lab-workspace" data-feedback="#result"><div class="lab-workspace-controls"><section class="coin-controls workspace-control-stack" aria-label="改变硬币比例与已知条件"><span class="operate-badge">你可以操作</span><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h2>操作一：调整袋子里双正面硬币的比例</h2><div class="controls one"><div class="control">
+        <label for="q-number"><span>袋子里双正面硬币的比例</span><span><input id="q-number" data-num="q" type="number" min="0" max="100" step="1" value="50" aria-describedby="bag-description error-q">%</span></label>
+        <input data-range="q" type="range" min="0" max="100" step="1" value="50" aria-label="袋子里双正面硬币的比例">
+        <p class="control-help" id="bag-description"></p>
+        <p class="error" id="error-q" role="status"></p>
+        
+      </div></div><p class="affects">对应影响下方：8,000轮预计结果表里的次数，以及还没看清硬币时的概率和算式。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h2>操作二：选择你分析这轮结果时，事先看没看清手里这枚硬币是哪一种</h2><div class="actions" role="group" aria-label="选择是否已经看清手里的硬币"><button type="button" id="mixed">还没看清手里拿的是哪种硬币（全混在一起看）</button><button type="button" id="fair">已经看清：手里拿的这枚是正常硬币</button><button type="button" id="double">已经看清：手里拿的这枚是双正面硬币</button></div><p class="affects">对应影响下方：蓝色标亮区域里的图表、概率和原因解释。</p></section></section></div><div class="lab-workspace-stage"><div id="population-note" class="result" aria-live="polite" aria-atomic="true" data-linked-label="随上方操作一、二变化"></div><p class="quick-result result" id="quick-result" role="status" aria-atomic="true" data-linked-label="随上方操作一、二变化"></p>
+
+    <div class="two results-grid">
+      <section class="card" aria-labelledby="joint-title">
+        <h2 id="joint-title">两次结果的四种组合</h2>
+        <p id="counts" class="caption"></p>
+        <div id="joint" data-linked-label="随上方操作一、二变化"></div>
+        <p class="caption" id="table-guide">行看第1抛，列看第2抛。绿色深浅表示每格的概率，文字给出预计次数。棕色边框圈出第1抛为正的一行，知道第1抛为正后就只看这一行。</p>
+      </section>
+      <section class="card" aria-labelledby="comparison-title">
+        <h2 id="comparison-title">第1抛的信息，会改变第2抛的概率吗？</h2>
+        <svg class="plot" id="comparison" role="img" aria-label="看第1抛结果前后，第2抛正面概率的比较" data-linked-label="随上方操作一、二变化"></svg>
+        <div id="result" class="result" data-linked-label="随上方操作一、二变化"></div>
+      </section>
+    </div>
+
+    </div></section><section class="section" aria-labelledby="calculation-title">
+      <h2 id="calculation-title">这些概率怎样从两种硬币算出来？</h2>
+      <p id="calculation-scope" class="caption"></p>
+      <div id="calculation" class="calculation-grid" data-linked-label="随上方操作一、二变化"></div>
+    </section>
+    <section class="section" aria-labelledby="explanation-title">
+      <h2 id="explanation-title">为什么看清手里是哪种硬币后，两次结果就独立了？</h2>
+      <div id="interpretation" class="interpretation result" data-linked-label="随上方操作一、二变化"></div>
+    </section>
+    <noscript><p>请启用JavaScript，才能操作这个实验。</p></noscript>
+  </main>
+  <footer class="shell footer">3.5.1 从独立到条件独立 · 武辰</footer>
+
+
+<script>(function(root,factory){const m=factory();if(typeof module==='object'&&module.exports)module.exports=m;else root.ProbModels=m;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+const sum=a=>a.reduce((s,x)=>s+x,0),mean=a=>a.length?sum(a)/a.length:null;
+function rng(seed=20261121){let a=seed>>>0;return()=>{a+=0x6D2B79F5;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+function covariance(points){const n=points.length,mx=mean(points.map(p=>p.x)),my=mean(points.map(p=>p.y));const xx=sum(points.map(p=>(p.x-mx)**2))/n,yy=sum(points.map(p=>(p.y-my)**2))/n,xy=sum(points.map(p=>(p.x-mx)*(p.y-my)))/n;return{n,mx,my,xx,yy,xy,r:xx>1e-12&&yy>1e-12?Math.max(-1,Math.min(1,xy/Math.sqrt(xx*yy))):null,terms:points.map(p=>(p.x-mx)*(p.y-my))};}
+function cosine(u,v){const dot=u.x*v.x+u.y*v.y,a=Math.hypot(u.x,u.y),b=Math.hypot(v.x,v.y);let cos=a&&b?Math.max(-1,Math.min(1,dot/a/b)):null;if(cos!==null){if(Math.abs(cos-1)<1e-12)cos=1;else if(Math.abs(cos+1)<1e-12)cos=-1;else if(Math.abs(cos)<1e-12)cos=0;}return{dot,a,b,cos,angle:cos===null?null:Math.acos(cos)*180/Math.PI};}
+function entropy(p){return Math.max(0,-sum(p.filter(x=>x>0).map(x=>x*Math.log2(x))));}
+function normalize(a){const total=sum(a);return{total,p:total>0?a.map(x=>x/total):a.map(()=>null)};}
+function channel(p,e){const joint=[(1-p)*(1-e),(1-p)*e,p*e,p*(1-e)],py=joint[1]+joint[3],hx=entropy([p,1-p]),hy=entropy([py,1-py]),hxy=entropy(joint),conditional=hxy-hx;return{joint,py,hx,hy,hxy,conditional,mi:Math.max(0,hy-conditional)};}
+function coin(q,kind='mixed'){const fair=kind==='fair'?1:kind==='double'?0:1-q,double=kind==='double'?1:kind==='fair'?0:q;const possible=kind==='mixed'||(kind==='fair'?q<1:q>0);const joint=[fair/4+double,fair/4,fair/4,fair/4];return{joint,possible,b:fair/2+double,after:(fair/4+double)/(fair/2+double),fair,double};}
+function tuesday(days,method='family'){const families=[];for(let a=0;a<14;a++)for(let b=0;b<14;b++){const am=a<7&&days.includes(a),bm=b<7&&days.includes(b-0);const boys=a<7&&b<7;families.push({a,b,boys,eligible:am||bm,weight:method==='family'?(am||bm?1:0):(Number(am)+Number(bm))});}const denominator=sum(families.map(f=>f.weight)),numerator=sum(families.filter(f=>f.boys).map(f=>f.weight));return{families,denominator,numerator,p:denominator?numerator/denominator:null};}
+function simulateMonty(n,repeats=1000,seed=1234){const random=rng(seed);let stay=0;for(let i=0;i<repeats;i++){const prize=Math.floor(random()*n),choice=Math.floor(random()*n);if(prize===choice)stay++;}return{stay,switch:repeats-stay,repeats};}
+function montyRound(n,choice,seed){const random=rng(seed),prize=Math.floor(random()*n),other=prize!==choice?prize:Array.from({length:n},(_,i)=>i).filter(i=>i!==choice)[Math.floor(random()*(n-1))];return{prize,choice,other,opened:Array.from({length:n},(_,i)=>i).filter(i=>i!==choice&&i!==other)};}
+function largeNumbers(p,n,seed=20261121){return Array.from({length:4},(_,j)=>{const random=rng(seed+j*1009),path=[],errors=[];let heads=0;const outcomes=[];for(let i=1;i<=n;i++){const head=random()<p;heads+=Number(head);if(i>n-20)outcomes.push(head);path.push({x:i,y:heads/i});errors.push({x:i,y:heads-i*p});}return{heads,path,errors,outcomes};});}
+function ruinTheory(start,goal,p){if(start<=0)return 1;if(start>=goal)return 0;if(p===0)return 1;if(p===1)return 0;if(Math.abs(p-.5)<1e-12)return 1-start/goal;const z=Math.log((1-p)/p);const win=z>0?Math.exp((start-goal)*z)*(-Math.expm1(-start*z))/(-Math.expm1(-goal*z)):Math.expm1(start*z)/Math.expm1(goal*z);return 1-win;}
+function gambler(start,goal,p,strategy='flat',repeats=300,horizon=4000,seed=20261121){const random=rng(seed);let ruined=0,won=0,pending=0;const paths=[];for(let i=0;i<repeats;i++){let money=start,stake=1,t=0;const path=[{x:0,y:money}];while(money>0&&money<goal&&t<horizon){const bet=Math.min(stake,money,goal-money),win=random()<p;money+=win?bet:-bet;stake=strategy==='double'&&!win?stake*2:1;t++;if(i<8&&(t<100||t%10===0||money===0||money===goal))path.push({x:t,y:money});}if(money===0)ruined++;else if(money===goal)won++;else pending++;if(i<8)paths.push(path);}return{ruined,won,pending,paths,repeats,horizon,theory:strategy==='flat'?ruinTheory(start,goal,p):null};}
+function pareto(alpha,n=200,seed=20261121){const random=rng(seed),values=Array.from({length:n},()=>Math.max(1e-12,1-random())**(-1/(alpha-1))).sort((a,b)=>b-a),total=sum(values);return{values,total,topOne:values[0]/total,topTen:sum(values.slice(0,Math.ceil(n*.1)))/total,mean:total/n,theoryMean:alpha>2?(alpha-1)/(alpha-2):null};}
+function clt(kind,n,repeats=1000,seed=20261121){const specs={uniform:{mu:.5,variance:1/12,domain:[0,1]},die:{mu:3.5,variance:35/12,domain:[.5,6.5]},coin:{mu:.1,variance:.09,domain:[0,1]}};const spec=specs[kind],groups=[],means=[],zs=[];for(let i=0;i<repeats;i++){const random=rng(seed+Math.imul(i,2654435761)),raw=Array.from({length:n},()=>kind==='uniform'?random():kind==='die'?Math.floor(random()*6)+1:Number(random()<.1)),m=mean(raw);groups.push(raw);means.push(m);zs.push((m-spec.mu)/Math.sqrt(spec.variance/n));}const random=rng(seed+779),mother=Array.from({length:3000},()=>kind==='uniform'?random():kind==='die'?Math.floor(random()*6)+1:Number(random()<.1));return{spec,groups,means,zs,mother,meanOfMeans:mean(means),standardError:Math.sqrt(spec.variance/n)};}
+function histogram(values,min,max,bins=24){const counts=Array(bins).fill(0),width=(max-min)/bins;let outside=0;for(const v of values){if(v<min||v>max){outside++;continue;}counts[Math.min(bins-1,Math.floor((v-min)/width))]++;}return{bars:counts.map((count,i)=>({x:min+(i+.5)*width,y:count/values.length/width,width,count})),outside,counts};}
+function joint(weights,row=0){const n=normalize(weights),rows=[0,1,2].map(i=>sum(weights.slice(i*3,i*3+3))),cols=[0,1,2].map(j=>weights[j]+weights[j+3]+weights[j+6]);return{total:n.total,p:n.p,rows,cols,marginalX:n.total?rows.map(x=>x/n.total):[null,null,null],marginalY:n.total?cols.map(x=>x/n.total):[null,null,null],conditional:rows[row]?weights.slice(row*3,row*3+3).map(x=>x/rows[row]):[null,null,null]};}
+function continuous(c,width){const a=Math.max(0,c-width/2),b=Math.min(1,c+width/2),mass=b*b-a*a;return{a,b,mass,fx:2*c,conditional:y=>y<0||y>b?0:2*(b-Math.max(a,y))/mass,limit:y=>y>=0&&y<=c?1/c:0};}
+return{sum,mean,rng,covariance,cosine,entropy,normalize,channel,coin,tuesday,simulateMonty,montyRound,largeNumbers,ruinTheory,gambler,pareto,clt,histogram,joint,continuous};
+});
+</script><script>(()=>{'use strict';const $=id=>document.getElementById(id),geom=new Map(),states={};let render=null;
+const f=(v,d=3)=>v===null?'无法计算':!Number.isFinite(v)?'无法计算':v===0?'0':Math.abs(v)>1e7||(Math.abs(v)>0&&Math.abs(v)<1e-4)?v.toExponential(2):new Intl.NumberFormat('zh-CN',{maximumFractionDigits:d}).format(v);
+const pct=v=>v===null?'无法计算':v>0&&v<1e-8?'<0.000001%':v>0&&v<1e-4?new Intl.NumberFormat('zh-CN',{maximumFractionDigits:8}).format(v*100)+'%':f(v*100,2)+'%';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function plot(id,o){const svg=$(id);if(!svg)return;const r=svg.getBoundingClientRect(),w=r.width,h=r.height;if(!w||!h)return;let left=o.left||60,top=22,iw=w-left-20,ih=h-top-51;if(o.equal){const unit=Math.min(iw/(o.x[1]-o.x[0]),ih/(o.y[1]-o.y[0])),nw=unit*(o.x[1]-o.x[0]),nh=unit*(o.y[1]-o.y[0]);left+=(iw-nw)/2;top+=(ih-nh)/2;iw=nw;ih=nh;}
+const tx=x=>o.logX?Math.log10(x):x,ty=y=>o.logY?Math.log10(y):y,xd=o.x.map(tx),yd=o.y.map(ty),X=x=>left+(tx(x)-xd[0])/(xd[1]-xd[0])*iw,Y=y=>top+ih-(ty(y)-yd[0])/(yd[1]-yd[0])*ih;
+const inverse=(cx,cy)=>({x:o.logX?10**(xd[0]+(cx-left)/iw*(xd[1]-xd[0])):xd[0]+(cx-left)/iw*(xd[1]-xd[0]),y:o.logY?10**(yd[0]+(top+ih-cy)/ih*(yd[1]-yd[0])):yd[0]+(top+ih-cy)/ih*(yd[1]-yd[0])});geom.set(id,{X,Y,inverse,svg,left,top,iw,ih});
+let s=`<defs><clipPath id="${id}-clip"><rect x="${left}" y="${top}" width="${iw}" height="${ih}"/></clipPath></defs>`;
+const ticks=(range,log)=>Array.from({length:4},(_,i)=>log?10**(Math.log10(range[0])+(Math.log10(range[1])-Math.log10(range[0]))*i/3):range[0]+(range[1]-range[0])*i/3);
+for(const v of(o.xticks||ticks(o.x,o.logX))){s+=`<line class="gridline" x1="${X(v)}" y1="${top}" x2="${X(v)}" y2="${top+ih}"/><text x="${X(v)}" y="${top+ih+23}" text-anchor="middle">${esc(o.xtickLabels?.[v]??f(v,2))}</text>`;}
+for(const v of(o.yticks||ticks(o.y,o.logY))){s+=`<line class="gridline" x1="${left}" y1="${Y(v)}" x2="${left+iw}" y2="${Y(v)}"/><text x="${left-8}" y="${Y(v)+5}" text-anchor="end">${esc(o.ytickLabels?.[v]??f(v,2))}</text>`;}
+s+=`<path class="axis" d="M${left},${top} V${top+ih} H${left+iw}" fill="none"/><text class="axislabel" x="${left+iw/2}" y="${Math.min(h-5,top+ih+47)}" text-anchor="middle">${esc(o.xlabel||'')}</text><text class="axislabel" transform="translate(${Math.max(15,left-45)},${top+ih/2}) rotate(-90)" text-anchor="middle">${esc(o.ylabel||'')}</text><g clip-path="url(#${id}-clip)">`;
+for(const poly of o.polygons||[])s+=`<polygon points="${poly.points.map(p=>`${X(p.x)},${Y(p.y)}`).join(' ')}" fill="${poly.color||'#26725f'}" opacity="${poly.opacity||.12}"/>`;
+for(const b of o.bars||[]){if(b.y===null)continue;const bw=b.width||(o.x[1]-o.x[0])/(o.bars.length+1)*.65;s+=`<rect x="${X(b.x-bw/2)}" y="${Y(b.y)}" width="${Math.max(1,X(b.x+bw/2)-X(b.x-bw/2))}" height="${Math.max(0,Y(o.logY?o.y[0]:Math.max(0,o.y[0]))-Y(b.y))}" fill="${b.color||'#26725f'}" opacity=".78"/>`;}
+for(const series of o.series||[]){const data=series.data.filter(p=>Number.isFinite(p.x)&&Number.isFinite(p.y)&&(!o.logX||p.x>0)&&(!o.logY||p.y>0));if(!data.length)continue;const d=data.map((p,i)=>`${i?'L':'M'}${X(p.x)},${Y(p.y)}`).join(' ');if(series.fill)s+=`<path d="${d} L${X(data.at(-1).x)},${Y(o.logY?o.y[0]:0)} L${X(data[0].x)},${Y(o.logY?o.y[0]:0)} Z" fill="${series.color||'#26725f'}" opacity=".15"/>`;s+=`<path d="${d}" fill="none" stroke="${series.color||'#26725f'}" stroke-width="${series.width||2}" ${series.dash?'stroke-dasharray="5 4"':''}/>`;}
+for(const line of o.guides||[]){s+=`<path d="M${X(line.a.x)},${Y(line.a.y)} L${X(line.b.x)},${Y(line.b.y)}" fill="none" stroke="${line.color||'#a96239'}" stroke-width="2" ${line.dash?'stroke-dasharray="5 4"':''}/>`;}
+s+='</g>';
+for(const p of(o.points||[]))s+=`<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="${p.r||5}" fill="${p.color||'#26725f'}" class="visible-point"/>`;
+if(o.extra)s+=o.extra({X,Y,left,top,iw,ih,w,h});svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
+let content=svg.querySelector(':scope > [data-plot-content]'),handles=svg.querySelector(':scope > [data-drag-layer]');
+if(!content){content=document.createElementNS('http://www.w3.org/2000/svg','g');content.setAttribute('data-plot-content','');svg.appendChild(content);}
+if(!handles){handles=document.createElementNS('http://www.w3.org/2000/svg','g');handles.setAttribute('data-drag-layer','');svg.appendChild(handles);}
+content.innerHTML=s;
+const keep=new Set();for(const[i,p]of(o.points||[]).entries()){if(!p.drag)continue;const key=String(p.key??i);keep.add(key);let hit=[...handles.children].find(n=>n.dataset.dragPoint===key);if(!hit){hit=document.createElementNS('http://www.w3.org/2000/svg','circle');hit.setAttribute('class','drag-hit');hit.setAttribute('r','13');hit.setAttribute('fill','transparent');hit.dataset.dragPoint=key;handles.appendChild(hit);}hit.setAttribute('cx',X(p.x));hit.setAttribute('cy',Y(p.y));}for(const hit of [...handles.children])if(!keep.has(hit.dataset.dragPoint))hit.remove();return geom.get(id);
+}
+function bind(fn){
+render=fn;
+document.querySelectorAll('input[data-num]').forEach(n=>{
+ const k=n.dataset.num,range=document.querySelector(`[data-range="${k}"]`),er=$('error-'+k);
+ states[k]=Number(n.value);
+ const clear=()=>{n.removeAttribute('aria-invalid');if(er)er.textContent='';};
+ const update=e=>{
+  if(e.target.value===''&&!e.target.validity.badInput){clear();return;}
+  const v=Number(e.target.value),min=Number(n.min),max=Number(n.max),step=Number(n.step||1);
+  if(!Number.isFinite(v)||v<min||v>max||Math.abs((v-min)/step-Math.round((v-min)/step))>1e-6){
+   n.setAttribute('aria-invalid','true');
+   if(er)er.textContent=`请填${f(min)}到${f(max)}之间${step===1?'的整数':`、间隔为${f(step)}的数`}，暂时仍按刚才的${f(states[k])}计算。`;
+   return;
+  }
+  states[k]=v;n.value=v;if(range)range.value=v;clear();render(states);
+ };
+ n.addEventListener('input',update);
+ n.addEventListener('blur',()=>{if(n.value===''&&!n.validity.badInput){n.value=states[k];clear();}});
+ if(range)range.addEventListener('input',update);
+});
+window.addEventListener('resize',()=>{clearTimeout(window.__resizeLab);window.__resizeLab=setTimeout(()=>render(states),80);});
+fn(states);document.documentElement.dataset.labReady='true';
+}
+function set(values){for(const[k,v]of Object.entries(values)){states[k]=v;const n=document.querySelector(`[data-num="${k}"]`),r=document.querySelector(`[data-range="${k}"]`);if(n){n.value=v;n.removeAttribute('aria-invalid');}if(r)r.value=v;const e=$('error-'+k);if(e)e.textContent='';}if(render)render(states);}
+function drag(id,fn){const svg=$(id);let active=null;svg.addEventListener('touchstart',e=>{if(e.target.closest('[data-drag-point]'))e.preventDefault();},{passive:false});svg.addEventListener('touchmove',e=>{if(active)e.preventDefault();},{passive:false});svg.addEventListener('pointerdown',e=>{const t=e.target.closest('[data-drag-point]');if(!t||e.button!==0)return;active={pointer:e.pointerId,key:t.dataset.dragPoint};svg.setPointerCapture(e.pointerId);e.preventDefault();});svg.addEventListener('pointermove',e=>{if(!active||active.pointer!==e.pointerId)return;const r=svg.getBoundingClientRect(),p=geom.get(id).inverse(e.clientX-r.left,e.clientY-r.top);fn(p,active.key);});const end=e=>{if(active&&active.pointer===e.pointerId){if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);active=null;}};svg.addEventListener('pointerup',end);svg.addEventListener('pointercancel',end);}
+function heat(id,values,{rows,cols,selectedRow=-1,onClick,cornerLabel='分组',caption='',cellLabels=[]}={}){
+ const host=$(id),interactive=typeof onClick==='function';
+ host.innerHTML=`<table class="heat">${caption?`<caption>${esc(caption)}</caption>`:''}<thead><tr><th class="heat-corner" scope="col">${esc(cornerLabel)}</th>${cols.map(c=>`<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr class="${i===selectedRow?'chosen-row':''}"><th scope="row">${esc(r)}</th>${cols.map((_,j)=>{
+  const index=i*cols.length+j,value=values[index],tag=interactive?'button':'span';
+  return `<td><${tag}${interactive?' type="button"':''} class="heat-value" data-cell="${index}" style="background:rgba(38,114,95,${value===null?0:.06+.7*value})"><span class="cell-probability">${value===null?'—':pct(value)}</span>${cellLabels[index]!==undefined?`<span class="cell-note">${esc(cellLabels[index])}</span>`:''}</${tag}></td>`;
+ }).join('')}</tr>`).join('')}</tbody></table>`;
+ if(interactive)host.querySelectorAll('[data-cell]').forEach(b=>b.addEventListener('click',()=>onClick(Number(b.dataset.cell))));
+}
+function series(fn,a,b,n=200){return Array.from({length:n+1},(_,i)=>({x:a+(b-a)*i/n,y:fn(a+(b-a)*i/n)}));}
+function refresh(){if(render)render(states);}window.Lab={$,f,pct,esc,plot,bind,set,drag,heat,series,refresh,values:()=>({...states}),term:s=>`<span class="term">${esc(s)}</span>`,colors:['#26725f','#a96239','#5579a2','#9275a6']};
+})();
+</script><script>(()=>{let armed=false;for(const type of ['input','change','click','pointerdown','keydown'])document.addEventListener(type,()=>{armed=true},{capture:true});for(const node of document.querySelectorAll('[data-linked-label]')){const shell=document.createElement('div');shell.className='linked-output';const badge=document.createElement('span');badge.className='linked-label';badge.textContent=node.dataset.linkedLabel;node.before(shell);shell.append(badge,node);let timer,last=node.innerHTML;new MutationObserver(()=>{const current=node.innerHTML;if(current===last)return;last=current;if(!armed)return;shell.dataset.changeCount=String(Number(shell.dataset.changeCount||0)+1);shell.classList.remove('is-updated');requestAnimationFrame(()=>shell.classList.add('is-updated'));clearTimeout(timer);timer=setTimeout(()=>shell.classList.remove('is-updated'),850)}).observe(node,{childList:true,characterData:true,subtree:true})}})();
+</script><script>(() => {
+  'use strict';
+  const L = window.Lab, M = window.ProbModels, $ = L.$;
+  const TOTAL = 8000;
+  let kind = 'mixed';
+  const f = n => L.f(n, 2);
+  const term = L.term;
+  const names = { mixed: '还没看清手里拿的是哪种硬币', fair: '已经看清：手里拿的这枚是正常硬币', double: '已经看清：手里拿的这枚是双正面硬币' };
+  function probability(n, d) {
+    const scaled = n * 10000;
+    const units = Math.floor((2 * scaled + d) / (2 * d));
+    return { text: `${f(units / 100)}%`, sign: scaled % d === 0 ? '＝' : '≈' };
+  }
+  const percentNumber = n => `${f(n)}%`;
+  function drawBars(a, before, after) {
+    L.plot('comparison', {
+      x: [-.5, 1.5], y: [0, 1], xticks: [0, 1], xtickLabels: { 0: '', 1: '' },
+      yticks: [0, .25, .5, .75, 1], ytickLabels: { 0: '0%', .25: '25%', .5: '50%', .75: '75%', 1: '100%' },
+      xlabel: '', ylabel: '第2抛出现正面的概率',
+      bars: a ? [{ x: 0, y: a.b }, { x: 1, y: a.after, color: '#a96239' }] : [],
+      extra: a ? ({ X, Y }) => `<text x="${X(0)}" y="${Y(0)+18}" text-anchor="middle" style="font-size:12px"><tspan x="${X(0)}">还不知道</tspan><tspan x="${X(0)}" dy="14">第1抛的</tspan><tspan x="${X(0)}" dy="14">结果时</tspan></text><text x="${X(1)}" y="${Y(0)+18}" text-anchor="middle" style="font-size:12px"><tspan x="${X(1)}">已经知道</tspan><tspan x="${X(1)}" dy="14">第1抛是</tspan><tspan x="${X(1)}" dy="14">正面之后</tspan></text><text class="bar-value" id="before-bar-value" x="${X(0)}" y="${Math.max(15, Y(a.b) - 9)}" text-anchor="middle">${before.text}</text><text class="bar-value" id="after-bar-value" x="${X(1)}" y="${Math.max(15, Y(a.after) - 9)}" text-anchor="middle">${after.text}</text>` : null
+    });
+    $('comparison').setAttribute('aria-label', a ? `${names[kind]}。对比两根柱子：左边是还不知道第1抛结果的时候，第2抛出现正面的概率，为${before.text}；右边是已经知道第1抛出现正面之后，第2抛出现正面的概率，为${after.text}。` : '袋子里没有这种硬币，无法比较这组概率。');
+  }
+  function interpret(q, doubleCount, firstHeads, before, after) {
+    const doubleKnown = kind === 'double' || (kind === 'mixed' && q === 100);
+    const fairKnown = kind === 'fair' || (kind === 'mixed' && q === 0);
+    if (doubleKnown) {
+      $('interpretation').innerHTML = `<p>${kind === 'mixed' ? '袋子里全是双正面硬币，所以即使没有另外看清手里是哪种硬币，你也已经知道拿到的是哪一种。' : '你已经确认这枚硬币两面都是正。'}第2抛在抛之前就一定是正面，概率是100%。再告诉你第1抛出了正面，第2抛的概率仍是100%。</p><p class="definition">判断独立，看的就是第1抛的结果有没有改变第2抛的概率。100%到100%没有变，所以这种必然出现的结果同样可以独立。</p><p>也可以看两次都正的概率：${term('100%×100%＝100%')}，正好等于两次各自为正的概率相乘。</p>`;
+    } else if (fairKnown) {
+      $('interpretation').innerHTML = `<p>${kind === 'mixed' ? '袋子里全是正常硬币，所以即使没有另外看清手里是哪种硬币，你也已经知道拿到的是哪一种。' : '你已经确认拿到的是正常硬币。'}第2抛为正面的机会原本就是50%。第1抛无论出了正面还是反面，第2抛仍是50%，不用再猜“是不是拿到了双正面硬币”。</p><p class="definition">先看清手里是哪种硬币以后，第1抛的结果没有改变第2抛的概率。这就叫在已经知道手里是哪种硬币的条件下，两次结果独立。</p>`;
+    } else {
+      const posterior = probability(doubleCount, firstHeads);
+      $('interpretation').innerHTML = `<p>还没看清手里是哪种硬币时，第1抛出了正面，你会更怀疑拿到的是双正面硬币。用本页预计次数算，第1抛为正的${f(firstHeads)}次里，有${f(doubleCount)}次来自双正面硬币。它的占比从${q}%升到${posterior.text}，所以第2抛为正的机会也从${before.text}升到了${after.text}。</p><p>如果先确认是正常硬币，第2抛为正的机会一直是50%；如果先确认是双正面硬币，第2抛为正的机会一直是100%。第1抛出正面，都不会再提供判断手里是哪种硬币的新线索。</p><p class="definition">已经知道手里是哪种硬币后，第1抛的结果不再改变第2抛的概率，这就是这里的条件独立。两次都必然为正的双正面硬币，也是100%到100%没有变。</p>`;
+    }
+  }
+  L.bind(v => {
+    const q = v.q, model = M.coin(q / 100, kind);
+    const doubleCount = TOTAL * q / 100, fairCount = TOTAL - doubleCount;
+    const scope = kind === 'mixed' ? '全部拿硬币再连抛两次的结果' : kind === 'fair' ? '抽到正常硬币的情况' : '抽到双正面硬币的情况';
+    $('bag-description').textContent = `正常硬币占${100 - q}%，双正面硬币占${q}%。每轮从袋子里拿出一枚硬币，再连续抛两次。`;
+    for (const k of ['mixed', 'fair', 'double']) $(k).setAttribute('aria-pressed', String(kind === k));
+    const tableOptions = { rows: ['第1抛是正面', '第1抛是反面'], cols: ['第2抛正面', '第2抛反面'], cornerLabel: '第1抛／\n第2抛', caption: '当前范围内的概率与预计次数' };
+    if (!model.possible) {
+      $('population-note').textContent = `现在选择了“${names[kind]}”，但袋子里没有这种硬币，也就抽不出这一组。`;
+      $('quick-result').textContent = '袋子里没有这种硬币，当前这一组的概率无法计算。';
+      L.heat('joint', [null, null, null, null], tableOptions);
+      drawBars(null);
+      $('counts').textContent = '假如电脑把“拿出一枚硬币、连抛两次、放回袋子”重复8,000轮，抽到这种硬币的预计次数为0。';
+      $('table-guide').textContent = '横线表示这一组概率无法计算。';
+      $('result').textContent = '袋子里一枚这种硬币都没有，没法单独看这一组的结果。';
+      $('calculation-scope').textContent = '袋子里抽不到这种硬币，没有这一组结果，不能用0作分母。';
+      $('calculation').innerHTML = '<p class="empty-message">改变袋子里的比例，或者选择“还没看清手里是哪种硬币”，再继续观察。</p>';
+      $('interpretation').innerHTML = '<p>先让袋子里有这种硬币，再看清手里是哪种硬币，才能比较知道第1抛结果前后的概率。</p>';
+      return;
+    }
+    const groupTotal = kind === 'mixed' ? TOTAL : kind === 'fair' ? fairCount : doubleCount;
+    const counts = kind === 'mixed' ? [fairCount / 4 + doubleCount, fairCount / 4, fairCount / 4, fairCount / 4]
+      : kind === 'fair' ? Array(4).fill(fairCount / 4) : [doubleCount, 0, 0, 0];
+    const firstHeads = counts[0] + counts[1];
+    const before = probability(counts[0] + counts[2], groupTotal);
+    const joint = probability(counts[0], groupTotal), first = probability(firstHeads, groupTotal);
+    const after = probability(counts[0], firstHeads);
+    $('population-note').textContent = kind === 'mixed'
+      ? `每100次从袋子里拿硬币，预计${q}次拿到双正面硬币、${100 - q}次拿到正常硬币。${q === 0 || q === 100 ? '袋子里只有一种硬币，所以硬币的种类已经确定。' : '这次还没有查看手里是哪一种。'}`
+      : `现在只看${kind === 'fair' ? '正常硬币' : '双正面硬币'}。袋子里的比例保持原样，只统计拿到这种硬币的那些轮次。`;
+    $('quick-result').innerHTML = kind === 'fair'
+      ? '当前设定：抛之前已经看清手里拿的这枚是正常硬币。<br>不管知不知道第1抛的结果，第2抛出现正面的概率始终都是<strong>50%</strong>，完全没变。'
+      : kind === 'double'
+        ? '当前设定：抛之前已经看清手里拿的这枚是双正面硬币。<br>不管知不知道第1抛的结果，第2抛出现正面的概率本来就一直是<strong>100%</strong>，完全没变。'
+        : `当前设定：还没看清手里这枚硬币是哪一种。<br>还不知道第1抛结果的时候，第2抛出现正面的概率是<strong>${before.text}</strong>；如果已经知道第1抛出现的是正面，第2抛出现正面的概率${before.text === after.text ? '仍然是' : '就变成了'}<strong>${after.text}</strong>。`;
+    $('counts').textContent = `假如电脑按袋子里的比例，把“拿出一枚硬币、连抛两次、放回袋子”重复8,000轮。现在只统计${scope}，预计共${f(groupTotal)}轮。每格的预计次数＝这${f(groupTotal)}轮×该格概率。`;
+    L.heat('joint', model.joint, { ...tableOptions, selectedRow: 0, cellLabels: counts.map(n => `${f(n)}次`) });
+    $('table-guide').textContent = '行看第1抛，列看第2抛。绿色深浅表示每格的概率，文字给出预计次数。棕色边框圈出第1抛为正的一行，知道第1抛为正后就只看这一行。';
+    drawBars(model, before, after);
+    $('result').innerHTML = `<p>还不知道第1抛结果的时候，第2抛出现正面的概率是${before.text}；如果已经知道第1抛出现了正面，第2抛出现正面的概率${before.text === after.text ? '仍然是' : '就变成了'}<strong>${after.text}</strong>。</p><p>只看棕框里的“第1抛是正面”这一行：${term(`${f(counts[0])}＋${f(counts[1])}＝${f(firstHeads)}次`)}，其中第2抛也出现正面的有${f(counts[0])}次。</p><p class="equation" id="conditional-count-equation">${term(`${f(counts[0])}÷${f(firstHeads)}${after.sign}${after.text}`)}。</p>`;
+    const fairWeight = kind === 'mixed' ? 100 - q : kind === 'fair' ? 100 : 0;
+    const doubleWeight = 100 - fairWeight;
+    $('calculation-scope').textContent = `以下概率都在“${scope}”中计算：正常硬币占${fairWeight}%，双正面硬币占${doubleWeight}%。`;
+    $('calculation').innerHTML = `<section class="calculation-card"><h3>1. 两次都为正面</h3><p>正常硬币两次抛掷互不影响，正、正的机会是${term('50%×50%＝25%')}；双正面硬币两次都正的机会是100%。分别乘当前所看范围里两种硬币各自的占比，再相加：</p><p class="equation">${term(`${fairWeight}%×25%`)}<wbr>＋${term(`${doubleWeight}%×100%`)}<wbr>＝${term(percentNumber(fairWeight / 4))}<wbr>＋${term(percentNumber(doubleWeight))}<wbr>＝${term(joint.text)}</p></section>
+      <section class="calculation-card"><h3>2. 第1抛为正面</h3><p>正常硬币第1抛为正的机会是50%，双正面硬币是100%，按两种硬币各自的占比相加：</p><p class="equation">${term(`${fairWeight}%×50%`)}<wbr>＋${term(`${doubleWeight}%×100%`)}<wbr>＝${term(percentNumber(fairWeight / 2))}<wbr>＋${term(percentNumber(doubleWeight))}<wbr>＝${term(first.text)}</p><p>在还不知道第1抛结果的时候，两次抛掷用的都是这轮从袋子里随机拿出的同一枚硬币。第1抛和第2抛各自出现正面的概率，都等于这里算出的数。</p></section>
+      <section class="calculation-card"><h3>3. 已知第1抛为正，再算第2抛</h3><p>先把“第1抛为正”当作全部范围，再看其中“两次都正”占多少：</p><p class="equation">${term(joint.text)}<wbr>÷${term(first.text)}<wbr>${after.sign}${term(after.text)}</p><p>这和上面的${term(`${f(counts[0])}÷${f(firstHeads)}`)}算的是同一个比例。</p><p>用P记概率，“|”读作“已知”，那么${term('P(第2抛正 | 第1抛正)')}说的就是：已经知道第1抛为正时，第2抛为正的概率。</p><p class="equation">${term('P(第2抛正 | 第1抛正)')}<wbr>＝${term(joint.text)}<wbr>÷${term(first.text)}<wbr>${after.sign}${term(after.text)}</p></section>`;
+    interpret(q, doubleCount, firstHeads, before, after);
+  });
+  for (const k of ['mixed', 'fair', 'double']) $(k).addEventListener('click', () => { kind = k; L.refresh(); });
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),boards=[...document.querySelectorAll('.lab-workspace')];
+  let timer;const feedbacks=[];
+  function arrange(){
+    for(const board of boards){
+      const controls=board.querySelector(':scope>.lab-workspace-controls'),stage=board.querySelector(':scope>.lab-workspace-stage');
+      if(!controls||!stage)continue;
+      const c=controls.getBoundingClientRect().height,s=stage.getBoundingClientRect().height;
+      board.classList.remove('lab-workspace--sticky-controls','lab-workspace--sticky-stage');
+      if(wide.matches){const pinStage=s<c;board.classList.add(pinStage?'lab-workspace--sticky-stage':'lab-workspace--sticky-controls');stage.style.top=pinStage?Math.min(16,innerHeight-s-16)+'px':''}
+    }
+    for(const {panel,output} of feedbacks){const hidden=!!panel.closest('[hidden]')||!panel.getClientRects().length;if(output.hidden!==hidden)output.hidden=hidden}
+  }
+  // A full, explicitly named result beside mobile controls avoids blind button presses.
+  for(const board of boards){
+    for(const panel of board.querySelectorAll('.lab-workspace-controls .operate-panel')){
+      if(!panel.querySelector('button,input,select'))continue;
+      if(panel.querySelector('.operate-panel')||panel.matches('#step-navigation,#lesson-actions,#playback-settings,#experiment-actions,.transient-panel'))continue;
+      const selector=panel.closest('[data-feedback]')?.dataset.feedback||board.dataset.feedback;
+      if(!selector)continue;
+      const sources=[...new Set(selector.split(',').flatMap(part=>[...document.querySelectorAll(part.trim())]))];if(!sources.length)continue;
+      const output=document.createElement('div');output.className='lab-mobile-feedback';output.setAttribute('role','status');panel.after(output);
+      feedbacks.push({panel,output});
+      let last;const update=()=>{const html=sources.map(source=>'<div>'+source.innerHTML+'</div>').join('');if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id')};
+      update();const observer=new MutationObserver(update);for(const source of sources)observer.observe(source,{childList:true,subtree:true,characterData:true});
+    }
+  }
+  // Keep the named probability and both positive counts visible above Bayes' full flow.
+  for(const board of boards.filter(n=>n.dataset.desktopFeedback)){
+    const source=document.querySelector(board.dataset.desktopFeedback),stage=board.querySelector('.lab-workspace-stage');
+    if(!source||!stage)continue;
+    const output=document.createElement('div');output.className='lab-desktop-feedback result';output.setAttribute('role','status');stage.prepend(output);
+    let last;const update=()=>{
+      if(output.hidden!==source.hidden)output.hidden=source.hidden;
+      const html=source.innerHTML;if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id');
+    };
+    update();new MutationObserver(update).observe(source,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+  }
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(arrange,100)};
+  for(const slot of document.querySelectorAll('[data-mobile-content]')){
+    const homes=[...document.querySelectorAll(slot.dataset.mobileContent)].map(node=>{const item=node.closest('.linked-output')||node,home=document.createComment('desktop position');item.before(home);return {item,home}});
+    const place=()=>{for(const {item,home}of homes)if(wide.matches)home.after(item);else slot.append(item)};
+    place();wide.addEventListener('change',place);
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);
+  for(const board of boards){new ResizeObserver(schedule).observe(board);new MutationObserver(schedule).observe(board,{attributes:true,attributeFilter:['hidden'],subtree:true})}
+  arrange();
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),panes=[...document.querySelectorAll('.lab-workspace>.lab-workspace-controls')];
+  let timer;
+  const update=()=>{
+    for(const pane of panes){
+      const value=String(wide.matches&&pane.scrollHeight>pane.clientHeight);
+      if(pane.dataset.scrollable!==value)pane.dataset.scrollable=value;
+    }
+  };
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(update,60)};
+  const observer=new ResizeObserver(update);
+  for(const pane of panes){
+    observer.observe(pane);for(const child of pane.children)observer.observe(child);
+    pane.addEventListener('toggle',update,true);
+    new MutationObserver(schedule).observe(pane,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','open']});
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);wide.addEventListener('change',schedule);update();
+})();
+</script></body></html>

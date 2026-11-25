@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="沿用《大白话概率论》的10万人检测例子，自定义患病比例，即时查看人数、检测计算和阳性后患病的概率。">
+  <meta name="theme-color" content="#14523f">
+  <title>检测阳性，患病的概率就是99%吗？｜武辰的交互实验</title>
+  <style>:root{color-scheme:light;--paper:#fcfdfb;--ink:#233029;--muted:#58665e;--pine:#14523f;--rust:#a35b32;--line:#d7e1d9;--soft:#eff5f0;--body:system-ui,"PingFang SC","Microsoft YaHei",sans-serif;--title:"Songti SC",SimSun,serif}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:1.0625rem/1.8 var(--body)}
+[hidden]{display:none!important}html{scroll-padding-top:18px}
+a{color:var(--pine);text-underline-offset:.22em}a:hover{color:var(--rust)}
+button,input,select{font:inherit}button,input,select,summary{touch-action:manipulation}
+button{min-height:44px;padding:.5rem 1rem;border:1px solid #c3d1c6;border-radius:5px;background:transparent;color:var(--ink);line-height:1.5;cursor:pointer}
+button:hover:enabled{background:var(--soft);border-color:var(--pine)}button:disabled{color:#8a958e;cursor:default}
+button.primary{background:var(--pine);border-color:var(--pine);color:#fff;font-weight:650;padding:.6rem 1.3rem}button.primary:hover:enabled{background:#0c4230}
+button.quiet{border-color:transparent;color:var(--muted)}button.quiet:disabled{color:#9aa59d}
+:focus-visible{outline:3px solid #ac693e;outline-offset:4px}
+input[type=number],select{min-height:44px;max-width:100%;padding:.35rem .6rem;border:1px solid #b9c9bc;border-radius:5px;background:#fff;color:var(--ink)}input[type=number]{width:6.2rem;font-variant-numeric:tabular-nums}
+input[type=range]{display:block;width:100%;min-height:30px;margin:.7rem 0 .3rem;accent-color:var(--pine)}
+h1,h2,h3,p{margin:0;overflow-wrap:anywhere}p+p{margin-top:.6rem}
+h1{font:750 clamp(1.7rem,2.7vw,2.4rem)/1.4 var(--title);letter-spacing:-.015em;margin:.8rem 0 .7rem}
+h2{font-size:1.45rem;line-height:1.5;font-weight:720}h3{font-size:1rem;font-weight:600;line-height:1.7}strong{font-weight:720}
+.shell{width:min(1600px,calc(100% - 64px));margin-inline:auto}.reading-width{width:100%;margin-inline:0}
+.skip{position:absolute;left:1rem;top:-6rem;padding:.5rem 1rem;background:#fff;z-index:5}.skip:focus{top:1rem}
+.masthead{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:62px;border-bottom:1px solid var(--line);font-size:.88rem}
+.brand{display:inline-flex;align-items:center;gap:.65rem;font-size:.95rem;font-weight:700;text-decoration:none;white-space:nowrap}.stamp{display:grid;place-items:center;width:29px;height:29px;border-radius:3px;background:var(--pine);color:#fff;font:700 1.1rem var(--title)}
+.intro{padding:1.2rem 0 1.35rem}.book-reference{display:flex;align-items:center;justify-content:space-between;gap:.6rem 2rem;font-size:.88rem;color:var(--muted)}.book-reference p+p{margin-top:.1rem}.book-reference strong{font-weight:650;color:var(--pine)}.book-reference>a{white-space:nowrap;font-size:.9rem}
+.lead{font-size:1.05rem;line-height:1.9}.intro>p:last-child{color:var(--muted);margin-top:.45rem}.eyebrow{font-size:.83rem;font-weight:600;color:var(--pine);letter-spacing:.04em}
+.lesson{padding-bottom:1.4rem}.step-navigation{display:flex;align-items:center;gap:1.25rem;border-bottom:1px solid var(--line)}
+.step-navigation button{display:flex;align-items:center;gap:.55rem;border:0;border-radius:0;border-bottom:2px solid transparent;padding:.55rem 1rem .7rem;color:var(--muted);font-size:.94rem}
+.step-navigation button[aria-current=step]{border-bottom-color:var(--pine);color:var(--pine);font-weight:700}.step-navigation button:hover:enabled{background:transparent}.step-number{font-size:.82rem;font-variant-numeric:tabular-nums}
+.step-copy{padding-top:1rem}.step-copy h2{margin:.2rem 0 .35rem}.step-copy>p:last-child{color:var(--muted);line-height:1.8}
+.scene{width:100%;margin:1.1rem 0 0}.population{display:flex;align-items:baseline;justify-content:center;gap:.8rem;margin-bottom:1.1rem;color:var(--muted);font-size:.94rem}.population strong{font-size:1.8rem;color:var(--ink);font-variant-numeric:tabular-nums}.unit{font-size:.9rem;font-weight:450;margin-left:.25rem}
+.groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem;width:100%}
+.group{display:grid;grid-template-columns:minmax(0,1fr) minmax(132px,1.65fr) minmax(0,1fr);align-items:center;gap:.75rem;padding:1.25rem 1.15rem 1rem;border:1px solid #d4e2d8;border-left:4px solid var(--pine);border-radius:6px;background:#f1f7f3;min-width:0}
+.healthy-group{border-color:#e6dacf;border-left-color:var(--rust);background:#fbf6f1}
+.group-source{text-align:center;min-width:0}.group h3{color:var(--muted);font-size:1rem}.group-count{margin-top:.35rem;font-variant-numeric:tabular-nums;white-space:nowrap}.group-count strong{font-size:clamp(1.4rem,2.5vw,2.15rem);line-height:1.4}
+.detection{display:contents}.flow-transform{min-width:0;text-align:center;color:var(--pine)}.healthy-group .flow-transform{color:var(--rust)}
+.flow-rate{font-size:.92rem;font-weight:600;line-height:1.8}.flow-arrow{display:block;position:relative;height:2px;width:100%;margin:.6rem 0 .65rem;background:currentColor}.flow-arrow::after{content:"";position:absolute;right:0;top:-4px;width:10px;height:10px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
+.calculation-line{font-size:.94rem;line-height:1.7;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--ink);margin:0}
+.calculation-line>span{white-space:nowrap}
+.group-derivation{grid-column:1/-1;margin:0 0 .4rem;padding-bottom:.85rem;border-bottom:1px solid #cadbce;font-size:.96rem;line-height:1.9}.healthy-group .group-derivation{border-color:#e4d4c5}
+.group-explanation{grid-column:1/-1;margin:.5rem 0 0;padding-top:1rem;border-top:1px solid #cadbce;font-size:1rem;line-height:1.95}.healthy-group .group-explanation{border-color:#e4d4c5}
+.counts-title,.counts-intro{grid-column:1/-1}.counts-intro{margin:0 0 .7rem;color:var(--muted);line-height:1.95;max-width:75em}
+.group-result{min-width:0;text-align:center}.positive-name{font-size:1rem;font-weight:600;line-height:1.6}.positive-count{margin:.2rem 0;font-variant-numeric:tabular-nums;white-space:nowrap}.positive-count strong{font-size:clamp(1.6rem,3vw,2.5rem);line-height:1.3}.positive-note{font-size:.88rem;line-height:1.8;margin-top:.25rem;color:var(--muted)}
+.sick-group .positive-count,.sick-group .positive-name{color:var(--pine)}.healthy-group .positive-count,.healthy-group .positive-name{color:var(--rust)}
+.negative{grid-column:1/-1;font-size:.88rem;line-height:1.8;color:var(--muted);border-top:1px solid #cadbce;padding-top:.65rem;margin-top:.25rem}.healthy-group .negative{border-color:#e4d4c5}
+.scene[data-step="1"] .group{display:block;padding:1.25rem 1.5rem}.scene[data-step="1"] .group-source{display:flex;justify-content:space-between;align-items:center;gap:1rem}.scene[data-step="1"] .group-count{margin-top:0}.scene[data-step="1"] .group-count strong{font-size:2.25rem}
+.scene[data-step="3"] .group{display:block;text-align:center;padding:1.3rem}.scene[data-step="3"] .positive-name{font-size:1.1rem}.scene[data-step="3"] .positive-count strong{font-size:3rem}.scene[data-step="3"] .positive-note{margin-top:.6rem}
+.scene-note{margin:1rem 0 0;color:var(--muted);font-size:.94rem;line-height:1.8}.scene-note:empty{display:none}
+.answer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center;gap:.8rem 3rem;width:100%;padding:1.1rem 1.5rem;border:1px solid var(--line);border-radius:6px;background:#f6f9f5}
+.answer h3{grid-column:1/-1;font-size:1.05rem;color:var(--ink)}.answer-equation{grid-column:1;grid-row:2/4;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.5rem;margin:.5rem 0;font-variant-numeric:tabular-nums}
+.fraction{display:flex;flex-direction:column;text-align:center;max-width:100%;min-width:8rem}.fraction>span{display:flex;flex-direction:column;align-items:center;padding:.35rem .65rem;max-width:100%}.fraction>span:first-child{border-bottom:1px solid var(--ink)}.fraction strong{font-size:1.55rem;line-height:1.4;overflow-wrap:anywhere}.fraction small{font-size:.81rem;color:var(--muted);line-height:1.7;margin-top:.2rem}
+.approximately{font-size:1.3rem;color:var(--muted)}#posterior{font-size:clamp(2.25rem,4vw,3.5rem);color:var(--pine);line-height:1.3;white-space:nowrap}#answer-explanation{grid-column:2;grid-row:2;font-size:1rem;line-height:1.9}
+.positive-composition{grid-column:2;grid-row:3;margin-top:.3rem}.composition{height:18px;display:flex;background:#e8eee7;overflow:hidden;border-radius:2px}.composition>span{transition:width .35s ease}.composition>span:first-child{background:var(--pine)}.composition>span:last-child{background:#b97b50}.legend{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem 1rem;margin-top:.5rem;font-size:.88rem}.legend>span:first-child{color:var(--pine)}.legend>span:last-child{color:#8e4a29}
+.positive-total-explanation{grid-column:1/-1;grid-row:2;margin:.5rem 0 1rem;line-height:1.95}.answer .answer-equation{grid-row:3/5}.answer #answer-explanation{grid-row:3}.answer .positive-composition{grid-row:4}
+.lesson-actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.2rem}.playback-settings{margin-top:.8rem;font-size:.9rem}summary{cursor:pointer;min-height:34px;padding:.2rem 0;font-weight:550;line-height:1.8}details[open]>summary{margin-bottom:.7rem}
+.playback-controls{display:flex;align-items:center;flex-wrap:wrap;gap:1rem;margin:.6rem 0}.playback-controls label{display:flex;align-items:center;gap:.7rem}.help{font-size:.9rem;color:var(--muted);line-height:1.8}
+.after-lesson{margin-top:1.2rem;padding-top:.8rem;border-top:1px solid var(--line)}.explanation{margin-bottom:.7rem;font-size:.95rem;text-align:left}.explanation p{margin-top:.7rem;line-height:1.9;max-width:70em}.formula{color:var(--pine)}.fine{font-size:.82rem;color:var(--muted);margin-top:1rem}
+.experiment-controls{margin-top:1.1rem;min-width:0}.prior-field{display:grid;grid-template-columns:1fr auto;gap:.4rem 1rem;align-items:center}.prior-field>label{font-weight:650;font-size:1rem}.prior-field>input[type=range]{grid-column:1/-1;margin:.4rem 0 0}.number-line{display:flex;align-items:center;gap:.5rem}.number-line input{font-size:1.05rem;font-weight:650}.number-line>span{font-size:.88rem;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:.6rem;margin:.8rem 0}.presets button{font-size:.9rem;padding:.45rem .8rem}.method-settings{margin-top:.8rem;font-size:.92rem}.method-fields{display:grid;gap:1.1rem;margin-top:.7rem}.field>label{display:block;font-size:.9rem;margin-bottom:.5rem}.error{color:#a22e20;font-size:.9rem;margin-top:.7rem}.error:empty{display:none}.experiment-actions{margin-top:1rem}
+.mode-return{margin-bottom:.5rem;padding-left:0;font-size:.9rem}
+.lesson[data-mode=experiment]{display:block}
+.lesson[data-mode=experiment] .experiment-controls{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;gap:2rem;margin-top:2rem}
+.parameter-block{padding:1.75rem;border:1px solid var(--line);border-radius:7px;background:#f7f9f6;min-width:0}
+.parameter-block h2,.parameter-block>summary{font-size:1.25rem;line-height:1.7;font-weight:700;color:var(--ink)}.parameter-block>summary{padding:0}.parameter-block[open]>summary{margin-bottom:1rem}
+.block-intro{margin:1rem 0;color:var(--muted);font-size:1rem;line-height:1.95}.prior-block .prior-field{margin-top:1.5rem}.prior-block .presets{margin:1rem 0}.population-explanation{margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--line);font-size:1rem;line-height:2}
+.method-settings.parameter-block{margin-top:0}.parameter-block .method-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem;margin-top:1.5rem}.parameter-block .field>label{font-size:1rem;line-height:1.9;margin-bottom:.8rem}
+.experiment-controls>.error{grid-column:1/-1}
+.lesson[data-mode=experiment] .scene{display:block;margin-top:3.5rem}
+.lesson[data-mode=experiment] .groups{margin-top:0;gap:1.5rem}
+.lesson[data-mode=experiment] .group{padding:1.5rem}
+.lesson[data-mode=experiment] .answer{position:static;margin-top:3rem;padding:1.75rem}
+.lesson[data-mode=experiment] .answer h3{font-size:1.35rem}.lesson[data-mode=experiment] .answer-equation{margin:1rem 0}
+.lesson[data-mode=experiment] .experiment-actions{margin-top:2rem}.lesson[data-mode=experiment] .after-lesson{margin-top:3rem;padding-top:0;border-top:0}
+.after-lesson .explanation{padding:1.5rem;border:1px solid var(--line);border-radius:7px;margin-bottom:2rem;font-size:1rem;line-height:2}.after-lesson .explanation>summary{font-size:1.1rem;font-weight:650}
+.mobile-result-summary{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem 2rem;margin:.8rem 0 0;padding:.8rem 0;background:var(--paper);border-bottom:1px solid var(--line)}.summary-probability{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;font-size:.95rem}.summary-probability strong{font-size:1.7rem;line-height:1.5;color:var(--pine);font-variant-numeric:tabular-nums;white-space:nowrap}.summary-counts{display:flex;flex-wrap:wrap;gap:.3rem 1.5rem;font-size:.9rem;color:var(--muted)}.summary-counts>span:first-child{color:var(--pine)}.summary-counts>span:last-child{color:var(--rust)}
+.footer{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap;padding:1rem 0 1.5rem;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}.footer nav{display:flex;gap:1.5rem;flex-wrap:wrap}
+@media(max-width:1000px){.group{grid-template-columns:minmax(0,1fr) minmax(120px,1.6fr) minmax(0,1fr);gap:.65rem;padding:1rem .9rem}.group-count strong{font-size:1.55rem}.positive-count strong{font-size:1.9rem}.positive-name{font-size:.9rem}.flow-rate,.calculation-line{font-size:.88rem}.answer{gap:.8rem 1.4rem}.lesson[data-mode=experiment]{column-gap:1.5rem}}
+@media(max-width:900px){
+  .shell{width:calc(100% - 32px)}.groups{grid-template-columns:1fr;gap:.85rem}.scene[data-step="1"] .groups,.scene[data-step="3"] .groups{grid-template-columns:repeat(2,minmax(0,1fr))}.group{grid-template-columns:minmax(0,1fr) minmax(0,1.6fr) minmax(0,1fr)}.group-count strong{font-size:1.8rem}.positive-count strong{font-size:2.1rem}.flow-rate,.calculation-line{font-size:1rem}
+  .lesson[data-mode=experiment] .experiment-controls{display:block;max-width:none}.experiment-controls>.parameter-block+.parameter-block{margin-top:2.5rem}.lesson[data-mode=experiment] .scene{display:block}.method-fields{grid-template-columns:repeat(2,minmax(0,1fr));gap:1.4rem}.experiment-controls input{scroll-margin-top:150px}
+}
+@media(max-width:700px){
+  body{font-size:1rem;line-height:1.8}.masthead{min-height:58px;gap:.5rem}.masthead>a:last-child{font-size:.75rem;max-width:8em;text-align:right}.brand{font-size:.84rem;gap:.45rem}.stamp{width:26px;height:26px}
+  .intro{padding:1rem 0 1.1rem}.book-reference{align-items:flex-start;flex-direction:column;gap:.4rem;font-size:.82rem}.book-reference>a{font-size:.85rem}.intro h1{font-size:1.75rem;line-height:1.45;margin:.8rem 0 .65rem}.lead{font-size:1rem;line-height:1.9}
+  .step-navigation{gap:.2rem}.step-navigation button{flex:1;justify-content:center;gap:.3rem;font-size:.83rem;padding:.5rem .2rem .6rem}.step-number{font-size:.76rem}.step-copy{padding-top:.8rem}.step-copy h2{font-size:1.3rem;margin:.2rem 0 .35rem}.step-copy>p:last-child{font-size:.94rem;line-height:1.85}.scene{margin-top:.9rem}.population{margin-bottom:.7rem;gap:.6rem;font-size:.88rem}.population strong{font-size:1.55rem}
+  .group{grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);gap:.5rem;padding:1rem .8rem .8rem}.group h3{font-size:.9rem}.group-count strong{font-size:1.3rem}.group-count .unit{display:block;margin:0;font-size:.88rem;line-height:1.4}.positive-count strong{font-size:1.5rem}.positive-count .unit{display:block;font-size:.88rem;line-height:1.4;margin:0}.flow-rate{font-size:.88rem;min-height:3.4em;line-height:1.7}.calculation-line{font-size:.875rem;letter-spacing:-.02em;white-space:normal}.flow-arrow{margin:.45rem 0 .55rem}.positive-name{font-size:.9rem;line-height:1.7}.positive-note{font-size:.875rem}.negative{font-size:.875rem;line-height:1.8;padding-top:.55rem}
+  .scene[data-step="1"] .group{padding:.9rem}.scene[data-step="1"] .group-source{display:block}.scene[data-step="1"] .group-count{margin-top:.3rem}.scene[data-step="1"] .group-count strong{font-size:1.8rem}.scene[data-step="3"] .group{padding:1rem .7rem}.scene[data-step="3"] .positive-name{font-size:.95rem;min-height:3.4em;line-height:1.7}.scene[data-step="3"] .positive-count strong{font-size:2.2rem}.scene[data-step="3"] .positive-note{font-size:.875rem}.scene-note{font-size:.9rem;margin-top:.7rem}
+  .answer{display:block;padding:1rem}.answer h3{font-size:.98rem}.answer-equation{gap:1rem;margin:1rem 0}.fraction{min-width:7rem}.fraction strong{font-size:1.3rem}.fraction small{font-size:.79rem}#posterior{font-size:2.55rem}.approximately{font-size:1.1rem}#answer-explanation{font-size:.94rem;line-height:1.9}.positive-composition{margin-top:1rem}.legend{font-size:.8rem;gap:.5rem}.lesson-actions{gap:.6rem;margin-top:1rem}.lesson-actions button{font-size:.9rem}.lesson-actions .primary{padding:.6rem .9rem}.playback-settings{margin-top:.6rem}.playback-controls{gap:.7rem}.playback-controls label{font-size:.86rem}
+  .after-lesson{margin-top:1rem}.explanation{font-size:.92rem}.fine{font-size:.8rem}.prior-field{column-gap:.5rem}.prior-field>label{font-size:.94rem}.prior-field input[type=number]{width:5.2rem}.method-fields{grid-template-columns:1fr;gap:1rem}.experiment-controls{margin-top:.8rem}.lesson[data-mode=experiment] .step-copy h2{font-size:1.3rem}.lesson[data-mode=experiment] .scene{margin-top:.8rem}.lesson[data-mode=experiment] .answer{padding:1rem}.experiment-actions{margin-top:1rem}.footer{font-size:.78rem;padding-bottom:1.3rem}.footer nav{gap:1rem}
+  .lesson[data-mode=experiment] .answer{display:block;margin-top:2.5rem;padding:1.2rem}.lesson[data-mode=experiment] .answer-equation{margin:1.5rem 0}.lesson[data-mode=experiment] .positive-composition{margin-top:1rem}
+  .parameter-block{padding:1.2rem}.parameter-block h2,.parameter-block>summary{font-size:1.15rem}.parameter-block .method-fields{grid-template-columns:1fr;gap:2rem}.parameter-block .block-intro,.population-explanation{font-size:.95rem}.parameter-block .field>label{font-size:.95rem}
+  .lesson[data-mode=experiment] .scene{margin-top:3rem}.lesson[data-mode=experiment] .group{padding:1.2rem .8rem}.group-derivation{font-size:.9rem;line-height:1.9}.group-explanation{font-size:.95rem;line-height:2}.counts-title{font-size:1.25rem}.counts-intro{font-size:.95rem}.lesson[data-mode=experiment] .answer h3{font-size:1.2rem}.positive-total-explanation{font-size:.95rem}.after-lesson .explanation{padding:1.2rem;margin-bottom:2rem;font-size:.95rem}.after-lesson .explanation>summary{font-size:1rem}
+  .mobile-result-summary{display:block}.summary-probability{font-size:.9rem}.summary-probability strong{font-size:1.5rem}.summary-counts{font-size:.82rem;gap:.2rem 1rem;margin-top:.3rem}
+  .group{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr) minmax(0,1.3fr)}.group-count strong{font-size:clamp(1.05rem,4.7vw,1.3rem)}
+}
+@media(max-width:370px){.brand{font-size:.8rem}.group-count strong{font-size:1.2rem}.flow-rate{font-size:.875rem}.calculation-line{font-size:.875rem;letter-spacing:-.04em}.positive-name{font-size:.875rem}.group{padding:.8rem .7rem}.answer-equation{gap:.7rem}#posterior{font-size:2.3rem}.fraction strong{font-size:1.15rem}.lesson-actions button{font-size:.85rem}.lesson-actions .primary{padding:.6rem .8rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+.answer-value{display:inline-flex;align-items:baseline;gap:.45rem;white-space:nowrap;max-width:100%}
+.why-result{grid-column:1/-1;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);font-size:1rem;line-height:1.95}
+.scenario-explanation{font-size:.92rem;line-height:1.9;color:var(--muted)}
+#back-to-lesson,.mode-return{padding:.55rem .9rem;background:var(--soft);border:1px solid #aebfb2;color:var(--pine);font-weight:650}
+.math-term{display:inline-block;white-space:nowrap;max-width:100%}
+#expanded-calculation p{line-height:2}
+@media(min-width:901px){.mobile-result-summary{padding:.55rem 0;gap:.4rem 1.5rem}.summary-probability{font-size:.88rem}.summary-probability strong{font-size:1.25rem}.summary-counts{font-size:.85rem}}
+@media(max-width:700px){.why-result{font-size:.94rem}.scene.has-long-counts .group{grid-template-columns:minmax(0,1fr)}.scene.has-long-counts .group-source,.scene.has-long-counts .flow-transform,.scene.has-long-counts .group-result{grid-column:1/-1}.scene.has-long-counts .flow-transform{padding:.5rem 0}.scene.has-long-counts .flow-rate{min-height:0}.scene.has-long-counts .group-count strong,.scene.has-long-counts .positive-count strong{font-size:1.3rem}.scene.has-long-counts .flow-arrow{width:50%;margin-inline:auto}.scene.has-long-counts[data-step="1"] .groups,.scene.has-long-counts[data-step="3"] .groups{grid-template-columns:1fr}}
+.scene.has-long-counts .group{grid-template-columns:minmax(0,1fr)}
+.scene.has-long-counts .group-source,.scene.has-long-counts .flow-transform,.scene.has-long-counts .group-result{grid-column:1/-1}
+.scene.has-long-counts .flow-transform{padding:.5rem 0}
+.scene.has-long-counts .flow-rate{min-height:0}
+.scene.has-long-counts .group-count strong,.scene.has-long-counts .positive-count strong{font-size:1.3rem}
+.scene.has-long-counts .flow-arrow{width:2px;height:1.5rem;margin:.6rem auto}
+.scene.has-long-counts .flow-arrow::after{top:auto;bottom:0;right:-4px;transform:rotate(135deg)}
+
+/* Formal operation zones: shared across the probability experiments. */
+body .operate-panel{background:#faf5e8;border:1.5px solid #dccaa0;border-radius:8px;padding:1.4rem 1.5rem;min-width:0;margin:1.1rem 0 1.5rem}
+.operate-badge{display:inline-block;width:fit-content;max-width:100%;color:#7c5812;background:#f2e6c9;border:1px solid #dccaa0;border-radius:4px;font-weight:700;font-size:.9rem;line-height:1.7;padding:.2rem .65rem;margin:0 0 .9rem}
+.operate-panel>.operate-badge{grid-column:1/-1}.operate-panel .controls:not(.operate-panel){background:transparent;border:0;border-top:1px solid #dccaa0;border-radius:0;padding:1rem 0 0;margin:1rem 0 0}.operate-panel .actions:last-child{margin-bottom:0}
+.operate-panel button,.operate-panel input[type=number],.operate-panel select{border-color:#c6b27d}.operate-panel button:hover,.operate-panel button[aria-pressed=true],.operate-panel button[aria-current=step]{background:#eee0b9;border-color:#9e792e;color:#67480d}.operate-panel button[aria-pressed=true]{box-shadow:inset 0 0 0 1px #9e792e}.operate-panel input[type=range],.operate-panel input[type=checkbox],.operate-panel input[type=radio]{accent-color:#7c5812}
+.operate-panel button:focus-visible,.operate-panel input:focus-visible,.operate-panel select:focus-visible{outline-color:#7c5812}.operate-panel input[aria-invalid=true]{border-color:#a23b30;background:#fff3f1}.operate-panel button.primary,.operate-panel button#next-step{background:#7c5812;color:#fff;border-color:#7c5812}
+.operate-panel button.btn-secondary{border-color:#d8cfba;color:#6f6b60;background:#fffdfa;box-shadow:none}.operate-panel button.btn-secondary:hover{background:#f4f0e7;border-color:#b9ab8b}.operate-panel button:disabled{opacity:.5}
+.plot-heading{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:.7rem 1rem}.plot-heading h2,.plot-heading h3{flex:1 1 240px}.plot-heading .operate-badge{background:#faf5e8;margin:0;flex:0 1 auto}.direct-interaction>.operate-badge{background:#faf5e8}
+body .result{background:#f3f8f3;border-left:4px solid #26725f;padding:1.1rem 1.3rem;margin:1.2rem 0;line-height:1.9;min-width:0}.card.soft{background:#fff}.operate-panel .event{background:#fffdf8;border-left-color:#b79248}.operate-panel .parameter-block,.operate-panel .parameter-card,.operate-panel .prior-block{background:transparent}.operate-panel .threshold-panel{background:transparent}.sampling{border-top-color:#dccaa0}.transient-panel:has(>button[hidden]){display:none}.operate-panel>.choice.log-choice{display:flex;flex-basis:100%;margin:.8rem 0 0}.operate-panel .day-grid{margin:.8rem 0}.operate-panel .presets button span{color:inherit}
+@media(max-width:600px){body .operate-panel{padding:1.1rem 1rem}.operate-badge{font-size:.875rem}.plot-heading{display:block}.plot-heading .operate-badge{margin-top:.75rem}.operate-panel .controls:not(.operate-panel){padding-top:.85rem}.operate-panel .control label{flex-wrap:wrap}body .result{padding:1rem}.compact-operate{margin:.8rem 0}}
+
+body .operate-panel #back-to-lesson,body .operate-panel .mode-return{background:#fff;color:#7c5812;border-color:#c6b27d}
+
+.plot-heading .operate-badge{white-space:normal;overflow-wrap:anywhere;min-width:0}.operate-panel .operate-badge{white-space:normal}.operate-panel .rule-explanation{background:transparent}
+
+body .direct-interaction button{border-color:#c6b27d}body .direct-interaction button:hover,body .direct-interaction button[aria-pressed=true]{background:#eee0b9;border-color:#9e792e;color:#67480d}body .direct-interaction button:focus-visible{outline-color:#7c5812}
+</style>
+  <link rel="icon" href="data:,">
+  
+<style>.operate-widget{border:1px solid #dccaa0;border-radius:10px;padding:1.2rem;margin-top:1.1rem;background:#fffaf0;min-width:0}.operate-widget h2,.operate-widget h3{font-size:1.1rem;margin:0 0 .7rem;line-height:1.7}.operate-widget .control{min-width:0}.operate-widget .affects{color:#6b531f;font-size:.9rem;line-height:1.8;margin:.8rem 0 0}.linked-output{border:1px solid #cadce9;border-left:5px solid #467caa;border-radius:9px;background:#f7fbff;padding:.8rem 1rem;margin:1.2rem 0;min-width:0;overflow-wrap:anywhere}.linked-label{display:block;width:fit-content;max-width:100%;font:600 .82rem/1.7 sans-serif;color:#24547b;background:#e6eff8;padding:.18rem .55rem;border-radius:4px;margin:0 0 .65rem}.linked-output>.result{margin:.45rem 0}.linked-output.is-updated{animation:output-change .8s ease-out}.story-bridge{padding:1.5rem 0 .6rem;max-width:none}.story-bridge p,.story-copy p{line-height:1.95}.method-steps{line-height:1.95;margin:1rem 0 0}.extension{border-top:1px solid var(--line,#ccd6d2);padding-top:1.6rem;margin-top:2.2rem}.fixed-reference{font-weight:600;color:#4d5a56;margin:1rem 0 .4rem}.situation-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1rem 0}.situation-list span{padding:.6rem;border:1px solid #ccd6d2;text-align:center;border-radius:5px}.situation-list .excluded{color:#78817d;background:#eff0ed;text-decoration:line-through}.progression{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.progression>section{padding:1rem;border:1px solid #ccd6d2;border-radius:8px}.progression h3{font-size:1rem;line-height:1.8}.progression p{line-height:1.9}.story-copy strong{font-weight:700}.story-copy .term{white-space:nowrap}@keyframes output-change{from{box-shadow:0 0 0 4px #90badd88}to{box-shadow:0 0 0 0 transparent}}@media(max-width:650px){.operate-widget{padding:1rem .85rem}.linked-output{padding:.75rem .7rem}.progression{grid-template-columns:1fr}.situation-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(prefers-reduced-motion:reduce){.linked-output.is-updated{animation:none;outline:2px solid #90badd}}
+
+.linked-output:has(>.live-summary){position:sticky;top:0;z-index:2}.linked-output>.live-summary{position:static;margin:0;border-bottom:0;padding:.3rem .5rem}
+
+.linked-output:has(#joined[hidden]){display:none}
+
+@media(max-width:650px){.linked-output:has(>.live-summary){position:static}}
+</style><style>/* Controls and their live figures share a workspace; explanations continue below. */
+body .lab-workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:1.25rem;align-items:start;margin:1.2rem 0 2rem;min-width:0;scroll-margin-top:16px}
+.lab-workspace-controls,.lab-workspace-stage{min-width:0}.lab-workspace--sticky-controls>.lab-workspace-controls{position:sticky;top:16px}.lab-workspace--sticky-stage>.lab-workspace-stage{position:sticky;top:16px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;align-items:start}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+body .lab-workspace .operate-panel{margin:0 0 .7rem;padding:.9rem;background:#faf5e8;border:1.5px solid #dccaa0;border-radius:7px;min-width:0}body .lab-workspace .operate-widget{padding:.6rem 0;margin:0;border:0;border-top:1px solid #dccaa0;background:transparent;border-radius:0}.lab-workspace .operate-widget:first-of-type{border-top:0;padding-top:0}.lab-workspace .operate-widget h2,.lab-workspace .operate-widget h3{font-size:1rem;line-height:1.65;margin:0 0 .4rem}.lab-workspace .operate-badge{font-size:.8rem;line-height:1.6;padding:.15rem .45rem;margin:0 0 .5rem}.lab-workspace .plot-heading .operate-badge{margin-top:.25rem}.lab-workspace .controls:not(.operate-panel){padding:0!important;margin:.5rem 0!important;border:0!important;gap:.65rem .75rem;grid-template-columns:repeat(2,minmax(0,1fr))}.lab-workspace .controls:not(.operate-panel):has(>.control:only-child){grid-template-columns:1fr}.lab-workspace .control label{flex-wrap:wrap;gap:.25rem;font-size:.9rem}.lab-workspace .control label>span:first-child{font-weight:600}.lab-workspace input[type=number]{width:5rem;min-width:0;min-height:40px;font-size:1rem}.lab-workspace input[type=range]{margin:.3rem 0 0;min-height:26px}.lab-workspace button{min-height:42px;padding:.4rem .6rem;font-size:.9rem;line-height:1.6}.lab-workspace .actions,.lab-workspace .presets{gap:.4rem;margin:.6rem 0}.lab-workspace .actions:last-child{margin-bottom:0}.lab-workspace .control-help,.lab-workspace .affects,.lab-workspace .operate-widget>p,.lab-workspace .operate-panel>p{font-size:.85rem;line-height:1.75;margin:.4rem 0}.lab-workspace .operate-panel p+p{margin-top:.4rem}.lab-workspace .operate-panel details{margin-top:.6rem;padding-top:.6rem}.lab-workspace .operate-panel summary{font-size:.9rem}
+body .lab-workspace .card,body .lab-workspace .plot-card{padding:.9rem;margin:0;min-width:0}.lab-workspace h2,.lab-workspace h3{font-size:1.1rem;line-height:1.6}.lab-workspace p{line-height:1.8}.lab-workspace .plot{height:230px;min-height:0;margin-top:.5rem}.lab-workspace .plot.square{width:min(100%,280px);height:auto;aspect-ratio:1;margin-inline:auto}.lab-workspace .plot text{font-size:12px}.lab-workspace .legend{font-size:.8rem;line-height:1.7;gap:.3rem .7rem;margin-top:.5rem}.lab-workspace .caption{font-size:.85rem;line-height:1.8}.lab-workspace .linked-output{border:0;border-radius:0;padding:0;margin:.5rem 0;background:transparent;box-shadow:none}.lab-workspace .linked-label{font-size:.75rem;line-height:1.7;padding:0;background:transparent;margin:0 0 .3rem;color:#456277}.lab-workspace .linked-output:has(>.live-summary){position:static}.lab-workspace .linked-output.is-updated{animation:none}.lab-workspace .linked-output>.plot{margin-top:.25rem}
+body .lab-workspace .result,body .lab-workspace .summary,body .lab-workspace .live-summary{margin:.5rem 0;padding:.75rem .85rem;font-size:.95rem;line-height:1.8;background:#f3f8f3;border-left:4px solid #26725f;position:static}.lab-workspace .result strong{font-size:1.15rem}.lab-workspace .result p+p{margin-top:.35rem}.lab-workspace .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.6rem 0}.lab-workspace .metric{padding:.55rem}.lab-workspace .metric span{font-size:.8rem}.lab-workspace .metric strong{font-size:1.25rem}.lab-workspace .formula,.lab-workspace .formulas{font-size:.9rem;line-height:1.9;margin-top:.5rem}.lab-workspace table{font-size:.85rem;margin-top:.5rem}.lab-workspace th,.lab-workspace td{padding:.45rem .25rem}.lab-workspace .plot-frame{min-width:0;padding:0}.lab-workspace .plot-frame svg{display:block;width:100%;height:245px}.lab-followup{margin:1rem 0 2rem}.lab-followup>h3{margin:.8rem 0}.lab-workspace .lab-paired-result{margin-top:.6rem}.lab-workspace-stage>.lab-core-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}.lab-workspace .lab-secondary-controls{margin-top:.75rem}.lab-workspace .bean-grid{width:100%;height:240px}.lab-workspace .door-grid{gap:.5rem;grid-template-columns:repeat(5,minmax(0,1fr));margin:.6rem 0}.lab-workspace .door{min-height:66px;padding:.35rem;font-size:.85rem}.lab-workspace .family-grid{max-width:340px;margin-inline:auto}.lab-workspace .experiment-paths{display:block;margin:0}.lab-workspace .experiment-path{margin-bottom:.5rem}
+/* Page-specific figures retain their labels and computational units. */
+body[data-workspace-page=beta] .lab-workspace-stage #curve-card{margin:0}body[data-workspace-page=beta] .lab-workspace-stage #density{height:245px}body[data-workspace-page=beta] .lab-workspace .beta-metrics{display:grid}body[data-workspace-page=beta] .lab-workspace #prior-summary{font-size:.85rem}body[data-workspace-page=beta] .lab-workspace #counts{font-size:.9rem}
+body[data-workspace-page=berkson] .lab-workspace .example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}body[data-workspace-page=berkson] .lab-workspace .example-grid button{padding:.5rem}body[data-workspace-page=berkson] .lab-workspace .threshold-panel{padding:0;margin:.5rem 0}body[data-workspace-page=berkson] .lab-workspace .plot-toolbar{padding:0;margin:0}
+body[data-workspace-page=bayes] .lab-workspace .reading-width{width:100%;max-width:none}body[data-workspace-page=bayes] .lab-workspace .scene{padding:0;margin:0}body[data-workspace-page=bayes] .lab-workspace .interaction-region{display:block}body[data-workspace-page=bayes] .lab-workspace .groups{margin:.5rem 0;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .group{padding:.8rem}body[data-workspace-page=bayes] .lab-workspace .population{margin:.3rem 0;padding:.4rem}body[data-workspace-page=bayes] .lab-workspace .group-count strong,body[data-workspace-page=bayes] .lab-workspace .positive-count strong{font-size:1.5rem}body[data-workspace-page=bayes] .lab-workspace .answer-equation{margin:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .answer-value strong{font-size:1.7rem}body[data-workspace-page=bayes] .lab-workspace .answer{padding:.85rem}body[data-workspace-page=bayes] .lab-workspace .parameter-block{margin:.5rem 0;padding:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .method-fields{display:grid;grid-template-columns:1fr;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .number-line{margin:.3rem 0}body[data-workspace-page=bayes] .lab-workspace .step-navigation{display:flex;flex-wrap:wrap}
+body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{gap:.7rem;grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-card,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-card{padding:.8rem}body[data-workspace-page=simpson] .lab-workspace .parameter-card,body[data-workspace-page=berkson-hospital] .lab-workspace .parameter-card{padding:.5rem 0}body[data-workspace-page=simpson] .lab-workspace .control-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .control-grid{grid-template-columns:1fr;gap:.6rem}
+body[data-workspace-page=one-way-anova] .lab-workspace #energy,body[data-workspace-page=one-way-anova] .lab-workspace #f-reference{height:145px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #stick{height:115px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #assembled{height:150px}
+@media(min-width:1400px){body .lab-workspace{grid-template-columns:380px minmax(0,1fr)}.lab-workspace .plot{height:250px}.lab-workspace .plot.square{max-width:300px;width:min(100%,300px)}}
+@media(min-width:960px) and (max-width:1100px){body .lab-workspace{grid-template-columns:310px minmax(0,1fr);gap:1rem}.lab-workspace .card,.lab-workspace .plot-card{padding:.7rem}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}.lab-workspace .plot text{font-size:11px}}
+@media(max-width:959px){body .lab-workspace{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0 1.5rem}.lab-workspace>.lab-workspace-controls,.lab-workspace>.lab-workspace-stage{position:static!important;width:100%}.lab-workspace .plot{height:270px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.lab-core-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{grid-template-columns:1fr;gap:1rem}.lab-workspace .plot.square{width:min(100%,340px);max-width:340px}.lab-workspace .lab-mobile-feedback{display:block;font-size:.9rem;line-height:1.8;margin:.4rem 0;padding:.75rem .85rem;background:#f3f8f3;border-left:4px solid #26725f;overflow-wrap:anywhere}.lab-workspace .lab-mobile-feedback:empty{display:none}.lab-workspace .lab-mobile-feedback strong{font-size:1.1rem;color:#26725f}.lab-workspace .plot-frame svg{height:280px}.lab-workspace .controls:not(.operate-panel){grid-template-columns:1fr}.lab-workspace-stage>.lab-core-grid>.card{width:100%}.lab-workspace .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{grid-template-columns:1fr}}
+@media(min-width:960px){.lab-mobile-feedback{display:none}}
+.lab-workspace .plot-frame{height:245px!important}.lab-workspace .threshold-panel{display:block;gap:.6rem}.lab-workspace .input-heading{flex-wrap:wrap;gap:.4rem}.lab-workspace .input-heading>label{min-width:0}.lab-workspace .plot-heading>span{white-space:normal}.lab-workspace .plot-caption{font-size:.85rem;line-height:1.8;margin-top:.5rem}.lab-workspace .quick-reading{font-size:.9rem;line-height:1.8;margin:.5rem 0;padding:.65rem .8rem;background:#f3f8f3;border-left:4px solid #26725f}.lab-workspace .example-card{padding:.65rem}.lab-workspace .example-card p{font-size:.8rem;margin-top:.4rem;line-height:1.7}.lab-workspace .example-card button{margin-top:.5rem}.lab-workspace .workspace-control-stack{display:block!important;border:0!important;padding:0!important;margin:0!important;background:transparent!important}.lab-workspace .workspace-control-stack>.operate-widget.operate-panel{padding:.8rem;border:1.5px solid #dccaa0;border-radius:7px;margin:0 0 .75rem;background:#faf5e8}.lab-workspace .workspace-control-stack>.operate-badge{display:none}
+body .lab-workspace .operate-panel:not(:has(button,input,select,summary)){padding:0;border:0;background:transparent;margin:0}.lab-workspace .operate-panel:not(:has(button,input,select,summary))>.operate-badge{display:none}
+body .lab-workspace .controls.operate-panel{display:block}.lab-workspace .people-table input[type=number]{width:100%;max-width:100%}.lab-mobile-feedback>div+div{margin-top:.5rem}
+.lab-workspace .plot-frame{height:auto!important}.lab-workspace .metric strong{white-space:nowrap}.lab-mobile-slot{display:none}
+@media(max-width:959px){.lab-workspace .metric-grid{grid-template-columns:1fr}.lab-mobile-slot{display:block}.lab-mobile-slot .door-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.lab-workspace .admission-panel{display:block;padding:0;margin:.5rem 0}.lab-workspace #other-calculation{font-size:.85rem;line-height:1.8;margin:.5rem 0 1rem}
+@media(max-width:600px){body[data-workspace-page=bayes] .lab-workspace .groups{grid-template-columns:1fr!important}body[data-workspace-page=bayes] .lab-workspace .group{grid-template-columns:1fr;gap:.65rem}body[data-workspace-page=bayes] .lab-workspace .group-source,body[data-workspace-page=bayes] .lab-workspace .flow-transform,body[data-workspace-page=bayes] .lab-workspace .group-result{grid-column:1/-1;text-align:center}body[data-workspace-page=bayes] .lab-workspace .flow-arrow{width:2px;height:1.5rem;margin:.5rem auto}body[data-workspace-page=bayes] .lab-workspace .flow-arrow::after{top:auto;bottom:0;right:-4px;transform:rotate(135deg)}body[data-workspace-page=bayes] .lab-workspace .flow-rate{min-height:0}}
+@media(min-width:960px){body[data-workspace-page=bayes] .lab-workspace-stage{position:static!important;top:auto!important}}
+</style><style>/* The approved confidence-interval control pane, shared by probability labs. */
+.lab-desktop-feedback{display:none}
+@media(min-width:960px){
+  body .lab-workspace>.lab-workspace-controls{
+    position:sticky;
+    top:16px;
+    max-height:calc(100vh - 32px);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior-y:auto;
+    scrollbar-gutter:stable;
+    scrollbar-width:auto;
+    scrollbar-color:#a88e57 #f3ecd9;
+    padding-inline-end:8px;
+    scroll-padding-block:12px;
+  }
+  body .lab-workspace>.lab-workspace-controls[data-scrollable="true"]{overscroll-behavior-y:contain}
+  .lab-workspace-controls>.operate-panel:not(:has(~.operate-panel)),
+  .lab-workspace-controls>.workspace-control-stack>.operate-panel:not(:has(~.operate-panel)){margin-bottom:0}
+  .lab-workspace-controls::-webkit-scrollbar{width:14px}
+  .lab-workspace-controls::-webkit-scrollbar-track{background:#f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb{background:#a88e57;border:3px solid #f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb:hover{background:#7c5812}
+  .lab-workspace-controls :is(button,input,select){scroll-margin-block:12px}
+  body .lab-workspace .lab-desktop-feedback{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1.25rem;margin:0 0 .75rem}
+  body[data-workspace-page="bayes"] .lab-workspace-controls .linked-output:has(>#mobile-result-summary){display:none}
+}
+</style></head>
+<body data-revised="2026-11-25-full" data-workspace-page="bayes">
+  <a class="skip" href="#lesson">跳到实验</a>
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../index.html">实验目录</a></header>
+  <main id="main">
+    <section class="intro shell" aria-labelledby="page-title">
+      <div class="book-reference">
+        <div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p><strong>第3.4节 贝叶斯公式</strong> · 纸书第77—88页</p></div>
+        <a href="https://wuchen2018.github.io/probability-book/samples/bayes-theorem.pdf" id="sample-link">阅读公开样章（PDF）</a>
+      </div>
+      <h1 id="page-title">检测阳性，患病的概率就是99%吗？</h1>
+      <p class="lead">比如你去医院做了一项罕见病检测。听说检测号称“99%准”：真正患病的人里，99%能测出阳性；没病的人里，1%会被误判成阳性。结果单子一出来：阳性。你可能会想，那我有99%的概率真的得病了吧？</p><p>假如参加检测的人里，只有0.1%原本患病，阳性后真正患病的概率其实还不到10%。为什么差这么多？我们让10万人一起参加检测，把阳性的人分成“确实患病”和“被误判”两组，数一数就知道了。下面的人群患病比例和检测准确率都可以改。</p></section>
+    <section class="lesson shell" id="lesson" data-mode="experiment" aria-label="贝叶斯检测实验">
+      <div class="operate-panel compact-operate transient-panel"><span class="operate-badge">你可以操作</span><button type="button" class="mode-return" id="back-to-experiment" hidden="">返回暖米黄区域，自己改参数</button></div>
+      <section class="lab-workspace" data-feedback="#mobile-result-summary" data-desktop-feedback="#mobile-result-summary"><div class="lab-workspace-controls"><div class="interaction-region" id="interaction-region">
+      <output id="mobile-result-summary" class="mobile-result-summary" aria-live="off" hidden="" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+        <span class="summary-probability"><span>阳性后患病概率</span><strong id="summary-posterior"></strong></span>
+        <span class="summary-counts"><span id="summary-tp"></span><span id="summary-fp"></span></span>
+      </output>
+      <section id="experiment-controls" class="experiment-controls reading-width workspace-control-stack" aria-label="自己改变检测参数"><div class="operate-panel"><span class="operate-badge">你可以操作</span><p id="input-error" class="error" role="status"></p>
+      </div><span class="operate-badge">你可以操作</span>
+        <section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作一：设置参加检测的人群里，原本有多少人患病</h3><section class="parameter-block prior-block" aria-labelledby="prior-title">
+        <h2 id="prior-title">人群里有多少人患病？</h2>
+        <p class="block-intro">我们固定让10万人参加检测。你可以拖动滑块，也可以直接输入患病的比例。</p>
+        <div class="prior-field">
+          <label for="prior">患病比例（患病率）</label>
+          <div class="number-line"><input id="prior-number" type="number" min="0" max="100" step="any" value="0.1" aria-label="人群中实际患病的比例，百分比"><span>%</span></div>
+          <input id="prior" type="range" min="0" max="100" step="any" value="0.1">
+        </div>
+        <div class="presets"><button type="button" id="higher-prior">换成有症状的人群（10%）</button><button type="button" id="book-example" class="btn-secondary">恢复默认数值</button></div>
+        <p class="scenario-explanation">从一般人群里筛查，和有症状才来检测，参加检测的人不同，患病比例也可能不同。本例把前一种情况设为0.1%，后一种设为10%，看看结果会怎样变。</p>
+        <p id="population-explanation" class="population-explanation"></p>
+        </section>
+        <p>对应影响下方：固定10万人，只改变实际患病和没有患病各有多少；整张检测人数图与最终概率一起重算。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作二：设置检测工具本身准不准</h3><details id="method-settings" class="method-settings parameter-block" open="">
+          <summary>检测能查出多少患者？又会误判多少健康人？</summary>
+          <p id="current-method" class="block-intro"></p>
+          <div class="method-fields">
+            <div class="field">
+              <label for="sensitivity">患病的人，有多少会测出阳性？</label>
+              <div class="number-line"><input id="sensitivity-number" type="number" min="0" max="100" step="any" value="99" aria-label="患者测出阳性的比例，百分比"><span>% · 灵敏度</span></div>
+              <input id="sensitivity" type="range" min="0" max="100" step="any" value="99">
+            </div>
+            <div class="field">
+              <label for="false-positive">健康的人，有多少会被误判为阳性？</label>
+              <div class="number-line"><input id="false-positive-number" type="number" min="0" max="100" step="any" value="1" aria-label="健康人被误判为阳性的比例，百分比"><span>% · 假阳性率</span></div>
+              <input id="false-positive" type="range" min="0" max="100" step="any" value="1">
+            </div>
+          </div>
+        </details>
+        <p>对应影响下方：保持原本患病人数不变，只改测出真阳性、误判假阳性的比例。</p></section></section>
+      </div>
+      <div id="experiment-actions" class="experiment-actions operate-panel"><span class="operate-badge">你可以操作</span><button type="button" id="back-to-lesson">分四步再看一遍</button></div>
+      <nav id="step-navigation" class="step-navigation operate-panel" aria-label="选择讲解步骤" hidden=""><span class="operate-badge">你可以操作</span>
+        <button type="button" data-step="1" aria-current="step"><span class="step-number">1</span>分人群</button>
+        <button type="button" data-step="2"><span class="step-number">2</span>做检测</button>
+        <button type="button" data-step="3"><span class="step-number">3</span>只看阳性</button>
+        <button type="button" data-step="4"><span class="step-number">4</span>算概率</button>
+      </nav>
+      <div class="lesson-actions operate-panel" id="lesson-actions" hidden=""><span class="operate-badge">你可以操作</span>
+        <button type="button" id="previous-step" class="quiet" disabled>上一步</button>
+        <button type="button" class="primary" id="next-step">下一步：做检测</button>
+      </div>
+      <details class="playback-settings reading-width operate-panel" id="playback-settings" open="" hidden=""><span class="operate-badge">你可以操作</span>
+        <summary>自动播放</summary>
+        <div class="playback-controls"><button type="button" id="autoplay">开始自动播放</button><label for="pace">播放速度<select id="pace"><option value="1">正常</option><option value="1.5">慢一些</option><option value="2">更慢</option></select></label></div>
+        <p class="help">每一步会停下来，让你看清人数和计算。你可以随时暂停，也可以自己点“下一步”。</p>
+      </details>
+      </div><div class="lab-workspace-stage"><header class="step-copy reading-width" id="step-copy" aria-live="polite" aria-atomic="true" hidden="">
+        <p id="step-label" class="eyebrow">第1步 / 共4步</p>
+        <h2 id="step-title">先把10万人分成两组</h2>
+        <p id="step-description">患病率是0.1%，也就是每1000人中约有1人患病。10万人中，约100人患病，另外99,900人没有患病。</p>
+      </header>
+      <div class="scene" id="scene" data-step="1">
+        <div class="population" id="population"><span>参加检测</span><strong>100,000<span class="unit">人</span></strong></div>
+        <div class="groups" id="groups" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+          <h2 class="counts-title" id="counts-title">两组阳性的人数是怎样算出来的？</h2>
+          <p class="counts-intro" id="counts-intro"></p>
+          <section class="group sick-group" aria-labelledby="sick-label">
+            <p class="group-derivation" id="sick-derivation"></p>
+            <div class="group-source" id="sick-source"><h3 id="sick-label">实际患病</h3><p class="group-count" id="sick-origin"><strong id="sick-count"></strong><span class="unit">人</span></p></div>
+            <div class="detection" id="sick-results" hidden="">
+              <div class="flow-transform" id="sick-transform"><p class="flow-rate" id="sick-rate"></p><span class="flow-arrow" aria-hidden="true"></span><p class="calculation-line" id="sick-calculation"></p></div>
+              <div class="group-result"><p class="positive-name" id="tp-label">测出阳性</p><p class="positive-count"><strong id="tp-count"></strong><span class="unit">人</span></p><p class="positive-note" id="tp-note"></p></div>
+              <p class="negative" id="sick-negative"></p>
+            </div>
+            <p class="group-explanation" id="sick-explanation"></p>
+          </section>
+          <section class="group healthy-group" aria-labelledby="healthy-label">
+            <p class="group-derivation" id="healthy-derivation"></p>
+            <div class="group-source" id="healthy-source"><h3 id="healthy-label">没有患病</h3><p class="group-count" id="healthy-origin"><strong id="healthy-count"></strong><span class="unit">人</span></p></div>
+            <div class="detection" id="healthy-results" hidden="">
+              <div class="flow-transform" id="healthy-transform"><p class="flow-rate" id="healthy-rate"></p><span class="flow-arrow" aria-hidden="true"></span><p class="calculation-line" id="healthy-calculation"></p></div>
+              <div class="group-result"><p class="positive-name" id="fp-label">被误判为阳性</p><p class="positive-count"><strong id="fp-count"></strong><span class="unit">人</span></p><p class="positive-note" id="fp-note"></p></div>
+              <p class="negative" id="healthy-negative"></p>
+            </div>
+            <p class="group-explanation" id="healthy-explanation"></p>
+          </section>
+        </div>
+        <p class="scene-note" id="scene-note"></p>
+        <section id="answer" class="answer result" aria-labelledby="answer-title" hidden="" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+          <h3 id="answer-title">阳性的人里，确实患病的人占多少？</h3>
+          <p id="positive-total-explanation" class="positive-total-explanation"></p>
+          <div class="answer-equation" aria-label="真阳性人数除以全部阳性人数">
+            <span class="fraction"><span><strong id="numerator"></strong><small>患病且测出阳性的人</small></span><span><strong id="denominator"></strong><small>全部阳性的人</small></span></span>
+            <span class="answer-value"><span class="approximately" id="approximately">≈</span><strong id="posterior"></strong></span>
+          </div>
+          <p id="answer-explanation" aria-live="polite" aria-atomic="true"></p>
+          <div class="positive-composition">
+            <div id="positive-bar" class="composition" role="img"><span id="true-share"></span><span id="false-share"></span></div>
+            <div class="legend"><span id="true-legend"></span><span id="false-legend"></span></div>
+          </div>
+          <p id="why-result" class="why-result"></p>
+        </section>
+      </div>
+      </div></section><div class="after-lesson reading-width" id="after-lesson" hidden="" data-linked-label="随「操作一（患病率）、操作二（检测准确率）」变化">
+        <details id="denominator-explanation" class="explanation" open=""><summary>“患者中有99%测出阳性”和“阳性后患病的概率”，分母为什么不同？</summary><p id="comparison-explanation"></p></details>
+        <details class="explanation" open=""><summary>把刚才的人数计算写成公式</summary><p>分子只数“确实患病，而且测出阳性”的人；分母把两组测出阳性的人加起来。</p><p class="formula">阳性后患病的概率 = 真阳性人数 ÷（真阳性人数 + 假阳性人数）</p><div id="expanded-calculation"></div></details>
+      </div>
+    </section>
+  </main>
+  <footer class="shell footer"><p>《大白话概率论》第3.4节 · 武辰</p><nav><a href="https://github.com/wuchen2018/probability-book/tree/main/demos/bayes">查看源码</a><a href="https://wuchen2018.pages.dev/">更多文章与视频</a></nav></footer>
+
+
+<script>(()=>{let armed=false;for(const type of ['input','change','click','pointerdown','keydown'])document.addEventListener(type,()=>{armed=true},{capture:true});for(const node of document.querySelectorAll('[data-linked-label]')){const shell=document.createElement('div');shell.className='linked-output';const badge=document.createElement('span');badge.className='linked-label';badge.textContent=node.dataset.linkedLabel;node.before(shell);shell.append(badge,node);let timer,last=node.innerHTML;new MutationObserver(()=>{const current=node.innerHTML;if(current===last)return;last=current;if(!armed)return;shell.dataset.changeCount=String(Number(shell.dataset.changeCount||0)+1);shell.classList.remove('is-updated');requestAnimationFrame(()=>shell.classList.add('is-updated'));clearTimeout(timer);timer=setTimeout(()=>shell.classList.remove('is-updated'),850)}).observe(node,{childList:true,characterData:true,subtree:true})}})();
+</script><script>function bayesCounts(prior, sensitivity, falsePositive, population = 100000) {
+  for (const value of [prior, sensitivity, falsePositive]) {
+    if (!Number.isFinite(value) || value < 0 || value > 100) throw new RangeError('比例须在 0% 到 100% 之间');
+  }
+  if (!Number.isFinite(population) || population <= 0) throw new RangeError('人数须为正数');
+  const sick = population * prior / 100;
+  const healthy = population - sick;
+  const truePositive = sick * sensitivity / 100;
+  const falseNegative = sick - truePositive;
+  const falsePositiveCount = healthy * falsePositive / 100;
+  const trueNegative = healthy - falsePositiveCount;
+  const positive = truePositive + falsePositiveCount;
+  return { population, sick, healthy, truePositive, falseNegative,
+    falsePositive: falsePositiveCount, trueNegative, positive,
+    posterior: positive > 0 ? truePositive / positive : null };
+}
+
+const $ = id => document.getElementById(id);
+const number = value => new Intl.NumberFormat('zh-CN', { maximumSignificantDigits: 12 }).format(value);
+const percent = value => `${(value * 100).toFixed(2)}%`;
+const resultLabel = c => c.posterior === null ? '无法计算'
+  : c.truePositive > 0 && c.falsePositive > 0 && c.posterior < 0.0001 ? '<0.01%'
+  : c.truePositive > 0 && c.falsePositive > 0 && c.posterior >= 0.99995 ? '>99.99%' : percent(c.posterior);
+const resultWords = c => resultLabel(c).replace('<', '不到').replace('>', '超过');
+const defaults = { prior: 0.1, sensitivity: 99, 'false-positive': 1 };
+const values = { ...defaults };
+const inputErrors = new Map();
+const delays = { 1: 9000, 2: 12000, 3: 9000 };
+let step = 2;
+let mode = 'experiment';
+let playing = false;
+let timer = null;
+
+function playbackLabel() {
+  $('autoplay').textContent = playing ? '暂停播放' : step === 4 ? '从头自动播放' : step === 1 ? '开始自动播放' : '继续自动播放';
+}
+
+function stop() {
+  clearTimeout(timer);
+  timer = null;
+  playing = false;
+  playbackLabel();
+}
+
+function scrollToLesson() {
+  $('lesson').scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+}
+
+function calculationLine(id, source, rate, result) {
+  const parts = [`${number(source)}×`, `${number(rate)}%=`, number(result)];
+  const nodes = [];
+  for (const [index, text] of parts.entries()) {
+    if (index > 0) nodes.push(document.createElement('wbr'));
+    const span = document.createElement('span');
+    span.textContent = text;
+    nodes.push(span);
+  }
+  $(id).replaceChildren(...nodes);
+}
+
+function explainResult(c) {
+  if (c.positive === 0) return '这次没有阳性结果，所以也没有可以用来计算“阳性后患病概率”的人群。';
+  if (c.truePositive === 0) return `测出的${number(c.positive)}名阳性全部来自健康人的误判，没有真阳性，所以阳性后患病的概率是0%。`;
+  if (c.falsePositive === 0) return `这组参数下，没有健康人被误判。测出的${number(c.positive)}名阳性全部来自患者，所以阳性后患病的概率是100%。`;
+  if (c.falsePositive > c.truePositive && c.healthy > c.sick) return `健康人有${number(c.healthy)}人，患者只有${number(c.sick)}人。健康人中${number(values['false-positive'])}%被误判，就有${number(c.falsePositive)}名阳性，已经多过了${number(c.truePositive)}名真阳性。所以只看阳性的人，真正患病的比例${c.posterior < 0.0001 ? '' : '约为'}${resultWords(c)}。`;
+  if (c.truePositive === c.falsePositive) return `真阳性和被误判的健康人各有${number(c.truePositive)}人，两组人数一样多，所以阳性的人里有一半确实患病。`;
+  return `这次有${number(c.sick)}名患者，其中${number(c.truePositive)}人测出阳性；${number(c.healthy)}名健康人中，${number(c.falsePositive)}人被误判为阳性。${c.truePositive > c.falsePositive ? '真阳性比假阳性多' : '假阳性比真阳性多'}，阳性后患病的概率${resultLabel(c).startsWith('<') || resultLabel(c).startsWith('>') ? '' : '约为'}${resultWords(c)}。`;
+}
+
+function expandedCalculation(c) {
+  const formulas = [
+    ['真阳性人数：', '100,000 × ', `${number(values.prior)}% × `, `${number(values.sensitivity)}% = `, `${number(c.truePositive)}人。`],
+    ['假阳性人数：', '100,000 × ', `(100% − ${number(values.prior)}%) × `, `${number(values['false-positive'])}% = `, `${number(c.falsePositive)}人。`]
+  ];
+  $('expanded-calculation').replaceChildren(...formulas.map(parts => {
+    const line = document.createElement('p');
+    for (const text of parts) {
+      const span = document.createElement('span'); span.className = 'math-term'; span.textContent = text;
+      line.append(span, document.createElement('wbr'));
+    }
+    return line;
+  }));
+}
+
+function render() {
+  const c = bayesCounts(values.prior, values.sensitivity, values['false-positive']);
+  const experiment = mode === 'experiment';
+  const onlyPositive = !experiment && step === 3;
+  const put = (id, value) => { $(id).textContent = number(value); };
+  $('scene').classList.toggle('has-long-counts', [c.sick, c.healthy, c.truePositive, c.falsePositive].some(value => number(value).length > 7));
+  $('lesson').dataset.mode = mode;
+  $('scene').dataset.step = experiment ? 2 : step;
+  $('step-copy').hidden = experiment;
+  $('back-to-experiment').hidden = experiment;
+  $('step-navigation').hidden = experiment;
+  $('interaction-region').hidden = !experiment;
+  $('experiment-controls').hidden = !experiment;
+  $('mobile-result-summary').hidden = !experiment;
+  $('lesson-actions').hidden = experiment;
+  $('experiment-actions').hidden = !experiment;
+  $('playback-settings').hidden = experiment;
+  $('after-lesson').hidden = !experiment && step !== 4;
+  $('population').hidden = experiment || step > 2;
+  $('groups').hidden = !experiment && step === 4;
+  $('counts-title').hidden = !experiment;
+  $('counts-intro').hidden = !experiment;
+  for (const id of ['sick-derivation', 'healthy-derivation']) $(id).hidden = !experiment && step > 2;
+  for (const id of ['sick-explanation', 'healthy-explanation']) $(id).hidden = !experiment;
+  for (const id of ['sick-origin', 'healthy-origin', 'sick-source', 'healthy-source']) $(id).hidden = onlyPositive;
+  $('sick-results').hidden = !experiment && step === 1;
+  $('healthy-results').hidden = !experiment && step === 1;
+  for (const id of ['sick-transform', 'healthy-transform']) $(id).hidden = !experiment && step !== 2;
+  for (const id of ['sick-negative', 'healthy-negative']) $(id).hidden = experiment || step !== 2;
+  $('answer').hidden = !experiment && step !== 4;
+
+  put('sick-count', c.sick); put('healthy-count', c.healthy);
+  put('tp-count', c.truePositive); put('fp-count', c.falsePositive);
+  $('population-explanation').textContent = `患病率是${number(values.prior)}%，也就是每1000人中约有${number(values.prior * 10)}人患病。放到这10万人中，就是100,000×${number(values.prior)}%=${number(c.sick)}名患者，剩下${number(c.healthy)}人没有患病。`;
+  const fractional = [c.sick, c.healthy, c.truePositive, c.falsePositive, c.falseNegative, c.trueNegative].some(n => Math.abs(n - Math.round(n)) > Number.EPSILON * Math.max(1, Math.abs(n)) * 8);
+  $('counts-intro').textContent = `先按患病比例把10万人分成患者和健康人，再分别对这两组人做检测。下面每一组都写出起始人数、检测比例和阳性人数。${fractional ? '人数出现小数，是说反复检测很多批10万人时，平均每批会有这么多人。' : ''}`;
+  $('sick-derivation').textContent = `先算患者人数：100,000×${number(values.prior)}%=${number(c.sick)}人。`;
+  $('healthy-derivation').textContent = `其余人没有患病：100,000−${number(c.sick)}=${number(c.healthy)}人。`;
+  $('sick-explanation').textContent = c.sick === 0 ? '当前人群里没有患者，所以这一组的真阳性和漏检人数都是0。' : `这${number(c.sick)}名患者中，有${number(values.sensitivity)}%会测出阳性，所以得到${number(c.truePositive)}人。确实患病、也测出阳性的人叫“真阳性”；另外${number(c.falseNegative)}名患者漏检了，测成阴性。`;
+  $('healthy-explanation').textContent = c.healthy === 0 ? '当前人群里没有健康人，所以这一组的假阳性和阴性人数都是0。' : `这${number(c.healthy)}名健康人中，有${number(values['false-positive'])}%会被误判为阳性，所以得到${number(c.falsePositive)}人。没有患病、却测出阳性的人叫“假阳性”；另外${number(c.trueNegative)}名健康人测出阴性，结果与他们没有患病的情况相符。`;
+  $('sick-label').textContent = onlyPositive ? '确实患病，也测出阳性' : '实际患病';
+  $('healthy-label').textContent = onlyPositive ? '没有患病，却测出阳性' : '没有患病';
+  $('sick-rate').textContent = `其中${number(values.sensitivity)}%测出阳性`;
+  $('healthy-rate').textContent = `其中${number(values['false-positive'])}%被误判`;
+  calculationLine('sick-calculation', c.sick, values.sensitivity, c.truePositive);
+  calculationLine('healthy-calculation', c.healthy, values['false-positive'], c.falsePositive);
+  $('tp-label').textContent = onlyPositive ? '确实患病，也测出阳性' : '测出阳性';
+  $('fp-label').textContent = onlyPositive ? '没有患病，却测出阳性' : '被误判为阳性';
+  $('tp-note').textContent = onlyPositive ? `真阳性 · 从${number(c.sick)}名患者中测出` : '真阳性';
+  $('fp-note').textContent = onlyPositive ? `假阳性 · 从${number(c.healthy)}名健康人中测出` : '假阳性';
+  $('sick-negative').textContent = `这组患者中，${number(c.falseNegative)}人漏检，测成阴性。`;
+  $('healthy-negative').textContent = `这组健康人中，${number(c.trueNegative)}人测出阴性，结果正确。`;
+  $('scene-note').textContent = experiment ? '' : step === 1 ? '两组人数相加，仍然是最开始的10万人。' : step === 2 ? c.positive === 0 ? '两组阳性人数都是0。接下来看看，这时还能不能计算阳性后患病的概率。' : '下一步，只看两组中测出阳性的人。' : step === 3 ? '阴性的人退出计算。接下来，只把这两组阳性的人加起来。' : '';
+
+  const titles = ['先把10万人分成两组', '给两组人做检测', '现在，只看测出阳性的人', '分母只数测出阳性的人'];
+  const descriptions = [
+    `患病率是${number(values.prior)}%，也就是每1000人中约有${number(values.prior * 10)}人患病。10万人中，约${number(c.sick)}人患病，另外${number(c.healthy)}人没有患病。${fractional ? '人数带小数，表示反复检测很多批10万人时，平均每批的人数。' : ''}`,
+    `给两组人用同一种方法做检测。患者中${number(values.sensitivity)}%测出阳性；健康人中${number(values['false-positive'])}%会被误判为阳性。分别乘一下，看看各有多少人。${fractional ? '人数带小数，表示反复检测很多批10万人时，平均每批的人数。' : ''}`,
+    c.positive === 0 ? '当前两组阳性人数都是0，这组参数下没有人测出阳性。' : c.truePositive === 0 ? '这组阳性的人全是被误判的健康人，没有查出的患者。' : c.falsePositive === 0 ? '这组阳性的人全部确实患病，没有被误判的健康人。' : '假设有一个人刚刚测出阳性。他可能确实患病，也可能没有患病、被误判了。接下来，只看这两组阳性的人。',
+    `两组阳性的人加起来，${number(c.truePositive)} + ${number(c.falsePositive)} = ${number(c.positive)}人。现在问：其中确实患病的${number(c.truePositive)}人，占多少？`
+  ];
+  $('step-label').textContent = experiment ? '自己试一试' : `第${step}步 / 共4步`;
+  $('step-title').textContent = experiment ? '你来改一改，看看人数怎样变化' : titles[step - 1];
+  $('step-description').textContent = experiment ? '先只改变患病率，观察真阳性、假阳性的人数和最后的概率。需要时，也可以直接在下面“可选操作项二”里修改检测的准确率。' : descriptions[step - 1];
+  document.querySelectorAll('#step-navigation [data-step]').forEach(button => {
+    if (Number(button.dataset.step) === step) button.setAttribute('aria-current', 'step');
+    else button.removeAttribute('aria-current');
+  });
+  $('previous-step').disabled = step === 1;
+  $('next-step').textContent = ['下一步：做检测', '下一步：只看阳性的人', '下一步：算出概率', '回到交互实验'][step - 1];
+
+  $('numerator').textContent = number(c.truePositive);
+  $('denominator').textContent = `${number(c.truePositive)} + ${number(c.falsePositive)}`;
+  $('posterior').textContent = resultLabel(c);
+  $('summary-posterior').textContent = $('posterior').textContent;
+  $('summary-tp').textContent = `患者测出阳性：${number(c.truePositive)}人`;
+  $('summary-fp').textContent = `健康人被误判：${number(c.falsePositive)}人`;
+  $('positive-total-explanation').textContent = c.positive === 0 ? '两组阳性人数都是0，0＋0＝0。这组参数下没有人测出阳性，无法继续计算阳性后患病的概率。' : `把上面两组阳性的人加起来：${number(c.truePositive)}名测出阳性的患者＋${number(c.falsePositive)}名被误判的健康人＝${number(c.positive)}名阳性。我们已经知道检测结果是阳性，接下来只看这${number(c.positive)}人中，有多少人确实患病。`;
+  const boundedResult = resultLabel(c).startsWith('<') || resultLabel(c).startsWith('>');
+  const exactEnd = c.positive > 0 && (c.truePositive === 0 || c.falsePositive === 0);
+  $('approximately').hidden = c.posterior === null || boundedResult;
+  $('approximately').textContent = exactEnd ? '=' : '≈';
+  document.querySelector('.answer-equation').setAttribute('aria-label', c.posterior === null ? '阳性人数为0，分母为0，无法计算。' : `${number(c.truePositive)}名真阳性，除以全部${number(c.positive)}名阳性，结果${boundedResult ? '' : exactEnd ? '为' : '约为'}${resultWords(c)}。`);
+  $('answer-explanation').textContent = c.posterior === null
+    ? '按这组参数，没有人测出阳性。分母是0，阳性后患病的概率无法计算。'
+    : `在这${number(c.positive)}名阳性的人中，确实患病的是${number(c.truePositive)}人。用${number(c.truePositive)}除以${number(c.positive)}，算出的比例${boundedResult ? '' : exactEnd ? '是' : '约为'}${resultWords(c)}。这就是测出阳性后患病的概率。`;
+  $('why-result').textContent = explainResult(c);
+  $('denominator-explanation').querySelector('summary').textContent = `“患者中有${number(values.sensitivity)}%测出阳性”和“阳性后患病的概率”，分母为什么不同？`;
+  document.querySelector('.positive-composition').hidden = c.posterior === null;
+  $('true-share').style.width = `${(c.posterior ?? 0) * 100}%`;
+  $('false-share').style.width = `${c.positive === 0 ? 0 : c.falsePositive / c.positive * 100}%`;
+  $('true-legend').textContent = `测出阳性的患者：${number(c.truePositive)}人`;
+  $('false-legend').textContent = `被误判的健康人：${number(c.falsePositive)}人`;
+  $('positive-bar').setAttribute('aria-label', c.posterior === null ? '没有阳性结果' : `测出阳性的${number(c.positive)}人中，${number(c.truePositive)}人确实患病，占${resultWords(c)}；${number(c.falsePositive)}人是被误判的健康人。`);
+  const patientComparison = c.sick === 0 ? `检测方法设为能查出${number(values.sensitivity)}%的患者；当前人群没有患者，不能用这批人数计算检出比例。` : `“患者中有${number(values.sensitivity)}%测出阳性”，先只看实际患病的那${number(c.sick)}个人，再数出${number(c.truePositive)}名阳性，分母是${number(c.sick)}：${number(c.truePositive)} ÷ ${number(c.sick)} = ${number(values.sensitivity)}%。`;
+  const positiveComparison = c.positive === 0 ? '这组参数下没有人测出阳性，无法计算阳性后患病的概率。' : `“阳性后患病的概率”先选中全部${number(c.positive)}名阳性，再数出${number(c.truePositive)}名患者，分母是${number(c.positive)}：${number(c.truePositive)} ÷ ${number(c.positive)}，结果${boundedResult ? '' : exactEnd ? '为' : '约为'}${resultWords(c)}。`;
+  $('comparison-explanation').textContent = `${patientComparison}${positiveComparison}`;
+  expandedCalculation(c);
+  $('current-method').textContent = `当前设置：${number(values.sensitivity)}%的患者会测出阳性，${number(values['false-positive'])}%的健康人会被误判为阳性。`;
+  playbackLabel();
+}
+
+function sync() {
+  for (const [name, value] of Object.entries(values)) {
+    $(name).value = value;
+    $(`${name}-number`).value = value;
+  }
+  inputErrors.clear(); $('input-error').textContent = '';
+  render();
+}
+
+function schedule() {
+  clearTimeout(timer);
+  if (!playing || step === 4) { stop(); return; }
+  timer = setTimeout(() => {
+    step += 1; render();
+    if (step === 4) stop(); else schedule();
+  }, delays[step] * Number($('pace').value));
+}
+
+function setStep(nextStep) {
+  stop(); step = Math.max(1, Math.min(4, nextStep)); render(); scrollToLesson();
+}
+
+for (const name of Object.keys(values)) {
+  for (const id of [name, `${name}-number`]) {
+    const read = event => {
+      if (event.type === 'input' && event.target.value === '') {
+        inputErrors.delete(name); $('input-error').textContent = [...inputErrors.values()].join(' '); return;
+      }
+      const raw = event.target.valueAsNumber;
+      const value = id === name ? Math.round(raw * 1000) / 1000 : raw;
+      if (!Number.isFinite(value) || value < 0 || value > 100) {
+        const label = { prior: '患病比例', sensitivity: '患者测出阳性的比例', 'false-positive': '健康人被误判的比例' }[name];
+        inputErrors.set(name, `${label}请填写0到100之间的数。现在仍按刚才的数值计算。`);
+        $('input-error').textContent = [...inputErrors.values()].join(' ');
+        return;
+      }
+      inputErrors.delete(name); $('input-error').textContent = [...inputErrors.values()].join(' ');
+      if (event.type === 'blur') return;
+      values[name] = value;
+      $(name).value = value; $(`${name}-number`).value = value;
+      render();
+    };
+    $(id).addEventListener('input', read);
+    if (id.endsWith('-number')) $(id).addEventListener('blur', read);
+  }
+}
+document.querySelectorAll('#step-navigation [data-step]').forEach(button => button.addEventListener('click', () => setStep(Number(button.dataset.step))));
+$('previous-step').addEventListener('click', () => setStep(step - 1));
+$('next-step').addEventListener('click', () => {
+  if (step < 4) { setStep(step + 1); return; }
+  stop(); mode = 'experiment'; render(); scrollToLesson();
+});
+$('autoplay').addEventListener('click', () => {
+  if (playing) { stop(); return; }
+  if (step === 4) { step = 1; render(); }
+  playing = true; playbackLabel(); scrollToLesson(); schedule();
+});
+$('pace').addEventListener('change', () => { if (playing) schedule(); });
+$('playback-settings').querySelector('summary').addEventListener('click', () => { if ($('playback-settings').open) stop(); });
+$('playback-settings').addEventListener('toggle', () => { if (!$('playback-settings').open) stop(); });
+$('book-example').addEventListener('click', () => { Object.assign(values, defaults); sync(); });
+$('higher-prior').addEventListener('click', () => { values.prior = 10; sync(); });
+$('back-to-lesson').addEventListener('click', () => {
+  stop(); mode = 'lesson'; step = 1; sync(); scrollToLesson();
+});
+$('back-to-experiment').addEventListener('click', () => {
+  stop(); mode = 'experiment'; step = 2; render(); scrollToLesson();
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
+render();
+document.documentElement.dataset.labReady = 'true';
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),boards=[...document.querySelectorAll('.lab-workspace')];
+  let timer;const feedbacks=[];
+  function arrange(){
+    for(const board of boards){
+      const controls=board.querySelector(':scope>.lab-workspace-controls'),stage=board.querySelector(':scope>.lab-workspace-stage');
+      if(!controls||!stage)continue;
+      const c=controls.getBoundingClientRect().height,s=stage.getBoundingClientRect().height;
+      board.classList.remove('lab-workspace--sticky-controls','lab-workspace--sticky-stage');
+      if(wide.matches){const pinStage=s<c;board.classList.add(pinStage?'lab-workspace--sticky-stage':'lab-workspace--sticky-controls');stage.style.top=pinStage?Math.min(16,innerHeight-s-16)+'px':''}
+    }
+    for(const {panel,output} of feedbacks){const hidden=!!panel.closest('[hidden]')||!panel.getClientRects().length;if(output.hidden!==hidden)output.hidden=hidden}
+  }
+  // A full, explicitly named result beside mobile controls avoids blind button presses.
+  for(const board of boards){
+    for(const panel of board.querySelectorAll('.lab-workspace-controls .operate-panel')){
+      if(!panel.querySelector('button,input,select'))continue;
+      if(panel.querySelector('.operate-panel')||panel.matches('#step-navigation,#lesson-actions,#playback-settings,#experiment-actions,.transient-panel'))continue;
+      const selector=panel.closest('[data-feedback]')?.dataset.feedback||board.dataset.feedback;
+      if(!selector)continue;
+      const sources=[...new Set(selector.split(',').flatMap(part=>[...document.querySelectorAll(part.trim())]))];if(!sources.length)continue;
+      const output=document.createElement('div');output.className='lab-mobile-feedback';output.setAttribute('role','status');panel.after(output);
+      feedbacks.push({panel,output});
+      let last;const update=()=>{const html=sources.map(source=>'<div>'+source.innerHTML+'</div>').join('');if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id')};
+      update();const observer=new MutationObserver(update);for(const source of sources)observer.observe(source,{childList:true,subtree:true,characterData:true});
+    }
+  }
+  // Keep the named probability and both positive counts visible above Bayes' full flow.
+  for(const board of boards.filter(n=>n.dataset.desktopFeedback)){
+    const source=document.querySelector(board.dataset.desktopFeedback),stage=board.querySelector('.lab-workspace-stage');
+    if(!source||!stage)continue;
+    const output=document.createElement('div');output.className='lab-desktop-feedback result';output.setAttribute('role','status');stage.prepend(output);
+    let last;const update=()=>{
+      if(output.hidden!==source.hidden)output.hidden=source.hidden;
+      const html=source.innerHTML;if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id');
+    };
+    update();new MutationObserver(update).observe(source,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+  }
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(arrange,100)};
+  for(const slot of document.querySelectorAll('[data-mobile-content]')){
+    const homes=[...document.querySelectorAll(slot.dataset.mobileContent)].map(node=>{const item=node.closest('.linked-output')||node,home=document.createComment('desktop position');item.before(home);return {item,home}});
+    const place=()=>{for(const {item,home}of homes)if(wide.matches)home.after(item);else slot.append(item)};
+    place();wide.addEventListener('change',place);
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);
+  for(const board of boards){new ResizeObserver(schedule).observe(board);new MutationObserver(schedule).observe(board,{attributes:true,attributeFilter:['hidden'],subtree:true})}
+  arrange();
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),panes=[...document.querySelectorAll('.lab-workspace>.lab-workspace-controls')];
+  let timer;
+  const update=()=>{
+    for(const pane of panes){
+      const value=String(wide.matches&&pane.scrollHeight>pane.clientHeight);
+      if(pane.dataset.scrollable!==value)pane.dataset.scrollable=value;
+    }
+  };
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(update,60)};
+  const observer=new ResizeObserver(update);
+  for(const pane of panes){
+    observer.observe(pane);for(const child of pane.children)observer.observe(child);
+    pane.addEventListener('toggle',update,true);
+    new MutationObserver(schedule).observe(pane,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','open']});
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);wide.addEventListener('change',schedule);update();
+})();
+</script></body></html>

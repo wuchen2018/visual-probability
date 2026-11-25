@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="改变两种方案接收的病例构成，观察辛普森悖论怎样出现、怎样消失。配套《大白话概率论》第3.5.3节。">
+  <title>分着比都赢，合起来反而输了？｜辛普森悖论交互实验</title>
+  <link rel="icon" href="data:,">
+  <style>:root{color-scheme:light;--paper:#fcfdfb;--ink:#233029;--muted:#56645e;--line:#d3dfd8;--small:#26725f;--large:#a96239;--small-bg:#f0f7f3;--large-bg:#fcf5ef;--soft:#f6f9f5;--failed:#e2e8e2;--body:system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:1.0625rem/1.9 var(--body)}[hidden]{display:none!important}h1,h2,h3,p{margin:0;overflow-wrap:anywhere}h1{font:750 clamp(1.85rem,2.7vw,2.65rem)/1.5 "Songti SC",SimSun,serif;margin:1rem 0}h2{font-size:1.5rem;line-height:1.65}h3{font-size:1.2rem;line-height:1.7}p+p{margin-top:.8rem}a{color:var(--small);text-underline-offset:.2em}strong{font-weight:720}button,input{font:inherit}button{min-height:44px;padding:.65rem 1rem;border:1px solid #b8cbbc;border-radius:5px;background:#fff;color:var(--ink);cursor:pointer;line-height:1.6}button:hover{background:var(--soft);border-color:var(--small)}button[aria-pressed=true]{background:#e9f2eb;border-color:var(--small)}:focus-visible{outline:3px solid var(--large);outline-offset:4px}input[type=number]{width:6rem;max-width:100%;min-height:44px;padding:.35rem .6rem;border:1px solid #b4c6b9;border-radius:5px;background:#fff;font-weight:650;color:var(--ink)}input[type=range]{width:100%;min-height:32px;margin:1rem 0 .65rem;accent-color:var(--small);touch-action:pan-y}.shell{width:min(1600px,calc(100% - 64px));margin-inline:auto}.masthead{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:68px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:.7rem;font-size:.95rem;font-weight:700}.stamp{display:grid;place-items:center;width:29px;height:29px;background:var(--small);color:#fff;font-family:serif;border-radius:3px}.draft{font-size:.85rem;color:var(--muted)}.intro{padding:1.7rem 0 2.5rem}.book-reference{display:flex;align-items:center;justify-content:space-between;gap:1rem 2rem;color:var(--muted);font-size:.88rem}.book-reference p+p{margin-top:.2rem}.book-reference>a{white-space:nowrap}.lead{font-size:1.1rem}.intro>p:last-child{margin-top:.75rem;color:var(--muted)}.section-intro{margin:1rem 0 1.75rem;line-height:2;max-width:80em;color:var(--muted)}.controls-region{margin-top:.5rem}.live-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem 2rem;position:sticky;top:0;z-index:2;padding:1rem 0;background:var(--paper);border-bottom:1px solid var(--line);margin-bottom:1.75rem}.summary-result{display:flex;align-items:baseline;flex-wrap:wrap;gap:.6rem 1.5rem;font-size:.95rem}.summary-result strong{font-size:1.75rem;color:var(--small);font-variant-numeric:tabular-nums;line-height:1.5}#summary-verdict{font-size:.95rem;color:var(--muted)}.control-grid,.case-grid,.overall-grid,.weight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem;align-items:start}.parameter-card{padding:1.75rem;border:1px solid var(--line);border-radius:7px;background:var(--soft);min-width:0}.input-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-top:1.4rem}.input-heading>label{font-weight:650}.input-heading>span{display:flex;align-items:center;gap:.45rem}.unit{font-size:.9rem;font-weight:450}.mix-description{font-size:1rem;line-height:1.9}.mix-bar,.outcome-bar{display:flex;height:22px;border-radius:3px;overflow:hidden;background:var(--failed);margin-top:.8rem}.mix-bar>span,.outcome-bar>span{height:100%;transition:width .2s ease}.small-part{background:var(--small)}.large-part{background:var(--large)}.failed-part{background:var(--failed)}.legend{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem 1rem;margin-top:.6rem;font-size:.88rem}.small-key{color:var(--small)}.large-key{color:var(--large)}.failed-key{color:var(--muted)}.local-explanation{border-top:1px solid var(--line);padding-top:1rem;margin-top:1.2rem;font-size:1rem;line-height:2}.presets{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.5rem}.input-error{color:#9e3328;margin-top:1rem}.input-error:empty{display:none}.lesson-section{margin-top:4rem}.case-card{padding:1.6rem;border:1px solid #cadfd1;border-left:4px solid var(--small);border-radius:7px;background:var(--small-bg);min-width:0}.large-case{border-color:#e7d6c7;border-left-color:var(--large);background:var(--large-bg)}.case-row{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid #cadfd1}.large-case .case-row{border-color:#e4d2c1}.row-heading{font-size:1.1rem;font-weight:700}.rate-source{font-size:1rem;line-height:1.95;margin:.5rem 0 1rem}.flow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1fr);align-items:center;gap:1rem;text-align:center}.flow-label{font-size:.9rem;color:var(--muted);line-height:1.8}.flow-value{display:block;font-size:clamp(1.45rem,2.3vw,2rem);font-variant-numeric:tabular-nums;line-height:1.7;white-space:nowrap}.flow-rate{font-size:.95rem;line-height:1.9}.flow-arrow{height:2px;position:relative;background:var(--small);margin:.75rem .1rem}.flow-arrow::after{content:"";position:absolute;right:0;top:-4px;width:10px;height:10px;border-top:2px solid var(--small);border-right:2px solid var(--small);transform:rotate(45deg)}.large-case .flow-arrow{background:var(--large)}.large-case .flow-arrow::after{border-color:var(--large)}.formula-line{font-size:1rem;margin-top:1rem;line-height:2;font-variant-numeric:tabular-nums}.formula-term{white-space:nowrap}.case-conclusion{border-top:1px solid #cadfd1;margin-top:1.5rem;padding-top:1rem;font-weight:650;line-height:1.95}.large-case .case-conclusion{border-color:#e4d2c1}.overall-card,.weight-card{padding:1.75rem;border:1px solid var(--line);border-radius:7px;min-width:0}.overall-card>p{margin-top:1rem;line-height:2}.total-rate{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:1.3rem 0 .7rem}.total-rate strong{font-size:clamp(2rem,3.5vw,3rem);line-height:1.5;font-variant-numeric:tabular-nums;color:var(--small)}.outcome-bar{margin-top:1.25rem}.finding{margin-top:2rem;padding:1.5rem 1.75rem;background:var(--soft);border-left:4px solid var(--small);border-radius:3px}.finding h3{font-size:1.25rem}.finding p{margin-top:.8rem;line-height:2}.weight-card>p{margin-top:1rem;line-height:2}.weight-equation{font-size:1rem;color:var(--small);line-height:2.1;font-variant-numeric:tabular-nums}.explanation{margin-top:1.75rem;line-height:2;max-width:80em}.try-again{padding:1.75rem;margin-top:2.5rem;background:var(--soft);border:1px solid var(--line);border-radius:7px}.try-again>p{margin-top:1rem;line-height:2}.try-again>button{margin-top:1.3rem}.footer{margin-top:4rem;padding:1.5rem 0 2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+h4{margin:0}
+.total-record{background:#f5f6f2}.total-record th,.total-record td{border-top:2px solid #a6bcae}.preset-hint{margin-top:1.5rem;color:var(--muted);font-size:.95rem}.preset-hint+.presets{margin-top:.65rem}.weight-bridge{padding:1.5rem 1.75rem;margin:0 0 2rem;background:var(--soft);border-left:4px solid var(--small);border-radius:4px}.bridge-equation{font-weight:700;line-height:2.1;color:var(--small);margin:1rem 0}.percentage-equation{padding-top:.8rem;border-top:1px solid var(--line)}#equal-mix-result{border-top:1px solid var(--line);padding-top:1rem}.takeaway{color:var(--muted)}input[aria-invalid=true]{border-color:#9e3328}
+@media(max-width:600px){.weight-bridge{padding:1.2rem 1rem}.original-records thead th{line-height:1.8}.total-record .record-calculation{overflow-wrap:anywhere}.formula-term{max-width:100%}.percentage-equation .formula-term{white-space:normal}}
+.original-records{width:100%;table-layout:fixed;border-collapse:collapse;margin:1.6rem 0 1.8rem;font-size:1rem;text-align:left;font-variant-numeric:tabular-nums}.original-records caption{text-align:left;font-weight:700;padding-bottom:.75rem;font-size:1.05rem}.category-column{width:24%}.original-records th,.original-records td{padding:1rem 1.25rem;border:1px solid var(--line);vertical-align:top}.original-records thead{background:var(--soft)}.original-records .small-record{background:var(--small-bg)}.original-records .large-record{background:var(--large-bg)}.original-records tbody th{font-weight:700}.record-count{display:inline-block;white-space:nowrap;margin-right:1.2rem}.record-calculation{display:block;margin-top:.4rem;color:var(--muted)}.record-calculation strong{display:inline-block;white-space:nowrap;color:var(--ink)}
+@media(max-width:600px){.original-records{font-size:.9375rem;margin:1.4rem 0 1.6rem}.original-records caption{font-size:1rem;line-height:1.8}.original-records th,.original-records td{padding:.8rem .5rem}.original-records tbody th{white-space:nowrap}.record-count{display:block;margin-right:0}.record-calculation strong{display:block;margin-top:.15rem}}
+@media(max-width:1000px){.shell{width:calc(100% - 40px)}.control-grid,.case-grid,.overall-grid,.weight-grid{gap:1.25rem}.parameter-card,.case-card,.overall-card,.weight-card{padding:1.3rem}.flow{gap:.6rem}.flow-value{font-size:1.5rem}}
+@media(max-width:850px){.control-grid,.case-grid,.overall-grid,.weight-grid{grid-template-columns:1fr;gap:2rem}.book-reference{align-items:flex-start;flex-direction:column;gap:.75rem}.parameter-card,.case-card,.overall-card,.weight-card{padding:1.5rem}.live-summary{display:block}.summary-result{justify-content:space-between;gap:.5rem 1rem}#summary-verdict{display:block;margin-top:.5rem}.controls-region input{scroll-margin-top:160px}}
+@media(max-width:600px){body{font-size:1rem}.shell{width:calc(100% - 32px)}.masthead{min-height:60px;gap:.5rem}.brand{font-size:.84rem;gap:.5rem}.draft{font-size:.75rem}.stamp{width:25px;height:25px}.intro{padding:1.1rem 0 2rem}.book-reference{font-size:.82rem}.intro h1{font-size:1.8rem;line-height:1.5}.lead{font-size:1rem}h2{font-size:1.3rem;line-height:1.7}h3{font-size:1.1rem}.section-intro{font-size:1rem;margin:.9rem 0 1.5rem}.parameter-card,.case-card,.overall-card,.weight-card{padding:1.2rem 1rem}.parameter-card h3{font-size:1.15rem}.input-heading{gap:.6rem;align-items:baseline}.input-heading>label{font-size:.95rem}input[type=number]{width:5.2rem}.mix-description,.local-explanation{font-size:.95rem}.summary-result{font-size:.9rem;gap:.4rem .8rem}.summary-result strong{font-size:1.5rem}#summary-verdict{font-size:.9rem}.live-summary{padding:.75rem 0}.presets{gap:.7rem}.presets button{font-size:.95rem}.lesson-section{margin-top:3rem}.case-row{margin-top:1.2rem;padding-top:1rem}.row-heading{font-size:1.05rem}.rate-source{font-size:.95rem}.flow{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.15fr);gap:.5rem}.flow-label,.flow-rate{font-size:.875rem}.flow-value{font-size:1.45rem}.flow .unit{font-size:.875rem}.formula-line{font-size:.95rem}.case-conclusion{font-size:.95rem}.legend{font-size:.875rem;gap:.4rem .75rem}.total-rate{gap:.75rem}.total-rate strong{font-size:2.4rem}.overall-card>p,.weight-card>p,.weight-equation{font-size:.95rem}.finding{padding:1.2rem 1rem}.finding h3{font-size:1.15rem}.try-again{padding:1.2rem 1rem}.footer{font-size:.82rem;margin-top:3rem}}
+@media(max-width:600px){.summary-label{flex-basis:100%}.summary-result>span:not(.summary-label){display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;flex:1}.book-reference{font-size:.875rem}}
+@media(max-width:360px){.brand{font-size:.78rem}.flow-value{font-size:1.25rem}.flow{gap:.35rem}.flow-label,.flow-rate{font-size:.875rem}.summary-result strong{font-size:1.4rem}.input-heading{gap:.4rem}.input-heading>label{font-size:.9rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+
+/* Formal operation zones: shared across the probability experiments. */
+body .operate-panel{background:#faf5e8;border:1.5px solid #dccaa0;border-radius:8px;padding:1.4rem 1.5rem;min-width:0;margin:1.1rem 0 1.5rem}
+.operate-badge{display:inline-block;width:fit-content;max-width:100%;color:#7c5812;background:#f2e6c9;border:1px solid #dccaa0;border-radius:4px;font-weight:700;font-size:.9rem;line-height:1.7;padding:.2rem .65rem;margin:0 0 .9rem}
+.operate-panel>.operate-badge{grid-column:1/-1}.operate-panel .controls:not(.operate-panel){background:transparent;border:0;border-top:1px solid #dccaa0;border-radius:0;padding:1rem 0 0;margin:1rem 0 0}.operate-panel .actions:last-child{margin-bottom:0}
+.operate-panel button,.operate-panel input[type=number],.operate-panel select{border-color:#c6b27d}.operate-panel button:hover,.operate-panel button[aria-pressed=true],.operate-panel button[aria-current=step]{background:#eee0b9;border-color:#9e792e;color:#67480d}.operate-panel button[aria-pressed=true]{box-shadow:inset 0 0 0 1px #9e792e}.operate-panel input[type=range],.operate-panel input[type=checkbox],.operate-panel input[type=radio]{accent-color:#7c5812}
+.operate-panel button:focus-visible,.operate-panel input:focus-visible,.operate-panel select:focus-visible{outline-color:#7c5812}.operate-panel input[aria-invalid=true]{border-color:#a23b30;background:#fff3f1}.operate-panel button.primary,.operate-panel button#next-step{background:#7c5812;color:#fff;border-color:#7c5812}
+.operate-panel button.btn-secondary{border-color:#d8cfba;color:#6f6b60;background:#fffdfa;box-shadow:none}.operate-panel button.btn-secondary:hover{background:#f4f0e7;border-color:#b9ab8b}.operate-panel button:disabled{opacity:.5}
+.plot-heading{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:.7rem 1rem}.plot-heading h2,.plot-heading h3{flex:1 1 240px}.plot-heading .operate-badge{background:#faf5e8;margin:0;flex:0 1 auto}.direct-interaction>.operate-badge{background:#faf5e8}
+body .result{background:#f3f8f3;border-left:4px solid #26725f;padding:1.1rem 1.3rem;margin:1.2rem 0;line-height:1.9;min-width:0}.card.soft{background:#fff}.operate-panel .event{background:#fffdf8;border-left-color:#b79248}.operate-panel .parameter-block,.operate-panel .parameter-card,.operate-panel .prior-block{background:transparent}.operate-panel .threshold-panel{background:transparent}.sampling{border-top-color:#dccaa0}.transient-panel:has(>button[hidden]){display:none}.operate-panel>.choice.log-choice{display:flex;flex-basis:100%;margin:.8rem 0 0}.operate-panel .day-grid{margin:.8rem 0}.operate-panel .presets button span{color:inherit}
+@media(max-width:600px){body .operate-panel{padding:1.1rem 1rem}.operate-badge{font-size:.875rem}.plot-heading{display:block}.plot-heading .operate-badge{margin-top:.75rem}.operate-panel .controls:not(.operate-panel){padding-top:.85rem}.operate-panel .control label{flex-wrap:wrap}body .result{padding:1rem}.compact-operate{margin:.8rem 0}}
+
+.plot-heading .operate-badge{white-space:normal;overflow-wrap:anywhere;min-width:0}.operate-panel .operate-badge{white-space:normal}.operate-panel .rule-explanation{background:transparent}
+
+body .direct-interaction button{border-color:#c6b27d}body .direct-interaction button:hover,body .direct-interaction button[aria-pressed=true]{background:#eee0b9;border-color:#9e792e;color:#67480d}body .direct-interaction button:focus-visible{outline-color:#7c5812}
+</style>
+  
+  
+<style>.operate-widget{border:1px solid #dccaa0;border-radius:10px;padding:1.2rem;margin-top:1.1rem;background:#fffaf0;min-width:0}.operate-widget h2,.operate-widget h3{font-size:1.1rem;margin:0 0 .7rem;line-height:1.7}.operate-widget .control{min-width:0}.operate-widget .affects{color:#6b531f;font-size:.9rem;line-height:1.8;margin:.8rem 0 0}.linked-output{border:1px solid #cadce9;border-left:5px solid #467caa;border-radius:9px;background:#f7fbff;padding:.8rem 1rem;margin:1.2rem 0;min-width:0;overflow-wrap:anywhere}.linked-label{display:block;width:fit-content;max-width:100%;font:600 .82rem/1.7 sans-serif;color:#24547b;background:#e6eff8;padding:.18rem .55rem;border-radius:4px;margin:0 0 .65rem}.linked-output>.result{margin:.45rem 0}.linked-output.is-updated{animation:output-change .8s ease-out}.story-bridge{padding:1.5rem 0 .6rem;max-width:none}.story-bridge p,.story-copy p{line-height:1.95}.method-steps{line-height:1.95;margin:1rem 0 0}.extension{border-top:1px solid var(--line,#ccd6d2);padding-top:1.6rem;margin-top:2.2rem}.fixed-reference{font-weight:600;color:#4d5a56;margin:1rem 0 .4rem}.situation-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1rem 0}.situation-list span{padding:.6rem;border:1px solid #ccd6d2;text-align:center;border-radius:5px}.situation-list .excluded{color:#78817d;background:#eff0ed;text-decoration:line-through}.progression{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.progression>section{padding:1rem;border:1px solid #ccd6d2;border-radius:8px}.progression h3{font-size:1rem;line-height:1.8}.progression p{line-height:1.9}.story-copy strong{font-weight:700}.story-copy .term{white-space:nowrap}@keyframes output-change{from{box-shadow:0 0 0 4px #90badd88}to{box-shadow:0 0 0 0 transparent}}@media(max-width:650px){.operate-widget{padding:1rem .85rem}.linked-output{padding:.75rem .7rem}.progression{grid-template-columns:1fr}.situation-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(prefers-reduced-motion:reduce){.linked-output.is-updated{animation:none;outline:2px solid #90badd}}
+
+.linked-output:has(>.live-summary){position:sticky;top:0;z-index:2}.linked-output>.live-summary{position:static;margin:0;border-bottom:0;padding:.3rem .5rem}
+
+.linked-output:has(#joined[hidden]){display:none}
+
+@media(max-width:650px){.linked-output:has(>.live-summary){position:static}}
+</style><style>/* Controls and their live figures share a workspace; explanations continue below. */
+body .lab-workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:1.25rem;align-items:start;margin:1.2rem 0 2rem;min-width:0;scroll-margin-top:16px}
+.lab-workspace-controls,.lab-workspace-stage{min-width:0}.lab-workspace--sticky-controls>.lab-workspace-controls{position:sticky;top:16px}.lab-workspace--sticky-stage>.lab-workspace-stage{position:sticky;top:16px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;align-items:start}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+body .lab-workspace .operate-panel{margin:0 0 .7rem;padding:.9rem;background:#faf5e8;border:1.5px solid #dccaa0;border-radius:7px;min-width:0}body .lab-workspace .operate-widget{padding:.6rem 0;margin:0;border:0;border-top:1px solid #dccaa0;background:transparent;border-radius:0}.lab-workspace .operate-widget:first-of-type{border-top:0;padding-top:0}.lab-workspace .operate-widget h2,.lab-workspace .operate-widget h3{font-size:1rem;line-height:1.65;margin:0 0 .4rem}.lab-workspace .operate-badge{font-size:.8rem;line-height:1.6;padding:.15rem .45rem;margin:0 0 .5rem}.lab-workspace .plot-heading .operate-badge{margin-top:.25rem}.lab-workspace .controls:not(.operate-panel){padding:0!important;margin:.5rem 0!important;border:0!important;gap:.65rem .75rem;grid-template-columns:repeat(2,minmax(0,1fr))}.lab-workspace .controls:not(.operate-panel):has(>.control:only-child){grid-template-columns:1fr}.lab-workspace .control label{flex-wrap:wrap;gap:.25rem;font-size:.9rem}.lab-workspace .control label>span:first-child{font-weight:600}.lab-workspace input[type=number]{width:5rem;min-width:0;min-height:40px;font-size:1rem}.lab-workspace input[type=range]{margin:.3rem 0 0;min-height:26px}.lab-workspace button{min-height:42px;padding:.4rem .6rem;font-size:.9rem;line-height:1.6}.lab-workspace .actions,.lab-workspace .presets{gap:.4rem;margin:.6rem 0}.lab-workspace .actions:last-child{margin-bottom:0}.lab-workspace .control-help,.lab-workspace .affects,.lab-workspace .operate-widget>p,.lab-workspace .operate-panel>p{font-size:.85rem;line-height:1.75;margin:.4rem 0}.lab-workspace .operate-panel p+p{margin-top:.4rem}.lab-workspace .operate-panel details{margin-top:.6rem;padding-top:.6rem}.lab-workspace .operate-panel summary{font-size:.9rem}
+body .lab-workspace .card,body .lab-workspace .plot-card{padding:.9rem;margin:0;min-width:0}.lab-workspace h2,.lab-workspace h3{font-size:1.1rem;line-height:1.6}.lab-workspace p{line-height:1.8}.lab-workspace .plot{height:230px;min-height:0;margin-top:.5rem}.lab-workspace .plot.square{width:min(100%,280px);height:auto;aspect-ratio:1;margin-inline:auto}.lab-workspace .plot text{font-size:12px}.lab-workspace .legend{font-size:.8rem;line-height:1.7;gap:.3rem .7rem;margin-top:.5rem}.lab-workspace .caption{font-size:.85rem;line-height:1.8}.lab-workspace .linked-output{border:0;border-radius:0;padding:0;margin:.5rem 0;background:transparent;box-shadow:none}.lab-workspace .linked-label{font-size:.75rem;line-height:1.7;padding:0;background:transparent;margin:0 0 .3rem;color:#456277}.lab-workspace .linked-output:has(>.live-summary){position:static}.lab-workspace .linked-output.is-updated{animation:none}.lab-workspace .linked-output>.plot{margin-top:.25rem}
+body .lab-workspace .result,body .lab-workspace .summary,body .lab-workspace .live-summary{margin:.5rem 0;padding:.75rem .85rem;font-size:.95rem;line-height:1.8;background:#f3f8f3;border-left:4px solid #26725f;position:static}.lab-workspace .result strong{font-size:1.15rem}.lab-workspace .result p+p{margin-top:.35rem}.lab-workspace .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.6rem 0}.lab-workspace .metric{padding:.55rem}.lab-workspace .metric span{font-size:.8rem}.lab-workspace .metric strong{font-size:1.25rem}.lab-workspace .formula,.lab-workspace .formulas{font-size:.9rem;line-height:1.9;margin-top:.5rem}.lab-workspace table{font-size:.85rem;margin-top:.5rem}.lab-workspace th,.lab-workspace td{padding:.45rem .25rem}.lab-workspace .plot-frame{min-width:0;padding:0}.lab-workspace .plot-frame svg{display:block;width:100%;height:245px}.lab-followup{margin:1rem 0 2rem}.lab-followup>h3{margin:.8rem 0}.lab-workspace .lab-paired-result{margin-top:.6rem}.lab-workspace-stage>.lab-core-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}.lab-workspace .lab-secondary-controls{margin-top:.75rem}.lab-workspace .bean-grid{width:100%;height:240px}.lab-workspace .door-grid{gap:.5rem;grid-template-columns:repeat(5,minmax(0,1fr));margin:.6rem 0}.lab-workspace .door{min-height:66px;padding:.35rem;font-size:.85rem}.lab-workspace .family-grid{max-width:340px;margin-inline:auto}.lab-workspace .experiment-paths{display:block;margin:0}.lab-workspace .experiment-path{margin-bottom:.5rem}
+/* Page-specific figures retain their labels and computational units. */
+body[data-workspace-page=beta] .lab-workspace-stage #curve-card{margin:0}body[data-workspace-page=beta] .lab-workspace-stage #density{height:245px}body[data-workspace-page=beta] .lab-workspace .beta-metrics{display:grid}body[data-workspace-page=beta] .lab-workspace #prior-summary{font-size:.85rem}body[data-workspace-page=beta] .lab-workspace #counts{font-size:.9rem}
+body[data-workspace-page=berkson] .lab-workspace .example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}body[data-workspace-page=berkson] .lab-workspace .example-grid button{padding:.5rem}body[data-workspace-page=berkson] .lab-workspace .threshold-panel{padding:0;margin:.5rem 0}body[data-workspace-page=berkson] .lab-workspace .plot-toolbar{padding:0;margin:0}
+body[data-workspace-page=bayes] .lab-workspace .reading-width{width:100%;max-width:none}body[data-workspace-page=bayes] .lab-workspace .scene{padding:0;margin:0}body[data-workspace-page=bayes] .lab-workspace .interaction-region{display:block}body[data-workspace-page=bayes] .lab-workspace .groups{margin:.5rem 0;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .group{padding:.8rem}body[data-workspace-page=bayes] .lab-workspace .population{margin:.3rem 0;padding:.4rem}body[data-workspace-page=bayes] .lab-workspace .group-count strong,body[data-workspace-page=bayes] .lab-workspace .positive-count strong{font-size:1.5rem}body[data-workspace-page=bayes] .lab-workspace .answer-equation{margin:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .answer-value strong{font-size:1.7rem}body[data-workspace-page=bayes] .lab-workspace .answer{padding:.85rem}body[data-workspace-page=bayes] .lab-workspace .parameter-block{margin:.5rem 0;padding:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .method-fields{display:grid;grid-template-columns:1fr;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .number-line{margin:.3rem 0}body[data-workspace-page=bayes] .lab-workspace .step-navigation{display:flex;flex-wrap:wrap}
+body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{gap:.7rem;grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-card,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-card{padding:.8rem}body[data-workspace-page=simpson] .lab-workspace .parameter-card,body[data-workspace-page=berkson-hospital] .lab-workspace .parameter-card{padding:.5rem 0}body[data-workspace-page=simpson] .lab-workspace .control-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .control-grid{grid-template-columns:1fr;gap:.6rem}
+body[data-workspace-page=one-way-anova] .lab-workspace #energy,body[data-workspace-page=one-way-anova] .lab-workspace #f-reference{height:145px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #stick{height:115px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #assembled{height:150px}
+@media(min-width:1400px){body .lab-workspace{grid-template-columns:380px minmax(0,1fr)}.lab-workspace .plot{height:250px}.lab-workspace .plot.square{max-width:300px;width:min(100%,300px)}}
+@media(min-width:960px) and (max-width:1100px){body .lab-workspace{grid-template-columns:310px minmax(0,1fr);gap:1rem}.lab-workspace .card,.lab-workspace .plot-card{padding:.7rem}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}.lab-workspace .plot text{font-size:11px}}
+@media(max-width:959px){body .lab-workspace{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0 1.5rem}.lab-workspace>.lab-workspace-controls,.lab-workspace>.lab-workspace-stage{position:static!important;width:100%}.lab-workspace .plot{height:270px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.lab-core-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{grid-template-columns:1fr;gap:1rem}.lab-workspace .plot.square{width:min(100%,340px);max-width:340px}.lab-workspace .lab-mobile-feedback{display:block;font-size:.9rem;line-height:1.8;margin:.4rem 0;padding:.75rem .85rem;background:#f3f8f3;border-left:4px solid #26725f;overflow-wrap:anywhere}.lab-workspace .lab-mobile-feedback:empty{display:none}.lab-workspace .lab-mobile-feedback strong{font-size:1.1rem;color:#26725f}.lab-workspace .plot-frame svg{height:280px}.lab-workspace .controls:not(.operate-panel){grid-template-columns:1fr}.lab-workspace-stage>.lab-core-grid>.card{width:100%}.lab-workspace .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{grid-template-columns:1fr}}
+@media(min-width:960px){.lab-mobile-feedback{display:none}}
+.lab-workspace .plot-frame{height:245px!important}.lab-workspace .threshold-panel{display:block;gap:.6rem}.lab-workspace .input-heading{flex-wrap:wrap;gap:.4rem}.lab-workspace .input-heading>label{min-width:0}.lab-workspace .plot-heading>span{white-space:normal}.lab-workspace .plot-caption{font-size:.85rem;line-height:1.8;margin-top:.5rem}.lab-workspace .quick-reading{font-size:.9rem;line-height:1.8;margin:.5rem 0;padding:.65rem .8rem;background:#f3f8f3;border-left:4px solid #26725f}.lab-workspace .example-card{padding:.65rem}.lab-workspace .example-card p{font-size:.8rem;margin-top:.4rem;line-height:1.7}.lab-workspace .example-card button{margin-top:.5rem}.lab-workspace .workspace-control-stack{display:block!important;border:0!important;padding:0!important;margin:0!important;background:transparent!important}.lab-workspace .workspace-control-stack>.operate-widget.operate-panel{padding:.8rem;border:1.5px solid #dccaa0;border-radius:7px;margin:0 0 .75rem;background:#faf5e8}.lab-workspace .workspace-control-stack>.operate-badge{display:none}
+body .lab-workspace .operate-panel:not(:has(button,input,select,summary)){padding:0;border:0;background:transparent;margin:0}.lab-workspace .operate-panel:not(:has(button,input,select,summary))>.operate-badge{display:none}
+body .lab-workspace .controls.operate-panel{display:block}.lab-workspace .people-table input[type=number]{width:100%;max-width:100%}.lab-mobile-feedback>div+div{margin-top:.5rem}
+.lab-workspace .plot-frame{height:auto!important}.lab-workspace .metric strong{white-space:nowrap}.lab-mobile-slot{display:none}
+@media(max-width:959px){.lab-workspace .metric-grid{grid-template-columns:1fr}.lab-mobile-slot{display:block}.lab-mobile-slot .door-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.lab-workspace .admission-panel{display:block;padding:0;margin:.5rem 0}.lab-workspace #other-calculation{font-size:.85rem;line-height:1.8;margin:.5rem 0 1rem}
+@media(max-width:600px){body[data-workspace-page=bayes] .lab-workspace .groups{grid-template-columns:1fr!important}body[data-workspace-page=bayes] .lab-workspace .group{grid-template-columns:1fr;gap:.65rem}body[data-workspace-page=bayes] .lab-workspace .group-source,body[data-workspace-page=bayes] .lab-workspace .flow-transform,body[data-workspace-page=bayes] .lab-workspace .group-result{grid-column:1/-1;text-align:center}body[data-workspace-page=bayes] .lab-workspace .flow-arrow{width:2px;height:1.5rem;margin:.5rem auto}body[data-workspace-page=bayes] .lab-workspace .flow-arrow::after{top:auto;bottom:0;right:-4px;transform:rotate(135deg)}body[data-workspace-page=bayes] .lab-workspace .flow-rate{min-height:0}}
+@media(min-width:960px){body[data-workspace-page=bayes] .lab-workspace-stage{position:static!important;top:auto!important}}
+</style><style>/* The approved confidence-interval control pane, shared by probability labs. */
+.lab-desktop-feedback{display:none}
+@media(min-width:960px){
+  body .lab-workspace>.lab-workspace-controls{
+    position:sticky;
+    top:16px;
+    max-height:calc(100vh - 32px);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior-y:auto;
+    scrollbar-gutter:stable;
+    scrollbar-width:auto;
+    scrollbar-color:#a88e57 #f3ecd9;
+    padding-inline-end:8px;
+    scroll-padding-block:12px;
+  }
+  body .lab-workspace>.lab-workspace-controls[data-scrollable="true"]{overscroll-behavior-y:contain}
+  .lab-workspace-controls>.operate-panel:not(:has(~.operate-panel)),
+  .lab-workspace-controls>.workspace-control-stack>.operate-panel:not(:has(~.operate-panel)){margin-bottom:0}
+  .lab-workspace-controls::-webkit-scrollbar{width:14px}
+  .lab-workspace-controls::-webkit-scrollbar-track{background:#f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb{background:#a88e57;border:3px solid #f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb:hover{background:#7c5812}
+  .lab-workspace-controls :is(button,input,select){scroll-margin-block:12px}
+  body .lab-workspace .lab-desktop-feedback{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1.25rem;margin:0 0 .75rem}
+  body[data-workspace-page="bayes"] .lab-workspace-controls .linked-output:has(>#mobile-result-summary){display:none}
+}
+</style></head>
+<body data-workspace-page="simpson">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../index.html">实验目录</a></header>
+  <main class="shell">
+    <section class="intro" aria-labelledby="title">
+      <div class="book-reference">
+        <div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p>第3.5节 条件独立、伯克森悖论和辛普森悖论 · <strong>3.5.3 辛普森悖论，纸书第92—94页</strong></p></div>
+        <a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf#page=5">阅读公开样章（PDF）</a>
+      </div>
+      <h1 id="title">分着比都赢，合起来反而输了？</h1>
+      <p class="lead">假设你要比较两种治疗肾结石的方案：A是传统开放手术，B是新型微创手术。两种方案各治疗了350名患者。我们按结石大小，把患者分成小结石和大结石两类。</p>
+      <p>成功率就是“成功人数÷治疗人数”。两种方案的治疗记录如下：</p>
+      <p class="fixed-reference">固定对照：原书原始治疗记录，不随下方操作改变</p><table class="original-records">
+        <caption>最初的治疗记录 · 两种方案各350人</caption>
+        <colgroup><col class="category-column"><col><col></colgroup>
+        <thead><tr><th scope="col">患者</th><th scope="col">A · 传统开放手术</th><th scope="col">B · 新型微创手术</th></tr></thead>
+        <tbody>
+          <tr class="small-record">
+            <th scope="row">小结石</th>
+            <td><span class="record-count">治疗 <strong>87</strong> 人</span><span class="record-count">成功 <strong>81</strong> 人</span><span class="record-calculation">81÷87 <strong>≈93.10%</strong></span></td>
+            <td><span class="record-count">治疗 <strong>270</strong> 人</span><span class="record-count">成功 <strong>234</strong> 人</span><span class="record-calculation">234÷270 <strong>≈86.67%</strong></span></td>
+          </tr>
+          <tr class="large-record">
+            <th scope="row">大结石</th>
+            <td><span class="record-count">治疗 <strong>263</strong> 人</span><span class="record-count">成功 <strong>192</strong> 人</span><span class="record-calculation">192÷263 <strong>≈73.00%</strong></span></td>
+            <td><span class="record-count">治疗 <strong>80</strong> 人</span><span class="record-count">成功 <strong>55</strong> 人</span><span class="record-calculation">55÷80 <strong>＝68.75%</strong></span></td>
+          </tr>
+          <tr class="total-record">
+            <th scope="row">合起来看（共350人）</th>
+            <td><span class="record-count">治疗 <strong>350</strong> 人</span><span class="record-count">成功 <strong>273</strong> 人</span><span class="record-calculation">81＋192＝273<br>273÷350 <strong>＝78.00%</strong></span></td>
+            <td><span class="record-count">治疗 <strong>350</strong> 人</span><span class="record-count">成功 <strong>289</strong> 人</span><span class="record-calculation">234＋55＝289<br>289÷350 <strong>≈82.57%</strong></span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p>只看小结石，方案A的成功率更高，93.10%对86.67%；只看大结石，还是方案A更高，73.00%对68.75%。合起来算总账，方案B却以<strong>82.57%</strong>超过了方案A的<strong>78.00%</strong>。</p><p><strong>这怎么可能？这也太奇怪了吧！只看小结石A更高，只看大结石也是A更高，合起来怎么反而比B低了？</strong></p><p>看看两边各自接收了什么病人：传统手术A接了263名大结石患者，新型微创B却接了270名小结石患者。大结石本来就更难治好，在两种方案里的成功率都更低。两边面对的病人轻重差了这么多，是怎么把整体成功率给反过来的？你可以自己改改下面两边接收的人数，看看结果怎样变化。</p>
+    </section>
+
+    <section class="lab-workspace" data-feedback="#live-summary"><div class="lab-workspace-controls"><section class="controls-region operate-panel" aria-labelledby="controls-title"><span class="operate-badge">你可以操作</span>
+      <h2 id="controls-title">改变两种方案各接收多少小结石患者</h2>
+      <p class="section-intro">每种方案都固定350人。你改小结石人数，大结石人数就用350减出来。这次先让四个分组成功率保持上表的比例，只改变两类患者的人数。这样就能单独看清：病例构成怎样影响整体成功率。上表保留原记录，下面显示你当前设置的结果。</p>
+      
+      <div class="control-grid">
+        <section class="parameter-card operate-widget" aria-labelledby="control-a-title">
+          <h3 id="control-a-title">操作一：调整方案A（传统开放手术，共350人）里小结石有多少人</h3>
+          <div class="input-heading"><label for="small-a">小结石有多少人？</label><span><input type="number" id="small-a-number" min="0" max="350" step="1" value="87" aria-label="方案A的小结石人数" aria-describedby="input-error-a"><span class="unit">人</span></span></div>
+          <input type="range" id="small-a" min="0" max="350" step="1" value="87" aria-describedby="mix-a-description">
+          <p id="mix-a-description" class="mix-description"></p>
+          <div class="mix-bar" id="mix-a-bar" role="img"><span class="small-part" id="mix-a-small"></span><span class="large-part" id="mix-a-large"></span></div>
+          <p class="legend"><span class="small-key">小结石</span><span class="large-key">大结石</span></p>
+          <p id="mix-a-equation" class="local-explanation"></p>
+          <p class="affects">对应影响下方：所有标亮区块里方案A的预计人数与整体成功率。</p><p id="input-error-a" class="input-error" role="status"></p>
+        </section>
+        <section class="parameter-card operate-widget" aria-labelledby="control-b-title">
+          <h3 id="control-b-title">操作二：调整方案B（新型微创手术，共350人）里小结石有多少人</h3>
+          <div class="input-heading"><label for="small-b">小结石有多少人？</label><span><input type="number" id="small-b-number" min="0" max="350" step="1" value="270" aria-label="方案B的小结石人数" aria-describedby="input-error-b"><span class="unit">人</span></span></div>
+          <input type="range" id="small-b" min="0" max="350" step="1" value="270" aria-describedby="mix-b-description">
+          <p id="mix-b-description" class="mix-description"></p>
+          <div class="mix-bar" id="mix-b-bar" role="img"><span class="small-part" id="mix-b-small"></span><span class="large-part" id="mix-b-large"></span></div>
+          <p class="legend"><span class="small-key">小结石</span><span class="large-key">大结石</span></p>
+          <p id="mix-b-equation" class="local-explanation"></p>
+          <p class="affects">对应影响下方：所有标亮区块里方案B的预计人数与整体成功率。</p><p id="input-error-b" class="input-error" role="status"></p>
+        </section>
+      </div>
+      <p class="preset-hint">下面按钮中的A、B人数都指小结石患者：</p>
+      <section class="operate-widget"><h3>操作三：一键试三种典型人数分配</h3><div class="presets"><button type="button" data-preset="book" class="btn-secondary">恢复原记录（A87人／B270人）</button><button type="button" data-preset="equal">拉平两种方案比例（各175小／175大）</button><button type="button" data-preset="swap">对调两种方案比例（A270人／B87人）</button></div><p class="affects">对应影响下方：两种方案的全部人数推算和整体成功率。</p></section>
+    </section><div class="try-again operate-panel"><span class="operate-badge">你可以操作</span><h3>操作四（快捷对照）：把两边人数全拉平到各175人</h3><p>把两种方案都设成175名小结石患者、175名大结石患者。四个分组成功率保持原样，看看整体成功率还会不会反转。</p><button type="button" data-preset="equal">各一半（小175／大175）</button></div></div><div class="lab-workspace-stage"><output class="live-summary result" id="live-summary" aria-live="polite" aria-atomic="true" data-linked-label="随上方人数实时变化">
+        <span class="summary-result"><span class="summary-label">合并成功率</span><span>A <strong id="summary-a"></strong></span><span>B <strong id="summary-b"></strong></span></span>
+        <span id="summary-verdict"></span>
+      </output>
+
+    <div class="overall-grid"><section class="overall-card" id="overall-a" aria-label="方案A合并计算" data-linked-label="随上方人数实时变化"></section><section class="overall-card" id="overall-b" aria-label="方案B合并计算" data-linked-label="随上方人数实时变化"></section></div>
+      </div></section><section class="lab-followup"><div class="finding" id="finding" aria-live="polite" aria-atomic="true" data-linked-label="随上方人数实时变化"></div>
+    </section><section class="lesson-section" aria-labelledby="group-title">
+      <h2 id="group-title">先分开算：同样大小的结石，哪种方案成功率更高？</h2>
+      <p class="section-intro">比如A治疗小结石的成功比例是81÷87。换一批人数，只要沿用这个比例，就用“当前人数×81÷87”推算预计成功人数。算出的小数表示平均预计人数；后面的合并计算都用未四舍五入的数值。</p>
+      <div class="case-grid" id="case-grid" data-linked-label="随上方人数实时变化">
+        <section class="case-card small-case" aria-labelledby="small-title"><h3 id="small-title">小结石患者</h3><div id="small-calculations"></div><p class="case-conclusion" id="small-conclusion"></p></section>
+        <section class="case-card large-case" aria-labelledby="large-title"><h3 id="large-title">大结石患者</h3><div id="large-calculations"></div><p class="case-conclusion" id="large-conclusion"></p></section>
+      </div>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="overall-title">
+      <h2 id="overall-title">再合起来算：成功人数相加，除以总人数</h2>
+      <p class="section-intro">每种方案都把自己的两类患者合并。下面整条仍是350人，绿色、棕色只画两类患者中预计成功的人，灰色合并两类中未成功的人。参数区的色条画的是全部小结石、大结石患者。</p>
+      </section>
+
+    <section class="lesson-section explanation-section" aria-labelledby="weight-title">
+      <h2 id="weight-title">同一类患者里A都更高，为什么合并后可能反过来？</h2>
+      <p id="mix-explanation" class="section-intro" data-linked-label="随上方人数实时变化"></p>
+      <div class="weight-bridge"><p>刚才先把两类成功人数加起来，再除以350。也可以让两类成功人数各除以350，再相加，结果相同。</p><p>每一类的成功人数都是“这一类的人数×成功率”。再除以总人数350，就得到“成功率×这一类的人数占比”。</p><p id="bridge-example" class="formula-line" data-linked-label="随上方人数实时变化"></p><p>左边是小结石成功人数除以总人数；右边是小结石成功率乘以小结石人数占比。大结石也这样算，两类相加就得到：</p><p class="bridge-equation">小结石成功率×小结石人数占比<br>＋大结石成功率×大结石人数占比</p><p>这个人数占比，就叫作“权重”。病例越多的那一类，对整体结果的影响越大。</p></div>
+      <div class="weight-grid"><section class="weight-card" id="weight-a" aria-label="方案A的加权计算" data-linked-label="随上方人数实时变化"></section><section class="weight-card" id="weight-b" aria-label="方案B的加权计算" data-linked-label="随上方人数实时变化"></section></div>
+      <p class="explanation">先分组算成功率，再按各组人数占比相加，这就是全概率公式在这个例子里的用法。</p>
+      <p class="takeaway">比较整体成功率时，先看看两边小结石、大结石各占多少。让病例构成相同以后，才能看清这组数据里两种方案的成功率差别。</p><p id="equal-mix-result" role="status" aria-atomic="true" class="result" data-linked-label="随上方人数实时变化"></p>
+    </section>
+    <noscript><p>请启用JavaScript，才能调整病例人数并更新计算。</p></noscript>
+  </main>
+  <footer class="shell footer">《大白话概率论》第3.5.3节 · 武辰</footer>
+
+
+<script>(function (root) {
+  'use strict';
+  const TOTAL = 350;
+  const BOOK = Object.freeze({
+    A: Object.freeze({ smallN: 87, smallSuccess: 81, largeN: 263, largeSuccess: 192 }),
+    B: Object.freeze({ smallN: 270, smallSuccess: 234, largeN: 80, largeSuccess: 55 })
+  });
+  function cohort(scheme, smallN) {
+    if (!Object.hasOwn(BOOK, scheme)) throw new RangeError('未知方案');
+    if (!Number.isInteger(smallN) || smallN < 0 || smallN > TOTAL) throw new RangeError('小结石人数必须是0到350之间的整数');
+    const source = BOOK[scheme];
+    const largeN = TOTAL - smallN;
+    const smallRate = source.smallSuccess / source.smallN;
+    const largeRate = source.largeSuccess / source.largeN;
+    const smallSuccess = smallN * smallRate;
+    const largeSuccess = largeN * largeRate;
+    const success = smallSuccess + largeSuccess;
+    return { scheme, total: TOTAL, smallN, largeN, smallRate, largeRate,
+      smallSuccess, largeSuccess, success, unsuccessful: TOTAL - success,
+      smallWeight: smallN / TOTAL, largeWeight: largeN / TOTAL,
+      smallContribution: smallSuccess / TOTAL, largeContribution: largeSuccess / TOTAL,
+      rate: success / TOTAL };
+  }
+  function scenario(smallA, smallB) {
+    const A = cohort('A', smallA), B = cohort('B', smallB);
+    const difference = A.rate - B.rate;
+    return { A, B, difference, winner: Math.abs(difference) < 1e-12 ? 'equal' : difference > 0 ? 'A' : 'B',
+      reversed: difference < -1e-12, sameMix: smallA === smallB };
+  }
+  const api = Object.freeze({ TOTAL, BOOK, cohort, scenario });
+  root.SimpsonModel = api;
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(globalThis);
+</script><script>(()=>{let armed=false;for(const type of ['input','change','click','pointerdown','keydown'])document.addEventListener(type,()=>{armed=true},{capture:true});for(const node of document.querySelectorAll('[data-linked-label]')){const shell=document.createElement('div');shell.className='linked-output';const badge=document.createElement('span');badge.className='linked-label';badge.textContent=node.dataset.linkedLabel;node.before(shell);shell.append(badge,node);let timer,last=node.innerHTML;new MutationObserver(()=>{const current=node.innerHTML;if(current===last)return;last=current;if(!armed)return;shell.dataset.changeCount=String(Number(shell.dataset.changeCount||0)+1);shell.classList.remove('is-updated');requestAnimationFrame(()=>shell.classList.add('is-updated'));clearTimeout(timer);timer=setTimeout(()=>shell.classList.remove('is-updated'),850)}).observe(node,{childList:true,characterData:true,subtree:true})}})();
+</script><script>(() => {
+  'use strict';
+  const { BOOK, TOTAL, scenario } = window.SimpsonModel;
+  const $ = id => document.getElementById(id);
+  const term = text => `<span class="formula-term">${text}</span>`;
+  const state = { A: BOOK.A.smallN, B: BOOK.B.smallN };
+
+  // Keep recorded ratios exact; round only for display.
+  const q = (n, d = 1) => ({ n: BigInt(n), d: BigInt(d) });
+  const add = (a, b) => q(a.n * b.d + b.n * a.d, a.d * b.d);
+  const divide = (a, n) => q(a.n, a.d * BigInt(n));
+  function rounded(value, digits = 2, scale = 1) {
+    const numerator = value.n * BigInt(scale) * 10n ** BigInt(digits);
+    return { units: (2n * numerator + value.d) / (2n * value.d), exact: numerator % value.d === 0n };
+  }
+  function decimal(units, digits, trim = false) {
+    const s = units.toString().padStart(digits + 1, '0');
+    const text = digits ? `${s.slice(0, -digits)}.${s.slice(-digits)}` : s;
+    return trim ? text.replace(/\.?0+$/, '') || '0' : text;
+  }
+  function count(value) {
+    const r = rounded(value);
+    return { text: decimal(r.units, 2, true), sign: r.exact ? '＝' : '≈', exact: r.exact };
+  }
+  function percent(value, digits = 2) {
+    const r = rounded(value, digits, 100);
+    return { text: `${decimal(r.units, digits)}%`, sign: r.exact ? '＝' : '≈' };
+  }
+  function exactCohort(scheme, c) {
+    const b = BOOK[scheme];
+    const small = q(c.smallN * b.smallSuccess, b.smallN);
+    const large = q(c.largeN * b.largeSuccess, b.largeN);
+    const success = add(small, large);
+    return {
+      small, large, success, rate: divide(success, TOTAL),
+      failed: q(BigInt(TOTAL) * success.d - success.n, success.d),
+      smallRate: q(b.smallSuccess, b.smallN), largeRate: q(b.largeSuccess, b.largeN),
+      smallWeight: q(c.smallN, TOTAL), largeWeight: q(c.largeN, TOTAL)
+    };
+  }
+  // Use enough displayed percentage digits to preserve the final rounded answer.
+  function percentageTerms(e) {
+    for (let digits = 2; digits <= 12; digits++) {
+      const units = [e.smallRate, e.smallWeight, e.largeRate, e.largeWeight]
+        .map(v => rounded(v, digits, 100).units);
+      const base = 100n * 10n ** BigInt(digits);
+      const displayed = q(units[0] * units[1] + units[2] * units[3], base * base);
+      if (rounded(displayed, 2, 100).units === rounded(e.rate, 2, 100).units) {
+        return {
+          terms: [e.smallRate, e.smallWeight, e.largeRate, e.largeWeight].map(v => percent(v, digits).text),
+          sign: displayed.n * e.rate.d === e.rate.n * displayed.d && percent(e.rate).sign === '＝' ? '＝' : '≈'
+        };
+      }
+    }
+    throw new Error('Percentage substitution needs more precision');
+  }
+
+  function renderCase(kind, result, exact) {
+    const title = kind === 'small' ? '小结石' : '大结石';
+    $(`${kind}-calculations`).innerHTML = ['A', 'B'].map(scheme => {
+      const source = BOOK[scheme], c = result[scheme], e = exact[scheme];
+      const originalN = source[`${kind}N`], originalSuccess = source[`${kind}Success`];
+      const n = c[`${kind}N`], success = count(e[kind]), rate = percent(e[`${kind}Rate`]);
+      const calculation = n === originalN
+        ? `人数和原记录相同，仍为${originalSuccess}人成功。`
+        : `${term(`${n}×（${originalSuccess}÷${originalN}）`)}<wbr>${success.sign}${term(`${success.text}人`)}。`;
+      return `<div class="case-row" id="${scheme.toLowerCase()}-${kind}-row">
+        <h4 class="row-heading">方案${scheme}</h4>
+        <p class="rate-source">原记录的成功率：${term(`${originalSuccess}÷${originalN}${rate.sign}${rate.text}`)}。</p>
+        <div class="flow" aria-label="当前${n}名${title}患者，乘以${originalSuccess}除以${originalN}的成功比例，预计成功${success.exact ? '' : '约'}${success.text}人">
+          <div><span class="flow-label">当前${title}</span><strong class="flow-value" id="${scheme.toLowerCase()}-${kind}-n">${n}<span class="unit">人</span></strong></div>
+          <div><p class="flow-rate">乘以成功率<br>${originalSuccess}/${originalN}</p><div class="flow-arrow" aria-hidden="true"></div></div>
+          <div><span class="flow-label">预计成功${success.exact ? '' : '约'}</span><strong class="flow-value" id="${scheme.toLowerCase()}-${kind}-success">${success.text}<span class="unit">人</span></strong></div>
+        </div>
+        <p class="formula-line">${calculation}</p>
+      </div>`;
+    }).join('');
+    $(`${kind}-conclusion`).textContent = `${title}成功率：A约${percent(exact.A[`${kind}Rate`]).text}，B${kind === 'small' ? '约' : ''}${percent(exact.B[`${kind}Rate`]).text}，A更高。`;
+  }
+
+  function renderOverall(scheme, c, e) {
+    const lower = scheme.toLowerCase(), b = BOOK[scheme];
+    const small = count(e.small), large = count(e.large), success = count(e.success), failed = count(e.failed);
+    const rate = percent(e.rate);
+    const smallTerm = `${c.smallN}×（${b.smallSuccess}÷${b.smallN}）`;
+    const largeTerm = `${c.largeN}×（${b.largeSuccess}÷${b.largeN}）`;
+    const sum = small.exact && large.exact
+      ? `${term(`${small.text}＋${large.text}${success.sign}${success.text}人`)}`
+      : `${term(smallTerm)}<wbr>＋${term(largeTerm)}<wbr>${success.sign}${term(`${success.text}人`)}`;
+    const division = success.exact
+      ? `${term(`${success.text}÷350${rate.sign}${rate.text}`)}`
+      : `（${term(smallTerm)}<wbr>＋${term(largeTerm)}）<wbr>÷350${rate.sign}${term(rate.text)}`;
+    $(`overall-${lower}`).innerHTML = `<h3>方案${scheme}合并两类患者</h3>
+      <p>总人数：${term(`${c.smallN}＋${c.largeN}＝350人`)}。</p>
+      <p id="${lower}-success-equation">预计成功人数：${sum}。</p>
+      <p class="formula-line">全部成功人数除以350：<br>${division}。</p>
+      <div class="total-rate"><span>整体成功率</span><strong id="rate-${lower}">${rate.text}</strong></div>
+      <div class="outcome-bar" role="img" aria-label="方案${scheme}的350人中，小结石预计成功${small.text}人，大结石预计成功${large.text}人，预计未成功${failed.text}人">
+        <span class="small-part" style="width:${c.smallContribution * 100}%"></span><span class="large-part" style="width:${c.largeContribution * 100}%"></span><span class="failed-part" style="width:${(1 - c.rate) * 100}%"></span>
+      </div>
+      <p class="legend"><span class="small-key">小结石成功 ${small.text}人</span><span class="large-key">大结石成功 ${large.text}人</span><span class="failed-key">两类未成功 ${failed.text}人</span></p>`;
+  }
+
+  function renderWeights(scheme, c, e) {
+    const b = BOOK[scheme], rate = percent(e.rate);
+    const sw = percent(e.smallWeight), lw = percent(e.largeWeight);
+    const substitution = percentageTerms(e);
+    const [rs, ws, rl, wl] = substitution.terms;
+    $(`weight-${scheme.toLowerCase()}`).innerHTML = `<h3>方案${scheme}：用两类患者的人数占比加权</h3>
+      <p>小结石占${term(`${c.smallN}÷350${sw.sign}${sw.text}`)}；大结石占${term(`${c.largeN}÷350${lw.sign}${lw.text}`)}。</p>
+      <p class="weight-equation">${term(`（${b.smallSuccess}÷${b.smallN}）×（${c.smallN}÷350）`)}<wbr>＋${term(`（${b.largeSuccess}÷${b.largeN}）×（${c.largeN}÷350）`)}<wbr>${rate.sign}${term(rate.text)}</p>
+      <p>换成百分比看，就是：</p>
+      <p class="weight-equation percentage-equation">${term(`${rs}×${ws}`)}<wbr>＋${term(`${rl}×${wl}`)}<wbr>${substitution.sign}${term(rate.text)}</p>`;
+  }
+
+  function render() {
+    const result = scenario(state.A, state.B);
+    const exact = { A: exactCohort('A', result.A), B: exactCohort('B', result.B) };
+    for (const scheme of ['A', 'B']) {
+      const c = result[scheme], e = exact[scheme], lower = scheme.toLowerCase();
+      $(`mix-${lower}-description`).textContent = `小结石${c.smallN}人（占${percent(e.smallWeight).text}），大结石${c.largeN}人（占${percent(e.largeWeight).text}）。`;
+      $(`mix-${lower}-small`).style.width = `${c.smallWeight * 100}%`;
+      $(`mix-${lower}-large`).style.width = `${c.largeWeight * 100}%`;
+      $(`mix-${lower}-bar`).setAttribute('aria-label', `方案${scheme}的小结石${c.smallN}人，大结石${c.largeN}人`);
+      $(`mix-${lower}-equation`).textContent = `大结石人数：350−${c.smallN}＝${c.largeN}人。两类加起来仍是350人。`;
+      $(`summary-${lower}`).textContent = percent(e.rate).text;
+      renderOverall(scheme, c, e);
+      renderWeights(scheme, c, e);
+    }
+    renderCase('small', result, exact);
+    renderCase('large', result, exact);
+    const bridgeLeft = state.A === BOOK.A.smallN ? '81÷350' : `［${state.A}×（81÷87）］÷350`;
+    $('bridge-example').innerHTML = `以当前A的小结石为例：<br>${term(bridgeLeft)}<wbr>＝${term(`（81÷87）×（${state.A}÷350）`)}。`;
+    const differencePP = Math.abs(result.difference) * 100;
+    const close = differencePP > 0 && differencePP < 0.01;
+    const rateA = percent(exact.A.rate).text, rateB = percent(exact.B.rate).text;
+    const verdict = close ? `两者很接近，${result.winner}略高，差不足0.01个百分点。` : result.reversed ? '分着比A都更高，合起来B更高。' : result.winner === 'equal' ? '这次合起来两者相同。' : '这次分着比、合起来比，都是A更高。';
+    $('summary-verdict').textContent = verdict;
+    const headline = result.reversed ? '这次反转了：分着比A更高，合起来B更高' : result.winner === 'equal' ? '这次整体成功率相同' : '这次分着比、合起来比，都是A更高';
+    const mixStory = result.sameMix
+      ? `现在两边都是小结石${state.A}人、大结石${TOTAL - state.A}人。两边用了相同的人数占比，A在两类患者中更高的成功率，也体现在了整体上。`
+      : `现在A接收了${result.A.largeN}名大结石患者，占${percent(exact.A.largeWeight).text}；B接收了${result.B.largeN}名，占${percent(exact.B.largeWeight).text}。${result.reversed ? 'A接收的难治病例占比更高，高到把分组比较的优势反过来了。' : result.A.largeN <= result.B.largeN ? 'A的难治病例占比没有更高，分组成功率的优势在合并后也保留了下来。' : 'A的难治病例占比虽然更高，当前这个差距还没有让整体排序反过来。'}`;
+    $('finding').innerHTML = `<h3>${headline}</h3><p>A的整体成功率是<strong>${rateA}</strong>，B是<strong>${rateB}</strong>。${close ? `${result.winner}略高，差不足0.01个百分点。` : ''}${result.reversed ? '分组比较和整体比较反过来，这种现象就叫辛普森悖论。' : ''}</p><p>${mixStory}</p>`;
+    $('mix-explanation').textContent = `为什么人数占比会影响结果？对A、B来说，大结石的成功率都比小结石低。沿用各自的分组成功率，大结石占比越高，整体成功率就越低。`;
+    $('equal-mix-result').innerHTML = result.sameMix
+      ? `现在两边都是<strong>小结石${state.A}人、大结石${TOTAL - state.A}人</strong>。A为<strong>${rateA}</strong>，B为<strong>${rateB}</strong>，A更高。${state.A === 175 ? '两类人数各占50%，所以各自的整体成功率，就是两个分组成功率的平均数。' : ''}`
+      : `当前结果：A为<strong>${rateA}</strong>，B为<strong>${rateB}</strong>。点击按钮后，这里会显示两边各175人＋175人的比较结果。`;
+    document.querySelectorAll('[data-preset]').forEach(button => {
+      if (button.dataset.preset === 'swap') {
+        button.textContent = `对调原记录人数（A${BOOK.B.smallN}人／B${BOOK.A.smallN}人）`;
+        return;
+      }
+      const selected = button.dataset.preset === 'book' ? state.A === BOOK.A.smallN && state.B === BOOK.B.smallN : state.A === 175 && state.B === 175;
+      button.setAttribute('aria-pressed', String(selected));
+    });
+  }
+
+  function clearError(scheme) {
+    $(`input-error-${scheme.toLowerCase()}`).textContent = '';
+    $(`small-${scheme.toLowerCase()}-number`).removeAttribute('aria-invalid');
+  }
+  function sync() {
+    for (const scheme of ['A', 'B']) {
+      const id = `small-${scheme.toLowerCase()}`;
+      $(id).value = state[scheme];
+      $(`${id}-number`).value = state[scheme];
+      clearError(scheme);
+    }
+    render();
+  }
+  for (const scheme of ['A', 'B']) {
+    const id = `small-${scheme.toLowerCase()}`;
+    const numberInput = $(`${id}-number`);
+    const reportError = empty => {
+      $(`input-error-${scheme.toLowerCase()}`).textContent = empty
+        ? `${scheme}的小结石人数还没填，计算暂时沿用${state[scheme]}人。`
+        : `${scheme}的小结石人数填0到350之间的整数即可，计算暂时沿用${state[scheme]}人。`;
+      numberInput.setAttribute('aria-invalid', 'true');
+    };
+    for (const inputId of [id, `${id}-number`]) $(inputId).addEventListener('input', event => {
+      if (event.target === numberInput && numberInput.value === '' && !numberInput.validity.badInput) {
+        clearError(scheme);
+        return;
+      }
+      const value = event.target.valueAsNumber;
+      if (!Number.isInteger(value) || value < 0 || value > TOTAL) {
+        reportError(false);
+        return;
+      }
+      state[scheme] = value;
+      $(inputId === id ? `${id}-number` : id).value = value;
+      clearError(scheme);
+      render();
+    });
+    numberInput.addEventListener('blur', () => {
+      if (numberInput.value === '') reportError(!numberInput.validity.badInput);
+    });
+  }
+  document.querySelectorAll('[data-preset]').forEach(button => button.addEventListener('click', () => {
+    if (button.dataset.preset === 'book') { state.A = BOOK.A.smallN; state.B = BOOK.B.smallN; }
+    else if (button.dataset.preset === 'equal') { state.A = 175; state.B = 175; }
+    else { state.A = BOOK.B.smallN; state.B = BOOK.A.smallN; }
+    sync();
+  }));
+  sync();
+  document.documentElement.dataset.labReady = 'true';
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),boards=[...document.querySelectorAll('.lab-workspace')];
+  let timer;const feedbacks=[];
+  function arrange(){
+    for(const board of boards){
+      const controls=board.querySelector(':scope>.lab-workspace-controls'),stage=board.querySelector(':scope>.lab-workspace-stage');
+      if(!controls||!stage)continue;
+      const c=controls.getBoundingClientRect().height,s=stage.getBoundingClientRect().height;
+      board.classList.remove('lab-workspace--sticky-controls','lab-workspace--sticky-stage');
+      if(wide.matches){const pinStage=s<c;board.classList.add(pinStage?'lab-workspace--sticky-stage':'lab-workspace--sticky-controls');stage.style.top=pinStage?Math.min(16,innerHeight-s-16)+'px':''}
+    }
+    for(const {panel,output} of feedbacks){const hidden=!!panel.closest('[hidden]')||!panel.getClientRects().length;if(output.hidden!==hidden)output.hidden=hidden}
+  }
+  // A full, explicitly named result beside mobile controls avoids blind button presses.
+  for(const board of boards){
+    for(const panel of board.querySelectorAll('.lab-workspace-controls .operate-panel')){
+      if(!panel.querySelector('button,input,select'))continue;
+      if(panel.querySelector('.operate-panel')||panel.matches('#step-navigation,#lesson-actions,#playback-settings,#experiment-actions,.transient-panel'))continue;
+      const selector=panel.closest('[data-feedback]')?.dataset.feedback||board.dataset.feedback;
+      if(!selector)continue;
+      const sources=[...new Set(selector.split(',').flatMap(part=>[...document.querySelectorAll(part.trim())]))];if(!sources.length)continue;
+      const output=document.createElement('div');output.className='lab-mobile-feedback';output.setAttribute('role','status');panel.after(output);
+      feedbacks.push({panel,output});
+      let last;const update=()=>{const html=sources.map(source=>'<div>'+source.innerHTML+'</div>').join('');if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id')};
+      update();const observer=new MutationObserver(update);for(const source of sources)observer.observe(source,{childList:true,subtree:true,characterData:true});
+    }
+  }
+  // Keep the named probability and both positive counts visible above Bayes' full flow.
+  for(const board of boards.filter(n=>n.dataset.desktopFeedback)){
+    const source=document.querySelector(board.dataset.desktopFeedback),stage=board.querySelector('.lab-workspace-stage');
+    if(!source||!stage)continue;
+    const output=document.createElement('div');output.className='lab-desktop-feedback result';output.setAttribute('role','status');stage.prepend(output);
+    let last;const update=()=>{
+      if(output.hidden!==source.hidden)output.hidden=source.hidden;
+      const html=source.innerHTML;if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id');
+    };
+    update();new MutationObserver(update).observe(source,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+  }
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(arrange,100)};
+  for(const slot of document.querySelectorAll('[data-mobile-content]')){
+    const homes=[...document.querySelectorAll(slot.dataset.mobileContent)].map(node=>{const item=node.closest('.linked-output')||node,home=document.createComment('desktop position');item.before(home);return {item,home}});
+    const place=()=>{for(const {item,home}of homes)if(wide.matches)home.after(item);else slot.append(item)};
+    place();wide.addEventListener('change',place);
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);
+  for(const board of boards){new ResizeObserver(schedule).observe(board);new MutationObserver(schedule).observe(board,{attributes:true,attributeFilter:['hidden'],subtree:true})}
+  arrange();
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),panes=[...document.querySelectorAll('.lab-workspace>.lab-workspace-controls')];
+  let timer;
+  const update=()=>{
+    for(const pane of panes){
+      const value=String(wide.matches&&pane.scrollHeight>pane.clientHeight);
+      if(pane.dataset.scrollable!==value)pane.dataset.scrollable=value;
+    }
+  };
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(update,60)};
+  const observer=new ResizeObserver(update);
+  for(const pane of panes){
+    observer.observe(pane);for(const child of pane.children)observer.observe(child);
+    pane.addEventListener('toggle',update,true);
+    new MutationObserver(schedule).observe(pane,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','open']});
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);wide.addEventListener('change',schedule);update();
+})();
+</script></body></html>

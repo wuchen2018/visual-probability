@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="拖动散点图中的筛选线，观察长相与演技、红颜多薄命、帅哥出渣男背后的选择偏差。《大白话概率论》伯克森悖论交互实验。">
+  <title>我们看见了谁？｜伯克森悖论散点图实验</title>
+  <link rel="icon" href="data:,">
+  <style>:root{color-scheme:light;--paper:#fcfdfb;--ink:#233029;--muted:#56645e;--line:#d3dfd8;--green:#26725f;--green-bg:#f0f7f3;--copper:#a96239;--gray:#bcc5c0;--soft:#f6f9f5;--body:system-ui,"PingFang SC","Microsoft YaHei",sans-serif}
+*,*::before,*::after{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:1.0625rem/1.9 var(--body)}[hidden]{display:none!important}h1,h2,h3,p{margin:0;overflow-wrap:anywhere}h1{font:750 clamp(1.85rem,2.7vw,2.65rem)/1.5 "Songti SC",SimSun,serif;margin:0 0 1rem}h2{font-size:1.5rem;line-height:1.65}h3{font-size:1.15rem;line-height:1.7}p+p{margin-top:.8rem}a{color:var(--green);text-underline-offset:.2em}strong{font-weight:720}button,input{font:inherit}button{min-height:44px;padding:.6rem 1rem;border:1px solid #b8cbbc;border-radius:5px;background:#fff;color:var(--ink);cursor:pointer;line-height:1.6}button:hover{background:var(--soft);border-color:var(--green)}button[aria-pressed=true]{background:#e9f2eb;border-color:var(--green);font-weight:650}:focus-visible{outline:3px solid var(--copper);outline-offset:4px}input[type=number]{width:5.5rem;min-height:44px;padding:.3rem .6rem;border:1px solid #b4c6b9;border-radius:5px;background:#fff;font-weight:650;color:var(--ink)}input[aria-invalid=true]{border:2px solid #9e3328;background:#fff5f3}input[type=range]{width:100%;min-height:32px;margin:.7rem 0 .25rem;accent-color:var(--green);touch-action:pan-y}input[type=checkbox]{width:18px;height:18px;accent-color:var(--green)}.shell{width:min(1600px,calc(100% - 64px));margin-inline:auto}.masthead{display:flex;align-items:center;justify-content:space-between;gap:1rem;min-height:68px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:.7rem;font-size:.95rem;font-weight:700}.stamp{display:grid;place-items:center;width:29px;height:29px;background:var(--green);color:#fff;font-family:serif;border-radius:3px}.draft{font-size:.85rem;color:var(--muted)}.book-reference{display:flex;align-items:center;justify-content:space-between;gap:1rem 2rem;color:var(--muted);font-size:.88rem;margin-top:1.7rem}.book-reference p+p{margin-top:.2rem}.book-reference>a{white-space:nowrap}.intro{padding:1.5rem 0 2rem}.lead{font-size:1.1rem;max-width:84em;line-height:2}.scenario-picker{display:flex;flex-wrap:wrap;gap:.75rem}.reading-guide{margin:1.2rem 0;color:var(--muted);line-height:2}.threshold-panel{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2.5rem;align-items:center;border:1px solid var(--line);border-radius:7px;background:var(--green-bg);padding:1.25rem 1.5rem}.input-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem}.input-heading>label{font-weight:650}.input-heading>span{display:flex;align-items:center;gap:.5rem}.range-labels{display:flex;justify-content:space-between;gap:1rem;font-size:.875rem;color:var(--muted)}.selection-rule{font-weight:700;font-size:1.1rem}.rule-explanation p+p{margin-top:.6rem}.input-error{font-size:.95rem;color:#9e3328}.input-error:empty{display:none}.plot-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem 2rem;margin-top:1.25rem}.presets{display:flex;flex-wrap:wrap;gap:.7rem}.trend-toggle{display:flex;align-items:center;gap:.6rem;min-height:44px;font-size:.95rem;cursor:pointer}.plot-help{color:var(--muted);font-size:.95rem;margin:1rem 0 1.25rem}.plot-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem}.plot-card{min-width:0;border:1px solid var(--line);border-radius:7px;padding:1.2rem}.selected-card{border-color:#bfd4c8;background:#f8fbf8}.plot-heading{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem 1rem;flex-wrap:wrap}.plot-heading h2{font-size:1.2rem}.plot-heading>span{font-size:.95rem;font-weight:650;color:var(--green);white-space:nowrap}.plot-subtitle{font-size:.95rem;color:var(--muted);margin-top:.5rem}.plot-frame{height:clamp(320px,32vw,470px);width:100%;margin-top:.75rem}.plot-frame svg{display:block;width:100%;height:100%;overflow:visible;touch-action:pan-y;user-select:none}.plot-frame svg.dragging{cursor:grabbing}.axis-label,.tick-label{font-family:var(--body);fill:var(--muted);font-size:14px}.axis-label{fill:var(--ink)}.plot-grid-line{stroke:#e7ece7;stroke-width:1}.axis-line{stroke:#a4b2a9;stroke-width:1.2}.person-point{pointer-events:none}.person-point.excluded{fill:#bdc7c0;opacity:.6}.person-point.selected{fill:var(--green);opacity:.8}.selection-area{fill:var(--green);opacity:.045}.cut-line{stroke:var(--green);stroke-width:1.5;stroke-dasharray:6 5;pointer-events:none}.trend-line{stroke:var(--copper);stroke-width:2;opacity:.9;pointer-events:none}.drag-target{cursor:grab;touch-action:none;stroke:transparent;stroke-width:26;fill:none}.drag-handle{fill:var(--paper);stroke:var(--green);stroke-width:2;cursor:grab;touch-action:none}.highlight-ring{fill:none;stroke:var(--copper);stroke-width:2.5;pointer-events:none}.plot-caption{margin-top:.75rem;font-size:.95rem;min-height:1.9em;color:var(--muted)}.legend{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;margin-top:1rem;font-size:.875rem;color:var(--muted)}.legend>span{display:flex;align-items:center;gap:.5rem}.dot{width:9px;height:9px;border-radius:50%;display:inline-block}.selected-dot{background:var(--green)}.excluded-dot{background:var(--gray)}.dashed-key,.trend-key{width:24px;display:inline-block;border-top:2px dashed var(--green)}.trend-key{border-top:2px solid var(--copper)}.change-explanation{margin-top:1.5rem;font-size:1.05rem;line-height:2}.person-inspector{border-left:4px solid var(--copper);background:#fbf6f0;padding:1rem 1.5rem;margin-top:1.5rem}.person-inspector p{margin-top:.5rem;line-height:2}.data-note{color:var(--muted);font-size:.9rem;margin-top:1.2rem}.lesson-section{margin-top:4rem}.section-intro{color:var(--muted);margin:1rem 0 1.5rem;line-height:2;max-width:84em}.example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.5rem 2rem}.example-card{border:1px solid var(--line);border-radius:7px;padding:1.4rem;min-width:0}.example-card.active{border-color:var(--copper);box-shadow:inset 3px 0 var(--copper)}.example-card p{margin-top:.65rem;line-height:2}.example-card button{margin-top:1rem;font-size:.95rem}.example-status{font-weight:650;color:var(--green)}.example-status.excluded-status{color:var(--muted)}.formula-term{white-space:nowrap}.lesson-explanation{margin-top:1.25rem;line-height:2;max-width:84em}.other-example{margin-top:2rem}.footer{margin-top:4rem;padding:1.5rem 0 2rem;border-top:1px solid var(--line);color:var(--muted);font-size:.88rem}
+@media(max-width:1100px){.shell{width:calc(100% - 40px)}.plot-grid,.example-grid{gap:1.25rem}.plot-card{padding:1rem}.threshold-panel{gap:1.5rem}.plot-frame{height:360px}}
+@media(max-width:850px){.plot-grid{grid-template-columns:1fr;gap:2rem}.book-reference{align-items:flex-start;flex-direction:column;gap:.75rem}.threshold-panel{grid-template-columns:1fr;gap:1.25rem}.rule-explanation{border-top:1px solid #ccdfd2;padding-top:1rem}.plot-frame{height:430px}.plot-toolbar{gap:.7rem 1rem}.plot-caption{min-height:0}}
+@media(max-width:600px){body{font-size:1rem}.shell{width:calc(100% - 32px)}.masthead{min-height:60px;gap:.5rem}.brand{font-size:.84rem;gap:.5rem}.draft{font-size:.75rem}.stamp{width:25px;height:25px}.book-reference{font-size:.875rem;margin-top:1.1rem}.intro{padding:1.3rem 0 1.6rem}.intro h1{font-size:1.8rem;line-height:1.5}.lead{font-size:1rem}h2{font-size:1.3rem;line-height:1.7}h3{font-size:1.1rem}.scenario-picker{gap:.6rem}.scenario-picker button{font-size:.95rem;padding:.55rem .75rem}.reading-guide{margin:1rem 0}.threshold-panel{padding:1.1rem 1rem}.input-heading{gap:.6rem}input[type=number]{width:5rem}.rule-explanation,.selection-rule{font-size:1rem}.presets button{font-size:.9rem;padding:.55rem .75rem}.plot-help,.trend-toggle{font-size:.9rem}.plot-card{padding:1rem .5rem}.plot-heading,.plot-subtitle,.plot-caption{margin-inline:.4rem}.plot-heading h2{font-size:1.1rem}.plot-heading>span,.plot-subtitle,.plot-caption{font-size:.9rem}.plot-frame{height:300px}.legend{gap:.5rem 1rem}.change-explanation{font-size:1rem}.person-inspector{padding:1rem}.data-note{font-size:.875rem}.lesson-section{margin-top:3rem}.section-intro{margin:.9rem 0 1.3rem}.example-grid{grid-template-columns:1fr;gap:1.5rem}.example-card{padding:1.2rem 1rem}.footer{font-size:.82rem;margin-top:3rem}}
+@media(max-width:360px){.brand{font-size:.78rem}.scenario-picker button{font-size:.875rem}.plot-heading{display:block}.plot-heading>span{display:block;margin-top:.3rem}.range-labels{font-size:.875rem;gap:.5rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;scroll-behavior:auto!important}}
+.point-detail{border-top:1px solid var(--line);padding-top:.9rem;margin-top:1rem;font-size:.95rem;line-height:1.95}.plot-frame svg{scroll-margin-top:12px}@media(max-width:600px){.point-detail{margin-inline:.4rem;font-size:.9rem}}
+.point-detail>span{display:block}.detail-heading{font-weight:700;margin-bottom:.3rem}.person-key{display:inline-block;width:14px;height:14px;border:2px solid var(--copper);border-radius:50%}.handle-key{display:inline-block;width:12px;height:12px;border:2px solid var(--green);background:var(--green-bg);transform:rotate(45deg);margin:0 2px}.drag-handle{fill:var(--green-bg)}
+@media(max-width:600px){.point-detail{min-height:15em}.selection-rule{min-height:6em}}
+@media(max-width:600px){#selection-count{min-height:3.8em}}
+
+/* Formal operation zones: shared across the probability experiments. */
+body .operate-panel{background:#faf5e8;border:1.5px solid #dccaa0;border-radius:8px;padding:1.4rem 1.5rem;min-width:0;margin:1.1rem 0 1.5rem}
+.operate-badge{display:inline-block;width:fit-content;max-width:100%;color:#7c5812;background:#f2e6c9;border:1px solid #dccaa0;border-radius:4px;font-weight:700;font-size:.9rem;line-height:1.7;padding:.2rem .65rem;margin:0 0 .9rem}
+.operate-panel>.operate-badge{grid-column:1/-1}.operate-panel .controls:not(.operate-panel){background:transparent;border:0;border-top:1px solid #dccaa0;border-radius:0;padding:1rem 0 0;margin:1rem 0 0}.operate-panel .actions:last-child{margin-bottom:0}
+.operate-panel button,.operate-panel input[type=number],.operate-panel select{border-color:#c6b27d}.operate-panel button:hover,.operate-panel button[aria-pressed=true],.operate-panel button[aria-current=step]{background:#eee0b9;border-color:#9e792e;color:#67480d}.operate-panel button[aria-pressed=true]{box-shadow:inset 0 0 0 1px #9e792e}.operate-panel input[type=range],.operate-panel input[type=checkbox],.operate-panel input[type=radio]{accent-color:#7c5812}
+.operate-panel button:focus-visible,.operate-panel input:focus-visible,.operate-panel select:focus-visible{outline-color:#7c5812}.operate-panel input[aria-invalid=true]{border-color:#a23b30;background:#fff3f1}.operate-panel button.primary,.operate-panel button#next-step{background:#7c5812;color:#fff;border-color:#7c5812}
+.operate-panel button.btn-secondary{border-color:#d8cfba;color:#6f6b60;background:#fffdfa;box-shadow:none}.operate-panel button.btn-secondary:hover{background:#f4f0e7;border-color:#b9ab8b}.operate-panel button:disabled{opacity:.5}
+.plot-heading{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:.7rem 1rem}.plot-heading h2,.plot-heading h3{flex:1 1 240px}.plot-heading .operate-badge{background:#faf5e8;margin:0;flex:0 1 auto}.direct-interaction>.operate-badge{background:#faf5e8}
+body .result{background:#f3f8f3;border-left:4px solid #26725f;padding:1.1rem 1.3rem;margin:1.2rem 0;line-height:1.9;min-width:0}.card.soft{background:#fff}.operate-panel .event{background:#fffdf8;border-left-color:#b79248}.operate-panel .parameter-block,.operate-panel .parameter-card,.operate-panel .prior-block{background:transparent}.operate-panel .threshold-panel{background:transparent}.sampling{border-top-color:#dccaa0}.transient-panel:has(>button[hidden]){display:none}.operate-panel>.choice.log-choice{display:flex;flex-basis:100%;margin:.8rem 0 0}.operate-panel .day-grid{margin:.8rem 0}.operate-panel .presets button span{color:inherit}
+@media(max-width:600px){body .operate-panel{padding:1.1rem 1rem}.operate-badge{font-size:.875rem}.plot-heading{display:block}.plot-heading .operate-badge{margin-top:.75rem}.operate-panel .controls:not(.operate-panel){padding-top:.85rem}.operate-panel .control label{flex-wrap:wrap}body .result{padding:1rem}.compact-operate{margin:.8rem 0}}
+
+.plot-heading .operate-badge{white-space:normal;overflow-wrap:anywhere;min-width:0}.operate-panel .operate-badge{white-space:normal}.operate-panel .rule-explanation{background:transparent}
+
+body .direct-interaction button{border-color:#c6b27d}body .direct-interaction button:hover,body .direct-interaction button[aria-pressed=true]{background:#eee0b9;border-color:#9e792e;color:#67480d}body .direct-interaction button:focus-visible{outline-color:#7c5812}
+</style>
+  
+  
+<style>.operate-widget{border:1px solid #dccaa0;border-radius:10px;padding:1.2rem;margin-top:1.1rem;background:#fffaf0;min-width:0}.operate-widget h2,.operate-widget h3{font-size:1.1rem;margin:0 0 .7rem;line-height:1.7}.operate-widget .control{min-width:0}.operate-widget .affects{color:#6b531f;font-size:.9rem;line-height:1.8;margin:.8rem 0 0}.linked-output{border:1px solid #cadce9;border-left:5px solid #467caa;border-radius:9px;background:#f7fbff;padding:.8rem 1rem;margin:1.2rem 0;min-width:0;overflow-wrap:anywhere}.linked-label{display:block;width:fit-content;max-width:100%;font:600 .82rem/1.7 sans-serif;color:#24547b;background:#e6eff8;padding:.18rem .55rem;border-radius:4px;margin:0 0 .65rem}.linked-output>.result{margin:.45rem 0}.linked-output.is-updated{animation:output-change .8s ease-out}.story-bridge{padding:1.5rem 0 .6rem;max-width:none}.story-bridge p,.story-copy p{line-height:1.95}.method-steps{line-height:1.95;margin:1rem 0 0}.extension{border-top:1px solid var(--line,#ccd6d2);padding-top:1.6rem;margin-top:2.2rem}.fixed-reference{font-weight:600;color:#4d5a56;margin:1rem 0 .4rem}.situation-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.6rem;margin:1rem 0}.situation-list span{padding:.6rem;border:1px solid #ccd6d2;text-align:center;border-radius:5px}.situation-list .excluded{color:#78817d;background:#eff0ed;text-decoration:line-through}.progression{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.progression>section{padding:1rem;border:1px solid #ccd6d2;border-radius:8px}.progression h3{font-size:1rem;line-height:1.8}.progression p{line-height:1.9}.story-copy strong{font-weight:700}.story-copy .term{white-space:nowrap}@keyframes output-change{from{box-shadow:0 0 0 4px #90badd88}to{box-shadow:0 0 0 0 transparent}}@media(max-width:650px){.operate-widget{padding:1rem .85rem}.linked-output{padding:.75rem .7rem}.progression{grid-template-columns:1fr}.situation-list{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(prefers-reduced-motion:reduce){.linked-output.is-updated{animation:none;outline:2px solid #90badd}}
+
+.linked-output:has(>.live-summary){position:sticky;top:0;z-index:2}.linked-output>.live-summary{position:static;margin:0;border-bottom:0;padding:.3rem .5rem}
+
+.linked-output:has(#joined[hidden]){display:none}
+
+@media(max-width:650px){.linked-output:has(>.live-summary){position:static}}
+</style><style>/* Controls and their live figures share a workspace; explanations continue below. */
+body .lab-workspace{display:grid;grid-template-columns:350px minmax(0,1fr);gap:1.25rem;align-items:start;margin:1.2rem 0 2rem;min-width:0;scroll-margin-top:16px}
+.lab-workspace-controls,.lab-workspace-stage{min-width:0}.lab-workspace--sticky-controls>.lab-workspace-controls{position:sticky;top:16px}.lab-workspace--sticky-stage>.lab-workspace-stage{position:sticky;top:16px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{gap:1rem;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;align-items:start}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+body .lab-workspace .operate-panel{margin:0 0 .7rem;padding:.9rem;background:#faf5e8;border:1.5px solid #dccaa0;border-radius:7px;min-width:0}body .lab-workspace .operate-widget{padding:.6rem 0;margin:0;border:0;border-top:1px solid #dccaa0;background:transparent;border-radius:0}.lab-workspace .operate-widget:first-of-type{border-top:0;padding-top:0}.lab-workspace .operate-widget h2,.lab-workspace .operate-widget h3{font-size:1rem;line-height:1.65;margin:0 0 .4rem}.lab-workspace .operate-badge{font-size:.8rem;line-height:1.6;padding:.15rem .45rem;margin:0 0 .5rem}.lab-workspace .plot-heading .operate-badge{margin-top:.25rem}.lab-workspace .controls:not(.operate-panel){padding:0!important;margin:.5rem 0!important;border:0!important;gap:.65rem .75rem;grid-template-columns:repeat(2,minmax(0,1fr))}.lab-workspace .controls:not(.operate-panel):has(>.control:only-child){grid-template-columns:1fr}.lab-workspace .control label{flex-wrap:wrap;gap:.25rem;font-size:.9rem}.lab-workspace .control label>span:first-child{font-weight:600}.lab-workspace input[type=number]{width:5rem;min-width:0;min-height:40px;font-size:1rem}.lab-workspace input[type=range]{margin:.3rem 0 0;min-height:26px}.lab-workspace button{min-height:42px;padding:.4rem .6rem;font-size:.9rem;line-height:1.6}.lab-workspace .actions,.lab-workspace .presets{gap:.4rem;margin:.6rem 0}.lab-workspace .actions:last-child{margin-bottom:0}.lab-workspace .control-help,.lab-workspace .affects,.lab-workspace .operate-widget>p,.lab-workspace .operate-panel>p{font-size:.85rem;line-height:1.75;margin:.4rem 0}.lab-workspace .operate-panel p+p{margin-top:.4rem}.lab-workspace .operate-panel details{margin-top:.6rem;padding-top:.6rem}.lab-workspace .operate-panel summary{font-size:.9rem}
+body .lab-workspace .card,body .lab-workspace .plot-card{padding:.9rem;margin:0;min-width:0}.lab-workspace h2,.lab-workspace h3{font-size:1.1rem;line-height:1.6}.lab-workspace p{line-height:1.8}.lab-workspace .plot{height:230px;min-height:0;margin-top:.5rem}.lab-workspace .plot.square{width:min(100%,280px);height:auto;aspect-ratio:1;margin-inline:auto}.lab-workspace .plot text{font-size:12px}.lab-workspace .legend{font-size:.8rem;line-height:1.7;gap:.3rem .7rem;margin-top:.5rem}.lab-workspace .caption{font-size:.85rem;line-height:1.8}.lab-workspace .linked-output{border:0;border-radius:0;padding:0;margin:.5rem 0;background:transparent;box-shadow:none}.lab-workspace .linked-label{font-size:.75rem;line-height:1.7;padding:0;background:transparent;margin:0 0 .3rem;color:#456277}.lab-workspace .linked-output:has(>.live-summary){position:static}.lab-workspace .linked-output.is-updated{animation:none}.lab-workspace .linked-output>.plot{margin-top:.25rem}
+body .lab-workspace .result,body .lab-workspace .summary,body .lab-workspace .live-summary{margin:.5rem 0;padding:.75rem .85rem;font-size:.95rem;line-height:1.8;background:#f3f8f3;border-left:4px solid #26725f;position:static}.lab-workspace .result strong{font-size:1.15rem}.lab-workspace .result p+p{margin-top:.35rem}.lab-workspace .metric-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:.5rem;margin:.6rem 0}.lab-workspace .metric{padding:.55rem}.lab-workspace .metric span{font-size:.8rem}.lab-workspace .metric strong{font-size:1.25rem}.lab-workspace .formula,.lab-workspace .formulas{font-size:.9rem;line-height:1.9;margin-top:.5rem}.lab-workspace table{font-size:.85rem;margin-top:.5rem}.lab-workspace th,.lab-workspace td{padding:.45rem .25rem}.lab-workspace .plot-frame{min-width:0;padding:0}.lab-workspace .plot-frame svg{display:block;width:100%;height:245px}.lab-followup{margin:1rem 0 2rem}.lab-followup>h3{margin:.8rem 0}.lab-workspace .lab-paired-result{margin-top:.6rem}.lab-workspace-stage>.lab-core-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;align-items:start}.lab-workspace .lab-secondary-controls{margin-top:.75rem}.lab-workspace .bean-grid{width:100%;height:240px}.lab-workspace .door-grid{gap:.5rem;grid-template-columns:repeat(5,minmax(0,1fr));margin:.6rem 0}.lab-workspace .door{min-height:66px;padding:.35rem;font-size:.85rem}.lab-workspace .family-grid{max-width:340px;margin-inline:auto}.lab-workspace .experiment-paths{display:block;margin:0}.lab-workspace .experiment-path{margin-bottom:.5rem}
+/* Page-specific figures retain their labels and computational units. */
+body[data-workspace-page=beta] .lab-workspace-stage #curve-card{margin:0}body[data-workspace-page=beta] .lab-workspace-stage #density{height:245px}body[data-workspace-page=beta] .lab-workspace .beta-metrics{display:grid}body[data-workspace-page=beta] .lab-workspace #prior-summary{font-size:.85rem}body[data-workspace-page=beta] .lab-workspace #counts{font-size:.9rem}
+body[data-workspace-page=berkson] .lab-workspace .example-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem}body[data-workspace-page=berkson] .lab-workspace .example-grid button{padding:.5rem}body[data-workspace-page=berkson] .lab-workspace .threshold-panel{padding:0;margin:.5rem 0}body[data-workspace-page=berkson] .lab-workspace .plot-toolbar{padding:0;margin:0}
+body[data-workspace-page=bayes] .lab-workspace .reading-width{width:100%;max-width:none}body[data-workspace-page=bayes] .lab-workspace .scene{padding:0;margin:0}body[data-workspace-page=bayes] .lab-workspace .interaction-region{display:block}body[data-workspace-page=bayes] .lab-workspace .groups{margin:.5rem 0;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .group{padding:.8rem}body[data-workspace-page=bayes] .lab-workspace .population{margin:.3rem 0;padding:.4rem}body[data-workspace-page=bayes] .lab-workspace .group-count strong,body[data-workspace-page=bayes] .lab-workspace .positive-count strong{font-size:1.5rem}body[data-workspace-page=bayes] .lab-workspace .answer-equation{margin:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .answer-value strong{font-size:1.7rem}body[data-workspace-page=bayes] .lab-workspace .answer{padding:.85rem}body[data-workspace-page=bayes] .lab-workspace .parameter-block{margin:.5rem 0;padding:.5rem 0}body[data-workspace-page=bayes] .lab-workspace .method-fields{display:grid;grid-template-columns:1fr;gap:.6rem}body[data-workspace-page=bayes] .lab-workspace .number-line{margin:.3rem 0}body[data-workspace-page=bayes] .lab-workspace .step-navigation{display:flex;flex-wrap:wrap}
+body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{gap:.7rem;grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-card,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-card{padding:.8rem}body[data-workspace-page=simpson] .lab-workspace .parameter-card,body[data-workspace-page=berkson-hospital] .lab-workspace .parameter-card{padding:.5rem 0}body[data-workspace-page=simpson] .lab-workspace .control-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .control-grid{grid-template-columns:1fr;gap:.6rem}
+body[data-workspace-page=one-way-anova] .lab-workspace #energy,body[data-workspace-page=one-way-anova] .lab-workspace #f-reference{height:145px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #stick{height:115px}body[data-workspace-page=puzzle-broken-stick] .lab-workspace #assembled{height:150px}
+@media(min-width:1400px){body .lab-workspace{grid-template-columns:380px minmax(0,1fr)}.lab-workspace .plot{height:250px}.lab-workspace .plot.square{max-width:300px;width:min(100%,300px)}}
+@media(min-width:960px) and (max-width:1100px){body .lab-workspace{grid-template-columns:310px minmax(0,1fr);gap:1rem}.lab-workspace .card,.lab-workspace .plot-card{padding:.7rem}.lab-workspace-stage>.three{grid-template-columns:repeat(3,minmax(0,1fr))}.lab-workspace .plot text{font-size:11px}}
+@media(max-width:959px){body .lab-workspace{display:flex;flex-direction:column;gap:.75rem;margin:1rem 0 1.5rem}.lab-workspace>.lab-workspace-controls,.lab-workspace>.lab-workspace-stage{position:static!important;width:100%}.lab-workspace .plot{height:270px}.lab-workspace-stage>.two,.lab-workspace-stage>.three,.lab-workspace-stage>.mini-grid,.lab-workspace-stage>.plot-grid,.lab-workspace-stage>.lab-core-grid,.lab-workspace-stage>.interval-layout,.lab-workspace-stage>.regression-layout{grid-template-columns:1fr;gap:1rem}.lab-workspace .plot.square{width:min(100%,340px);max-width:340px}.lab-workspace .lab-mobile-feedback{display:block;font-size:.9rem;line-height:1.8;margin:.4rem 0;padding:.75rem .85rem;background:#f3f8f3;border-left:4px solid #26725f;overflow-wrap:anywhere}.lab-workspace .lab-mobile-feedback:empty{display:none}.lab-workspace .lab-mobile-feedback strong{font-size:1.1rem;color:#26725f}.lab-workspace .plot-frame svg{height:280px}.lab-workspace .controls:not(.operate-panel){grid-template-columns:1fr}.lab-workspace-stage>.lab-core-grid>.card{width:100%}.lab-workspace .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-workspace-page=simpson] .lab-workspace .overall-grid,body[data-workspace-page=berkson-hospital] .lab-workspace .comparison-grid{grid-template-columns:1fr}}
+@media(min-width:960px){.lab-mobile-feedback{display:none}}
+.lab-workspace .plot-frame{height:245px!important}.lab-workspace .threshold-panel{display:block;gap:.6rem}.lab-workspace .input-heading{flex-wrap:wrap;gap:.4rem}.lab-workspace .input-heading>label{min-width:0}.lab-workspace .plot-heading>span{white-space:normal}.lab-workspace .plot-caption{font-size:.85rem;line-height:1.8;margin-top:.5rem}.lab-workspace .quick-reading{font-size:.9rem;line-height:1.8;margin:.5rem 0;padding:.65rem .8rem;background:#f3f8f3;border-left:4px solid #26725f}.lab-workspace .example-card{padding:.65rem}.lab-workspace .example-card p{font-size:.8rem;margin-top:.4rem;line-height:1.7}.lab-workspace .example-card button{margin-top:.5rem}.lab-workspace .workspace-control-stack{display:block!important;border:0!important;padding:0!important;margin:0!important;background:transparent!important}.lab-workspace .workspace-control-stack>.operate-widget.operate-panel{padding:.8rem;border:1.5px solid #dccaa0;border-radius:7px;margin:0 0 .75rem;background:#faf5e8}.lab-workspace .workspace-control-stack>.operate-badge{display:none}
+body .lab-workspace .operate-panel:not(:has(button,input,select,summary)){padding:0;border:0;background:transparent;margin:0}.lab-workspace .operate-panel:not(:has(button,input,select,summary))>.operate-badge{display:none}
+body .lab-workspace .controls.operate-panel{display:block}.lab-workspace .people-table input[type=number]{width:100%;max-width:100%}.lab-mobile-feedback>div+div{margin-top:.5rem}
+.lab-workspace .plot-frame{height:auto!important}.lab-workspace .metric strong{white-space:nowrap}.lab-mobile-slot{display:none}
+@media(max-width:959px){.lab-workspace .metric-grid{grid-template-columns:1fr}.lab-mobile-slot{display:block}.lab-mobile-slot .door-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.lab-workspace .admission-panel{display:block;padding:0;margin:.5rem 0}.lab-workspace #other-calculation{font-size:.85rem;line-height:1.8;margin:.5rem 0 1rem}
+@media(max-width:600px){body[data-workspace-page=bayes] .lab-workspace .groups{grid-template-columns:1fr!important}body[data-workspace-page=bayes] .lab-workspace .group{grid-template-columns:1fr;gap:.65rem}body[data-workspace-page=bayes] .lab-workspace .group-source,body[data-workspace-page=bayes] .lab-workspace .flow-transform,body[data-workspace-page=bayes] .lab-workspace .group-result{grid-column:1/-1;text-align:center}body[data-workspace-page=bayes] .lab-workspace .flow-arrow{width:2px;height:1.5rem;margin:.5rem auto}body[data-workspace-page=bayes] .lab-workspace .flow-arrow::after{top:auto;bottom:0;right:-4px;transform:rotate(135deg)}body[data-workspace-page=bayes] .lab-workspace .flow-rate{min-height:0}}
+@media(min-width:960px){body[data-workspace-page=bayes] .lab-workspace-stage{position:static!important;top:auto!important}}
+</style><style>/* The approved confidence-interval control pane, shared by probability labs. */
+.lab-desktop-feedback{display:none}
+@media(min-width:960px){
+  body .lab-workspace>.lab-workspace-controls{
+    position:sticky;
+    top:16px;
+    max-height:calc(100vh - 32px);
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    overscroll-behavior-y:auto;
+    scrollbar-gutter:stable;
+    scrollbar-width:auto;
+    scrollbar-color:#a88e57 #f3ecd9;
+    padding-inline-end:8px;
+    scroll-padding-block:12px;
+  }
+  body .lab-workspace>.lab-workspace-controls[data-scrollable="true"]{overscroll-behavior-y:contain}
+  .lab-workspace-controls>.operate-panel:not(:has(~.operate-panel)),
+  .lab-workspace-controls>.workspace-control-stack>.operate-panel:not(:has(~.operate-panel)){margin-bottom:0}
+  .lab-workspace-controls::-webkit-scrollbar{width:14px}
+  .lab-workspace-controls::-webkit-scrollbar-track{background:#f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb{background:#a88e57;border:3px solid #f3ecd9;border-radius:8px}
+  .lab-workspace-controls::-webkit-scrollbar-thumb:hover{background:#7c5812}
+  .lab-workspace-controls :is(button,input,select){scroll-margin-block:12px}
+  body .lab-workspace .lab-desktop-feedback{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem 1.25rem;margin:0 0 .75rem}
+  body[data-workspace-page="bayes"] .lab-workspace-controls .linked-output:has(>#mobile-result-summary){display:none}
+}
+</style></head>
+<body data-revised="2026-11-25-full" data-workspace-page="berkson">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span><a href="../index.html">实验目录</a></header>
+  <main class="shell">
+    <div class="book-reference"><div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p>第3.5节 · <strong>3.5.2 伯克森悖论，纸书第90—92页</strong> · 散点图见第91页图3-13</p></div><a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf#page=4">阅读公开样章（PDF）</a></div>
+    <section class="intro" aria-labelledby="title">
+      <h1 id="title">你注意到的演员，为什么像是长相和演技只能占一样？</h1>
+      <p class="lead" id="scenario-intro"></p>
+    </section>
+
+    <section class="experiment" aria-label="散点图交互实验">
+      <section class="lab-workspace" data-feedback=".rule-explanation"><div class="lab-workspace-controls"><div class="workspace-control-stack"><div class="operate-panel"><span class="operate-badge">你可以操作</span><p id="reading-guide" class="reading-guide"></p>
+      <div class="plot-toolbar"><div class="presets"><button type="button" data-threshold="0">不筛选：全部出现</button><button type="button" data-threshold="120" class="btn-secondary">恢复120分</button></div></div></div><span class="operate-badge">你可以操作</span><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作一：选择你想讨论的生活例子</h3><div class="scenario-picker" role="group" aria-label="选择要看的例子"><button type="button" data-scenario="actors" aria-pressed="true">演员：长相与演技</button><button type="button" data-scenario="beauty" aria-pressed="false">“红颜多薄命”</button><button type="button" data-scenario="dating" aria-pressed="false">“帅哥出渣男”</button></div>
+      <p>对应影响下方：切换长相、人生顺遂程度等坐标含义，以及对应的筛选前提。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作二：改变筛选门槛（也可拖动图上的绿色菱形）</h3><div class="threshold-panel">
+        <div class="threshold-control">
+          <div class="input-heading"><label for="threshold-number">被选中的门槛</label><span><input type="number" id="threshold-number" value="120" min="0" max="200" step="1" aria-describedby="threshold-error"><span>分</span></span></div>
+          <input type="range" id="threshold-range" value="120" min="0" max="200" step="1" aria-label="调整被选中的门槛">
+          <div class="range-labels"><span>0分：所有人都出现</span><span>200分：要求最高</span></div>
+          <p id="threshold-error" class="input-error" role="status"></p>
+        </div>
+        
+      </div>
+      <p>对应影响下方：改变哪些点留进筛选图，以及留下的人呈现出怎样的趋势。人物本身的分数位置不动。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>操作三：换一组随机人群，或开关趋势线</h3><label class="trend-toggle"><input type="checkbox" id="show-trend" checked>显示趋势线</label><div class="actions"><button type="button" id="new-population">不管刚才选了谁，重新随机生成700个人物</button></div><p>对应影响下方：重新生成700个普通人物；开关只控制趋势线是否显示，点某个人不会重新抽人群。</p></section></div><div class="operate-panel" data-feedback="#person-detail"><span class="operate-badge">你可以操作</span><section class="operate-widget"><h3>操作四：点下面4个典型人物，去散点图里找出他</h3><div class="example-grid" id="examples"></div><p>对应影响下方：只高亮定位这个人，不改变人群和门槛。</p></section></div>
+      </div><div class="lab-workspace-stage"><div class="rule-explanation result" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群）」变化"><p id="selection-rule" class="selection-rule"></p><p id="selection-count" aria-live="polite" aria-atomic="true"></p></div>
+      <div class="plot-grid">
+        <section class="plot-card" aria-labelledby="all-title"><div class="plot-heading"><h2 id="all-title"></h2><span id="all-count"></span><span class="operate-badge">你可以直接在图上拖动绿色菱形门槛，或点击圆点</span></div><p class="plot-subtitle">灰点和绿点合起来，是完整的人群。</p><div class="plot-frame"><svg id="all-plot" role="img" aria-label="全体人物散点图" aria-describedby="plot-help" tabindex="0" class="direct-interaction" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群与趋势线）」变化"></svg></div><p class="plot-caption" id="all-caption"></p></section>
+        <section class="plot-card selected-card" aria-labelledby="selected-title"><div class="plot-heading"><h2 id="selected-title"></h2><span id="selected-count"></span><span class="operate-badge">你可以直接在图上拖动绿色菱形门槛，或点击圆点</span></div><p class="plot-subtitle">只保留绿色的点，坐标和刻度保持相同。</p><div class="plot-frame"><svg id="selected-plot" role="img" aria-label="筛选后人物散点图" aria-describedby="plot-help" tabindex="0" class="direct-interaction" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群与趋势线）」变化"></svg></div><p class="plot-caption" id="selected-caption"></p></section>
+      </div>
+      <div class="legend"><span><i class="dot selected-dot" aria-hidden="true"></i>绿点：达到门槛</span><span><i class="dot excluded-dot" aria-hidden="true"></i>灰点：没达到门槛</span><span><i class="person-key" aria-hidden="true"></i>橙圈：当前查看的人</span><span><i class="handle-key" aria-hidden="true"></i>菱形：拖动门槛</span><span><i class="dashed-key" aria-hidden="true"></i>虚线：筛选门槛</span><span id="trend-legend"><i class="trend-key" aria-hidden="true"></i>棕线：整群点的趋势</span></div>
+      </div></section><section class="lesson-section"><h2>图中选中的人，具体是什么情况？</h2><p class="point-detail" id="person-detail" aria-live="polite" aria-atomic="true" data-linked-label="随当前人物、生活例子与门槛变化（点击人物或操作一～四）"></p><p class="point-detail" id="selected-person-detail" aria-live="polite" aria-atomic="true" data-linked-label="随当前人物、生活例子与门槛变化（点击人物或操作一～四）"></p></section><p class="plot-help" id="plot-help">拖动虚线上的绿色菱形、虚线本身或上方滑块，就能改变门槛。点击一个点，橙圈会标出这个人，分数和入选原因显示在你点击的图下。也可以先点图，再用方向键调整门槛。</p>
+      <p class="change-explanation" id="change-explanation" aria-live="polite" aria-atomic="true" data-linked-label="随「操作一（例子）、操作二（门槛）、操作三（随机人群与趋势线）」变化"></p>
+      <p class="data-note">图里的主体是电脑随机生成的700个普通人物，另外特意固定放进4个“40分、80分”的典型对照人物，加起来共704人，方便你点击比较谁留下、谁被刷掉。两项分数都在0—100之间。拖动筛选线时，每个人的分数和位置都不变，变的只是谁能进入筛选图。</p>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="why-title">
+      <h2 id="why-title">低的一项，为什么要靠另一项补上？</h2>
+      <p class="section-intro" id="compensation-intro"></p>
+      <p class="lesson-explanation" id="scenario-explanation"></p>
+      <p class="lesson-explanation" id="berkson-explanation"></p>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="how-title">
+      <h2 id="how-title">这条线怎样决定谁会出现？</h2>
+      <p class="section-intro" id="boundary-explanation"></p>
+      <p class="lesson-explanation">棕色实线根据各自图里的点计算，概括整群点的倾斜方向；虚线由你设置的门槛决定。你可以取消“显示趋势线”，只看人物和筛选过程，也可以换一组模拟人物再试。</p>
+      <p class="lesson-explanation">再听到“这两个特点好像总是反着来”，可以先问一句：我们看到的这些人，是怎样被选出来的？</p>
+      <p class="other-example"><a href="hospital.html">另一个例子：只看住院者，比较结果怎样变化？</a></p>
+    </section>
+    <noscript><p>请启用JavaScript，才能拖动筛选线并查看散点图。</p></noscript>
+  </main>
+  <footer class="shell footer">《大白话概率论》第3.5.2节 · 武辰</footer>
+
+
+<script>(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.ScatterBerkson = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  'use strict';
+  const INITIAL_SEED = 20261121;
+  const INITIAL_THRESHOLD = 120;
+  const PROBES = Object.freeze([
+    { id: 701, x: 40, y: 80 }, { id: 702, x: 80, y: 40 },
+    { id: 703, x: 40, y: 40 }, { id: 704, x: 80, y: 80 }
+  ]);
+  function randomGenerator(seed) {
+    let a = seed >>> 0;
+    return function () {
+      a += 0x6D2B79F5;
+      let t = a;
+      t = Math.imul(t ^ t >>> 15, t | 1);
+      t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function generate(seed = INITIAL_SEED) {
+    const random = randomGenerator(seed);
+    function score() {
+      for (;;) {
+        const u = Math.max(random(), Number.EPSILON), v = random();
+        const value = 50 + 19 * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        if (value >= 0 && value <= 100) return Math.round(value * 10) / 10;
+      }
+    }
+    return Array.from({ length: 700 }, (_, i) => ({ id: i + 1, x: score(), y: score() })).concat(PROBES.map(p => ({ ...p })));
+  }
+  function statistics(points) {
+    const n = points.length;
+    if (n < 3) return { n, r: null, slope: null, intercept: null };
+    const mx = points.reduce((sum, p) => sum + p.x, 0) / n;
+    const my = points.reduce((sum, p) => sum + p.y, 0) / n;
+    let xx = 0, yy = 0, xy = 0;
+    for (const p of points) { const dx = p.x - mx, dy = p.y - my; xx += dx * dx; yy += dy * dy; xy += dx * dy; }
+    if (xx < 1e-10 || yy < 1e-10) return { n, r: null, slope: null, intercept: null };
+    const r = Math.max(-1, Math.min(1, xy / Math.sqrt(xx * yy)));
+    const slope = xy / xx;
+    return { n, r, slope, intercept: my - slope * mx };
+  }
+  function validateThreshold(value) {
+    if (!Number.isInteger(value) || value < 0 || value > 200) throw new RangeError('门槛须为0到200之间的整数');
+  }
+  const totalScore = p => Math.round((p.x + p.y) * 10) / 10;
+  function analyze(points, threshold) {
+    validateThreshold(threshold);
+    const selected = points.filter(p => totalScore(p) >= threshold);
+    return { threshold, points, selected, selectedIds: new Set(selected.map(p => p.id)), all: statistics(points), visible: statistics(selected), excluded: points.length - selected.length };
+  }
+  function boundary(threshold) {
+    validateThreshold(threshold);
+    return threshold <= 100 ? [{ x: 0, y: threshold }, { x: threshold, y: 0 }] : [{ x: threshold - 100, y: 100 }, { x: 100, y: threshold - 100 }];
+  }
+  function area(threshold) {
+    validateThreshold(threshold);
+    return threshold <= 100
+      ? [{ x: 0, y: threshold }, { x: 0, y: 100 }, { x: 100, y: 100 }, { x: 100, y: 0 }, { x: threshold, y: 0 }]
+      : [{ x: threshold - 100, y: 100 }, { x: 100, y: 100 }, { x: 100, y: threshold - 100 }];
+  }
+  return { INITIAL_SEED, INITIAL_THRESHOLD, PROBES, generate, statistics, analyze, boundary, area, totalScore };
+});
+</script><script>(()=>{let armed=false;for(const type of ['input','change','click','pointerdown','keydown'])document.addEventListener(type,()=>{armed=true},{capture:true});for(const node of document.querySelectorAll('[data-linked-label]')){const shell=document.createElement('div');shell.className='linked-output';const badge=document.createElement('span');badge.className='linked-label';badge.textContent=node.dataset.linkedLabel;node.before(shell);shell.append(badge,node);let timer,last=node.innerHTML;new MutationObserver(()=>{const current=node.innerHTML;if(current===last)return;last=current;if(!armed)return;shell.dataset.changeCount=String(Number(shell.dataset.changeCount||0)+1);shell.classList.remove('is-updated');requestAnimationFrame(()=>shell.classList.add('is-updated'));clearTimeout(timer);timer=setTimeout(()=>shell.classList.remove('is-updated'),850)}).observe(node,{childList:true,characterData:true,subtree:true})}})();
+</script><script>(() => {
+  'use strict';
+  const M = window.ScatterBerkson;
+  const $ = id => document.getElementById(id);
+  const f = value => new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 1 }).format(value);
+  const term = text => `<span class="formula-term">${text}</span>`;
+  const scenarios = {
+    actors: {
+      title: '你注意到的演员，为什么像是长相和演技只能占一样？', x: '长相', y: '演技', subject: '演员', chosen: '受到关注',
+      intro: '假设在所有演员里，长得好不好看，和演技好不好本来互不相干。观众更容易注意到长相出众、或者演技出色的人，长相和演技都普通的人很少进入视野。只看受到关注的演员，两项分数会呈现什么关系？',
+      guide: '每个点是一位模拟演员。越往右，长相分数越高；越往上，演技分数越高。我们先设一个简单规则：两项分数合起来达到门槛，演员才会受到关注。其中一项普通，只要另一项够高，也能把总分补上来。'
+    },
+    beauty: {
+      title: '“红颜多薄命”，会不会也和我们记住了谁有关？', x: '美貌', y: '境遇顺遂', subject: '人物', chosen: '被记载',
+      intro: '你听过的故事里，可能有不少美貌出众、命运坎坷的女子。这里先假设，美貌和境遇好坏本来互不相干；故事更容易留下特别美貌的人，或者出身、生活条件特别优越的人。按这个假设，普通而境遇不好的女子，就容易被漏掉。',
+      guide: '每个点是一位模拟人物。越往右，美貌分数越高；越往上，境遇越顺遂，越往下则越坎坷。这次用“美貌分数＋境遇顺遂分数”筛选：总分达到门槛，人物才会被记载。美貌或优越境遇都能帮助一个人达到门槛。'
+    },
+    dating: {
+      title: '“帅哥出渣男”，会不会也和你愿意认识谁有关？', x: '长相', y: '体贴程度', subject: '人物', chosen: '进入交往考虑范围',
+      intro: '先假设在所有人里，长相好不好和相处时体不体贴互不相干。你更容易注意到长相出众的人，或者特别体贴的人，两项都普通的人很少进入你考虑交往的范围。只看你愿意认识的人，长相和体贴程度会呈现什么关系？',
+      guide: '每个点是一位模拟人物。越往右，长相分数越高；越往上，相处时越体贴。我们用两项分数的总和筛选：总分达到门槛，才进入交往考虑范围。其中一项普通，可以靠另一项较高的分数补上来。'
+    }
+  };
+  const state = { scenario: 'actors', threshold: M.INITIAL_THRESHOLD, seed: M.INITIAL_SEED, points: M.generate(), person: 701, inspectPlot: 'all-plot', trend: true };
+  let current;
+  const geometries = new Map();
+  const info = () => scenarios[state.scenario];
+  const required = (x, s) => {
+    const need = state.threshold - x;
+    return need > 100 ? `${s.y}即使100分也不够` : need <= 0 ? `${s.y}0分就已经够了` : `${s.y}至少要${need}分`;
+  };
+
+  function draw(id, onlySelected) {
+    const svg = $(id), rect = svg.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const width = rect.width, height = rect.height;
+    const g = { left: 54, top: 24, width: width - 70, height: height - 74, frameWidth: width, frameHeight: height };
+    geometries.set(id, g);
+    const X = x => g.left + x / 100 * g.width, Y = y => g.top + (100 - y) / 100 * g.height;
+    const s = info(), points = onlySelected ? current.selected : state.points;
+    const stats = onlySelected ? current.visible : current.all;
+    const polygon = M.area(state.threshold).map(p => `${X(p.x)},${Y(p.y)}`).join(' ');
+    const ends = M.boundary(state.threshold), middle = { x: (ends[0].x + ends[1].x) / 2, y: (ends[0].y + ends[1].y) / 2 };
+    const cut = `M${X(ends[0].x)},${Y(ends[0].y)} L${X(ends[1].x)},${Y(ends[1].y)}`;
+    let content = `<defs><clipPath id="${id}-clip"><rect x="${g.left}" y="${g.top}" width="${g.width}" height="${g.height}"/></clipPath></defs>`;
+    content += `<polygon class="selection-area" points="${polygon}"/>`;
+    for (const tick of [0, 50, 100]) content += `<line class="plot-grid-line" x1="${X(tick)}" y1="${Y(0)}" x2="${X(tick)}" y2="${Y(100)}"/><line class="plot-grid-line" x1="${X(0)}" y1="${Y(tick)}" x2="${X(100)}" y2="${Y(tick)}"/><text class="tick-label" x="${X(tick)}" y="${Y(0) + 22}" text-anchor="middle">${tick}</text><text class="tick-label" x="${X(0) - 9}" y="${Y(tick) + 5}" text-anchor="end">${tick}</text>`;
+    content += `<path class="axis-line" fill="none" d="M${X(0)},${Y(100)} L${X(0)},${Y(0)} L${X(100)},${Y(0)}"/><text class="axis-label" x="${X(50)}" y="${height - 5}" text-anchor="middle">${s.x}（分）</text><text class="axis-label" x="15" y="${Y(50)}" transform="rotate(-90 15 ${Y(50)})" text-anchor="middle">${s.y}（分）</text>`;
+    content += `<path class="cut-line" d="${cut}"/>`;
+    content += `<g clip-path="url(#${id}-clip)">`;
+    const radius = width < 400 ? 2 : 2.5;
+    for (const p of points) content += `<circle class="person-point ${current.selectedIds.has(p.id) ? 'selected' : 'excluded'}" data-person="${p.id}" cx="${X(p.x)}" cy="${Y(p.y)}" r="${radius}"/>`;
+    if (state.trend && stats.slope !== null) content += `<path class="trend-line" d="M${X(0)},${Y(stats.intercept)} L${X(100)},${Y(stats.intercept + stats.slope * 100)}"/>`;
+    const p = points.find(p => p.id === state.person);
+    if (p) content += `<circle class="highlight-ring" cx="${X(p.x)}" cy="${Y(p.y)}" r="7"/>`;
+    const hx = X(middle.x), hy = Y(middle.y);
+    content += '</g>';
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    // Keep the drag hit areas alive throughout each gesture.
+    if (!svg.querySelector('.rendered-content')) {
+      svg.innerHTML = '<title></title><g class="rendered-content"></g><path class="drag-target" data-drag="true"/><path class="drag-handle" data-drag="true"/>';
+    }
+    svg.querySelector('title').textContent = `${onlySelected ? '筛选后' : '全体'}${s.subject}：横轴${s.x}，纵轴${s.y}`;
+    svg.querySelector('.rendered-content').innerHTML = content;
+    svg.querySelector('.drag-target').setAttribute('d', cut);
+    svg.querySelector('.drag-handle').setAttribute('d', `M${hx},${hy - 9} L${hx + 9},${hy} L${hx},${hy + 9} L${hx - 9},${hy} Z`);
+    svg.setAttribute('aria-label', `${onlySelected ? '筛选后' : '全体'}${points.length}位模拟${s.subject}。横轴${s.x}，纵轴${s.y}。虚线条件为两项分数相加至少${state.threshold}分。`);
+    svg.dataset.pointCount = String(points.length);
+  }
+
+  function render() {
+    const s = info();
+    current = M.analyze(state.points, state.threshold);
+    $('title').textContent = s.title;
+    $('scenario-intro').textContent = s.intro;
+    $('reading-guide').textContent = s.guide;
+    $('selection-rule').textContent = `${s.x}分数＋${s.y}分数 ≥ ${state.threshold}分，才会${s.chosen}。`;
+    $('selection-count').textContent = `共${state.points.length}人，选中${current.selected.length}人，筛掉${current.excluded}人。`;
+    $('all-title').textContent = `全体模拟${s.subject}`;
+    $('selected-title').textContent = `只看${s.chosen}的${s.subject}`;
+    $('all-count').textContent = `${state.points.length}人`;
+    $('selected-count').textContent = `${current.selected.length}人`;
+    $('all-caption').textContent = state.trend ? '两个分数分别生成，棕线概括整个人群的趋势。' : '两个分数分别生成，完整的人群保留在这幅图里。';
+    $('selected-caption').textContent = current.visible.slope === null ? '当前选中的点不足以画出趋势线。可以降低门槛，让更多人出现。' : state.threshold === 0 ? '所有人都留下了，两幅图包含同一群人。' : '两项都高的人只要总分达标，也会留下。留不下来的是总分没够门槛的人。';
+    $('trend-legend').hidden = !state.trend;
+    if (state.threshold === 0) $('change-explanation').textContent = `现在所有${state.points.length}人都出现，两幅图包含同一群人。你可以把门槛调回120分，观察筛选拿掉了哪些人。`;
+    else if (current.visible.slope === null) $('change-explanation').textContent = `当前选中${current.selected.length}人，还看不出整群点的倾斜方向。把门槛调低一些，让更多人出现，再观察。`;
+    else if (current.visible.r < -.1) $('change-explanation').textContent = `现在留下${current.selected.length}个绿点。两项都高的人也在其中；同时，靠近门槛时，${s.x}普通的人要靠较高的${s.y}才能留下，${s.x}高的人则允许${s.y}普通。留下的整群点向右下方倾斜：${s.x}越高，${s.y}往往越低，这叫负相关。${state.scenario === 'beauty' ? '这里境遇顺遂分数越低，表示经历越坎坷。' : ''}`;
+    else $('change-explanation').textContent = `当前留下${current.selected.length}人，还没有明显向右下方倾斜。把门槛调到120分附近，看看哪些人消失了，再比较整群点的方向。`;
+    const p = state.points.find(p => p.id === state.person) || state.points[0];
+    const chosen = current.selectedIds.has(p.id), total = M.totalScore(p);
+    const personDetail = `<span class="detail-heading">当前查看的这位${s.subject}</span><span>${s.x}${f(p.x)}分，${s.y}${f(p.y)}分。</span><span>${term(`${f(p.x)}＋${f(p.y)}＝${f(total)}分`)}，门槛${state.threshold}分。</span><span>${chosen ? `达到门槛，会${s.chosen}。` : '没达到门槛，在全体图中是灰点，筛选图里没有这个人。'}</span>`;
+    const otherDetail = chosen ? '橙圈标出的，是另一幅图中正在查看的同一个人。两幅图里，他的分数和位置相同。' : '全体图中橙圈标出的这个人没有达到门槛，筛选图里没有他。';
+    $('person-detail').innerHTML = state.inspectPlot === 'all-plot' ? personDetail : otherDetail;
+    $('selected-person-detail').innerHTML = state.inspectPlot === 'selected-plot' ? personDetail : otherDetail;
+    $('compensation-intro').textContent = `现在的门槛是${state.threshold}分。${s.x}40分的人，${required(40, s)}；${s.x}80分的人，${required(80, s)}。你可以点击下面的例子，在散点图中找到对应的人。`;
+    $('examples').innerHTML = M.PROBES.map(p => {
+      const total = M.totalScore(p), yes = total >= state.threshold;
+      return `<section class="example-card${state.person === p.id ? ' active' : ''}"><h3>${s.x}${p.x}分，${s.y}${p.y}分</h3><p>${term(`${p.x}＋${p.y}＝${total}分`)}，${total >= state.threshold ? '达到' : '低于'}当前${state.threshold}分门槛。</p><p class="example-status${yes ? '' : ' excluded-status'}">${yes ? `会${s.chosen}，保留为绿点` : '被筛掉，在全体图中是灰点'}</p><button type="button" data-person-example="${p.id}" aria-pressed="${state.person === p.id}">在全体图中看这个人</button></section>`;
+    }).join('');
+    const beautyComparison = state.threshold <= 80
+      ? '这次两个人都达到门槛，都会被记载。当前门槛还没有把这两个人分开。'
+      : state.threshold <= 120
+        ? '这次美貌80分的人够门槛，留下了故事；美貌40分的人没够门槛，没有被记住。同样坎坷的两个人，因为美貌不同，有了不同的入选结果。'
+        : '这次两个人都没有达到门槛，都不会被记载。把门槛调回120分，就能看到前者留下、后者被筛掉的对照。';
+    $('scenario-explanation').textContent = state.scenario === 'beauty'
+      ? `看美貌80分、境遇顺遂40分，和美貌40分、境遇顺遂40分这两个人。两人的境遇都是40分，一样坎坷，总分分别是120分和80分。${beautyComparison}`
+      : state.threshold === 0
+      ? '当前所有人都被选中，低分人物也没有消失。把门槛恢复为120分，再对照哪些人会被筛掉，以及剩下的人为什么会显得一项高、另一项低。'
+        : state.scenario === 'actors'
+          ? '沿着门槛线看，长相少一分，就需要演技多一分，才能达到相同的总分。长相普通的演员，要靠演技补到门槛；长相出众的演员，演技普通也可能够分。右上角两项都高的演员，同样按总分入选。'
+          : '沿着门槛线看，长相少一分，就需要体贴程度多一分，才能达到相同的总分。长相普通的人，要靠体贴程度补到门槛；长相出众的人，体贴程度普通也可能够分。两项都高的人，同样按总分入选。';
+    $('berkson-explanation').textContent = `${s.x}和${s.y}本来互不相干。我们让两项分数一起决定一个人能不能${s.chosen}，再只看${s.chosen}的人。这次筛选就可能让两项分数看起来一高一低，出现原本人群里没有的关系。这就是这里演示的伯克森悖论。`;
+    $('boundary-explanation').textContent = `虚线上的人，${s.x}分数与${s.y}分数之和刚好等于${state.threshold}分。虚线上方的人达到门槛，虚线下方的人没有达到门槛。例如${s.x}40分时，${required(40, s)}。门槛为0时，所有点都被选中；门槛为200时，两项都要达到100分才行。`;
+    document.querySelectorAll('[data-scenario]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.scenario === state.scenario)));
+    document.querySelectorAll('[data-threshold]').forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.threshold) === state.threshold)));
+    draw('all-plot', false);draw('selected-plot', true);
+    document.documentElement.dataset.labReady = 'true';
+  }
+
+  function setThreshold(value) {
+    state.threshold = value;
+    $('threshold-number').value = value;
+    $('threshold-range').value = value;
+    $('threshold-number').removeAttribute('aria-invalid');
+    $('threshold-error').textContent = '';
+    render();
+  }
+  for (const id of ['threshold-number', 'threshold-range']) $(id).addEventListener('input', event => {
+    if (event.target.value === '' && !event.target.validity.badInput) {
+      event.target.removeAttribute('aria-invalid');
+      $('threshold-error').textContent = '';
+      return;
+    }
+    const value = event.target.valueAsNumber;
+    if (!Number.isInteger(value) || value < 0 || value > 200) {
+      event.target.setAttribute('aria-invalid', 'true');
+      $('threshold-error').textContent = `门槛填0到200之间的整数即可，暂时仍按刚才的${state.threshold}分筛选。`;
+      return;
+    }
+    setThreshold(value);
+  });
+  $('threshold-number').addEventListener('blur', () => {
+    if ($('threshold-number').value === '') {
+      $('threshold-number').setAttribute('aria-invalid', 'true');
+      $('threshold-error').textContent = `门槛还没填，暂时仍按刚才的${state.threshold}分筛选。`;
+    }
+  });
+  document.querySelectorAll('[data-scenario]').forEach(button => button.addEventListener('click', () => { state.scenario = button.dataset.scenario;render(); }));
+  document.querySelectorAll('[data-threshold]').forEach(button => button.addEventListener('click', () => setThreshold(Number(button.dataset.threshold))));
+  $('new-population').addEventListener('click', () => { state.seed++;state.points = M.generate(state.seed);render(); });
+  $('show-trend').addEventListener('change', event => { state.trend = event.target.checked;render(); });
+  $('examples').addEventListener('click', event => {
+    const button = event.target.closest('[data-person-example]');
+    if (!button) return;
+    state.person = Number(button.dataset.personExample);state.inspectPlot = 'all-plot';render();
+    $('all-plot').scrollIntoView({ block: 'start', behavior: 'instant' });
+  });
+  for (const id of ['all-plot', 'selected-plot']) {
+    const svg = $(id);
+    let drag = null;
+    for (const type of ['touchstart', 'touchmove']) svg.addEventListener(type, event => {
+      if (drag && drag.line) event.preventDefault();
+    }, { passive: false });
+    const toPoint = event => {
+      const rect = svg.getBoundingClientRect(), g = geometries.get(id);
+      return { x: (event.clientX - rect.left - g.left) / g.width * 100, y: 100 - (event.clientY - rect.top - g.top) / g.height * 100 };
+    };
+    svg.addEventListener('pointerdown', event => {
+      if (event.button !== 0) return;
+      const draggingLine = event.target.dataset.drag === 'true';
+      drag = { id: event.pointerId, x: event.clientX, y: event.clientY, line: draggingLine, moved: false };
+      if (draggingLine) { svg.setPointerCapture(event.pointerId);svg.classList.add('dragging');event.preventDefault(); }
+    });
+    svg.addEventListener('pointermove', event => {
+      if (!drag || !drag.line || drag.id !== event.pointerId) return;
+      event.preventDefault();
+      if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 3) drag.moved = true;
+      if (drag.moved) { const p = toPoint(event);setThreshold(Math.round(Math.max(0, Math.min(200, p.x + p.y)))); }
+    });
+    svg.addEventListener('pointerup', event => {
+      if (!drag || drag.id !== event.pointerId) return;
+      const wasMoved = drag.moved;
+      if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+      svg.classList.remove('dragging');drag = null;
+      if (wasMoved) return;
+      const at = toPoint(event), g = geometries.get(id), points = id === 'all-plot' ? state.points : current.selected;
+      let closest = null, distance = 13;
+      for (const p of points) { const d = Math.hypot((p.x - at.x) / 100 * g.width, (p.y - at.y) / 100 * g.height);if (d < distance) { distance = d;closest = p; } }
+      if (closest) { state.person = closest.id;state.inspectPlot = id;render(); }
+    });
+    svg.addEventListener('pointercancel', () => { drag = null;svg.classList.remove('dragging'); });
+    svg.addEventListener('keydown', event => {
+      const step = ['ArrowRight', 'ArrowUp'].includes(event.key) ? 1 : ['ArrowLeft', 'ArrowDown'].includes(event.key) ? -1 : 0;
+      if (step) { event.preventDefault();setThreshold(Math.max(0, Math.min(200, state.threshold + step))); }
+    });
+  }
+  const observer = new ResizeObserver(() => { if (current) {draw('all-plot', false);draw('selected-plot', true);} });
+  document.querySelectorAll('.plot-frame').forEach(frame => observer.observe(frame));
+  render();
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),boards=[...document.querySelectorAll('.lab-workspace')];
+  let timer;const feedbacks=[];
+  function arrange(){
+    for(const board of boards){
+      const controls=board.querySelector(':scope>.lab-workspace-controls'),stage=board.querySelector(':scope>.lab-workspace-stage');
+      if(!controls||!stage)continue;
+      const c=controls.getBoundingClientRect().height,s=stage.getBoundingClientRect().height;
+      board.classList.remove('lab-workspace--sticky-controls','lab-workspace--sticky-stage');
+      if(wide.matches){const pinStage=s<c;board.classList.add(pinStage?'lab-workspace--sticky-stage':'lab-workspace--sticky-controls');stage.style.top=pinStage?Math.min(16,innerHeight-s-16)+'px':''}
+    }
+    for(const {panel,output} of feedbacks){const hidden=!!panel.closest('[hidden]')||!panel.getClientRects().length;if(output.hidden!==hidden)output.hidden=hidden}
+  }
+  // A full, explicitly named result beside mobile controls avoids blind button presses.
+  for(const board of boards){
+    for(const panel of board.querySelectorAll('.lab-workspace-controls .operate-panel')){
+      if(!panel.querySelector('button,input,select'))continue;
+      if(panel.querySelector('.operate-panel')||panel.matches('#step-navigation,#lesson-actions,#playback-settings,#experiment-actions,.transient-panel'))continue;
+      const selector=panel.closest('[data-feedback]')?.dataset.feedback||board.dataset.feedback;
+      if(!selector)continue;
+      const sources=[...new Set(selector.split(',').flatMap(part=>[...document.querySelectorAll(part.trim())]))];if(!sources.length)continue;
+      const output=document.createElement('div');output.className='lab-mobile-feedback';output.setAttribute('role','status');panel.after(output);
+      feedbacks.push({panel,output});
+      let last;const update=()=>{const html=sources.map(source=>'<div>'+source.innerHTML+'</div>').join('');if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id')};
+      update();const observer=new MutationObserver(update);for(const source of sources)observer.observe(source,{childList:true,subtree:true,characterData:true});
+    }
+  }
+  // Keep the named probability and both positive counts visible above Bayes' full flow.
+  for(const board of boards.filter(n=>n.dataset.desktopFeedback)){
+    const source=document.querySelector(board.dataset.desktopFeedback),stage=board.querySelector('.lab-workspace-stage');
+    if(!source||!stage)continue;
+    const output=document.createElement('div');output.className='lab-desktop-feedback result';output.setAttribute('role','status');stage.prepend(output);
+    let last;const update=()=>{
+      if(output.hidden!==source.hidden)output.hidden=source.hidden;
+      const html=source.innerHTML;if(last===html)return;last=html;output.innerHTML=html;for(const n of output.querySelectorAll('[id]'))n.removeAttribute('id');
+    };
+    update();new MutationObserver(update).observe(source,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden']});
+  }
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(arrange,100)};
+  for(const slot of document.querySelectorAll('[data-mobile-content]')){
+    const homes=[...document.querySelectorAll(slot.dataset.mobileContent)].map(node=>{const item=node.closest('.linked-output')||node,home=document.createComment('desktop position');item.before(home);return {item,home}});
+    const place=()=>{for(const {item,home}of homes)if(wide.matches)home.after(item);else slot.append(item)};
+    place();wide.addEventListener('change',place);
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);
+  for(const board of boards){new ResizeObserver(schedule).observe(board);new MutationObserver(schedule).observe(board,{attributes:true,attributeFilter:['hidden'],subtree:true})}
+  arrange();
+})();
+</script><script>(()=>{
+  const wide=matchMedia('(min-width:960px)'),panes=[...document.querySelectorAll('.lab-workspace>.lab-workspace-controls')];
+  let timer;
+  const update=()=>{
+    for(const pane of panes){
+      const value=String(wide.matches&&pane.scrollHeight>pane.clientHeight);
+      if(pane.dataset.scrollable!==value)pane.dataset.scrollable=value;
+    }
+  };
+  const schedule=()=>{clearTimeout(timer);timer=setTimeout(update,60)};
+  const observer=new ResizeObserver(update);
+  for(const pane of panes){
+    observer.observe(pane);for(const child of pane.children)observer.observe(child);
+    pane.addEventListener('toggle',update,true);
+    new MutationObserver(schedule).observe(pane,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['hidden','open']});
+  }
+  addEventListener('resize',schedule);addEventListener('load',schedule);wide.addEventListener('change',schedule);update();
+})();
+</script></body></html>

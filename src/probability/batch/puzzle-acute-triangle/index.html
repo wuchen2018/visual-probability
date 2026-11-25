@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>圆周三点连成锐角三角形的机会有多大？｜武辰的概率论交互实验</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../_probability/lab.css">
+  <link rel="stylesheet" href="../_probability/third.css">
+  <link rel="stylesheet" href="workspace.css">
+  <script src="../_probability/lab.js" defer></script>
+  <script src="../_probability/third-math.js" defer></script>
+  <script src="app.js" defer></script>
+<link rel="stylesheet" href="../_probability/scroll-controls.css"><script src="../_probability/scroll-controls.js" defer></script></head>
+<body data-revised="2026-11-25-workspace">
+<header class="shell masthead"><span class="brand"><span class="stamp">武</span>武辰的概率论交互实验</span><a href="../probability/index.html">实验目录</a></header>
+<main class="shell">
+  <div class="book-reference"><p>《大白话概率论》 · 第20章 考研真题与大厂面试 · 20.4 概率面试题 · 纸书第742页起</p><p>此小节尚未提供样章，详情可参考纸质书。</p></div>
+  <section class="intro">
+    <h1>圆周上随机选3个点，连成锐角三角形的机会有多大？</h1>
+    <p class="lead">在同一个圆周上随机选出 A、B、C 三个点，再把它们连起来。每个点都可以落在圆周的任何位置，长度相同的圆弧被选中的机会相同，三个点各自独立选取。连成的三角形，三个角都小于90°的机会有多大？</p>
+    <p>你可以先拖动三个点，看看什么样的三角形是锐角三角形，再让电脑随机选500组，数一数其中有多少组符合要求。</p>
+  </section>
+
+  <section id="acute-panel" class="lab-workspace lab-workspace--sticky-controls" aria-label="圆周三点实验">
+    <div class="lab-workspace-controls">
+      <section class="operate-panel operate-widget manual-controls">
+        <span class="operate-badge">你可以操作</span>
+        <h2>自己摆一个三角形</h2>
+        <p class="control-intro">拖动圆图上的 A、B、C，或点下面的例子，看看三个角怎样变化：</p>
+        <div class="presets actions"><button id="equilateral">等边三角形</button><button id="right">直角三角形</button><button id="obtuse">钝角三角形</button><button id="duplicate">两点重合</button></div>
+        <details class="fine-tune">
+          <summary>用数字微调三个点的位置</summary>
+          <p class="micro-note">0°在圆的最右侧，沿逆时针方向增加。这是点在圆周上的位置，不是三角形的内角。</p>
+          <div class="angle-inputs">
+            <div class="control"><label for="angle0-number">A 的位置</label><span class="number-unit"><input id="angle0-number" data-num="angle0" type="number" min="0" max="359" step="1" value="0" aria-describedby="error-angle0">°</span><p class="error" id="error-angle0" role="status"></p></div>
+            <div class="control"><label for="angle1-number">B 的位置</label><span class="number-unit"><input id="angle1-number" data-num="angle1" type="number" min="0" max="359" step="1" value="120" aria-describedby="error-angle1">°</span><p class="error" id="error-angle1" role="status"></p></div>
+            <div class="control"><label for="angle2-number">C 的位置</label><span class="number-unit"><input id="angle2-number" data-num="angle2" type="number" min="0" max="359" step="1" value="240" aria-describedby="error-angle2">°</span><p class="error" id="error-angle2" role="status"></p></div>
+          </div>
+        </details>
+        <button id="acute-reset" class="btn-secondary">恢复等边三角形</button>
+      </section>
+      <section class="operate-panel operate-widget sim-controls">
+        <span class="operate-badge">你可以操作</span>
+        <h2>让电脑另外随机选500组</h2>
+        <p class="control-intro">电脑重新选点，不使用你摆的三角形。</p>
+        <button id="acute-sim" class="primary">随机选500组，看锐角三角形占多少</button>
+        <p class="micro-note">每点一次就换一批；你摆的三角形保持原样。</p>
+      </section>
+    </div>
+    <div class="lab-workspace-stage">
+      <section class="card manual-stage">
+        <h2>你摆的这一组</h2>
+        <span class="operate-badge">你可以直接在图上拖动 A、B、C</span>
+        <svg id="triangle" class="plot square direct-interaction" role="img" aria-label="可拖动的圆周三点与三角形"></svg>
+        <div id="acute-result" class="result" aria-live="polite"></div>
+      </section>
+      <section class="card sim-stage">
+        <h2>把每组三点记在一张图里</h2>
+        <p class="chart-bridge">把整个圆转到 A 在最右侧，三角形形状不变。横轴记 B 相对 A 的角度，纵轴记 C 相对 A 的角度，每组三点就对应图上的一个点。</p>
+        <svg id="acute-area" class="plot square" role="img" aria-label="每组三点对应一个落点，绿色区域能连成锐角三角形"></svg>
+        <div id="acute-simulation" class="result" aria-live="polite"></div>
+        <div class="legend"><span><i class="blue"></i>蓝点：你摆的这一组</span><span><i></i>绿区、绿点：锐角</span><span><i class="copper"></i>棕点：非锐角</span></div>
+      </section>
+    </div>
+  </section>
+
+  <details open class="explanation">
+    <summary>为什么随机选出的三角形，有四分之一是锐角三角形？</summary>
+    <p>先看圆图：三个角都小于90°时，圆心 O 在三角形内部。如果三个点全挤在同一个半圆里，圆心就在三角形边上或外面，至少有一个角不小于90°。</p>
+    <p>再看正方形图。我们只转动整个圆，让 A 停在最右侧的0°处，B、C 仍各自独立地落在0°到360°之间。横、纵坐标的所有组合，正好铺满一个边长360°的正方形。</p>
+    <p>圆周上的一个内角，等于它对着的那段弧所对应圆心角的一半。例如，从 A 到 B、不经过 C 的那段弧对应120°，正对它的 ∠C 就是60°。所以，三个内角都小于90°，就要求各自对着的三段弧都短于半圈。</p>
+    <p>沿逆时针方向，如果先遇到 B、再遇到 C，圆周就被分成三段弧：从 A 到 B 是 B 的角度，从 B 到 C 是两者的角度差，从 C 回到 A 则是360°减去 C 的角度。这三段都要小于180°，因此 B 要小于180°，C 要大于180°，两者之差还要小于180°。满足这三个条件的位置，就是图中左上方的绿色三角形。先遇到 C、再遇到 B 时，同样得到右下方的另一块绿色三角形。</p>
+    <p>两块绿色三角形的直角边都是180°，总面积是 <span class="term">2 ×（180 × 180 ÷ 2）＝32,400</span>。整个正方形的面积是 <span class="term">360 × 360＝129,600</span>。每个点都按题目的规则独立选取，所以图上面积相同的区域，落进去的机会也相同。</p>
+    <div class="result"><p>连成锐角三角形的概率＝绿色区域面积 ÷ 整个正方形面积＝<span class="term">32,400 ÷ 129,600＝1/4＝25%</span>。</p><p>也就是说，反复按题目的规则随机选三点，平均每100组中，大约有25组能连成锐角三角形。一次只选500组，实际数到的比例通常会有些偏差。</p></div>
+  </details>
+  <p class="extension">延伸阅读：<a href="../puzzle-broken-stick/index.html">折木棍成三角形</a> · <a href="../puzzle-coupon-collector/index.html">集齐盲盒卡片</a></p>
+</main>
+<footer class="shell footer">武辰 · 概率论交互实验</footer>
+</body></html>

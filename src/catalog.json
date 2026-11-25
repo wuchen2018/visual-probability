@@ -1,0 +1,358 @@
+{
+  "groups": [
+    {
+      "id": "geometry",
+      "title": "几何概型与随机方法",
+      "chapters": "第2章"
+    },
+    {
+      "id": "conditions",
+      "title": "条件概率与反直觉",
+      "chapters": "第3章"
+    },
+    {
+      "id": "features",
+      "title": "数字特征与大模型",
+      "chapters": "第5章"
+    },
+    {
+      "id": "distributions",
+      "title": "常见分布与多维分布",
+      "chapters": "第6、7、9章"
+    },
+    {
+      "id": "limits",
+      "title": "极限定理与直觉陷阱",
+      "chapters": "第12、14章"
+    },
+    {
+      "id": "information",
+      "title": "熵与信息论",
+      "chapters": "第15章"
+    },
+    {
+      "id": "inference",
+      "title": "样本、估计、检验与回归",
+      "chapters": "第16—19章"
+    },
+    {
+      "id": "puzzles",
+      "title": "概率谜题",
+      "chapters": "第20章"
+    }
+  ],
+  "entries": [
+    {
+      "slug": "geometric-probability",
+      "group": "geometry",
+      "section": "2.3",
+      "title": "咖啡店碰面问题",
+      "question": "先到的人最多等15分钟，两人能碰面的机会有多大？",
+      "source": "probability/batch/geometric-probability"
+    },
+    {
+      "slug": "bertrand-chord",
+      "group": "geometry",
+      "section": "2.4",
+      "title": "贝特朗随机弦悖论",
+      "question": "在圆里随机画一条弦，为什么会有三个答案？",
+      "source": "probability/batch/bertrand-chord"
+    },
+    {
+      "slug": "bayes",
+      "group": "conditions",
+      "section": "3.4",
+      "title": "贝叶斯公式",
+      "question": "检测阳性，患病概率是多少？",
+      "source": "probability/bayes"
+    },
+    {
+      "slug": "conditional-independence",
+      "group": "conditions",
+      "section": "3.5.1",
+      "title": "从独立到条件独立",
+      "question": "用同一枚硬币连抛两次，先看清是哪种硬币，会改变判断吗？",
+      "source": "probability/batch/conditional-independence"
+    },
+    {
+      "slug": "berkson",
+      "group": "conditions",
+      "section": "3.5.2",
+      "title": "伯克森悖论",
+      "question": "筛选怎样改变散点图？",
+      "source": "probability/berkson"
+    },
+    {
+      "slug": "simpson",
+      "group": "conditions",
+      "section": "3.5.3",
+      "title": "辛普森悖论",
+      "question": "分组和合并比较为什么会反转？",
+      "source": "probability/simpson"
+    },
+    {
+      "slug": "tuesday-boy",
+      "group": "conditions",
+      "section": "3.6",
+      "title": "星期二男孩问题",
+      "question": "从至少一个男孩到星期二男孩，概率为什么从1/3变成13/27？",
+      "source": "probability/batch/tuesday-boy"
+    },
+    {
+      "slug": "monty-hall",
+      "group": "conditions",
+      "section": "3.7",
+      "title": "三门问题",
+      "question": "只剩两扇关着的门，为什么换门更容易赢？",
+      "source": "probability/batch/monty-hall"
+    },
+    {
+      "slug": "variance-squared",
+      "group": "features",
+      "section": "5.2",
+      "title": "方差为什么先平方",
+      "question": "取绝对值与平方，会选同一个最优中心吗？",
+      "source": "probability/batch/variance-squared"
+    },
+    {
+      "slug": "correlation",
+      "group": "features",
+      "section": "5.3",
+      "title": "协方差与相关系数",
+      "question": "两组数怎样一起变化？拖动散点看一看",
+      "source": "probability/batch/correlation"
+    },
+    {
+      "slug": "cosine",
+      "group": "features",
+      "section": "5.4",
+      "title": "余弦相似度与大模型的底层逻辑",
+      "question": "两个方向有多接近？拖动向量试试",
+      "source": "probability/batch/cosine"
+    },
+    {
+      "slug": "outliers-and-cv",
+      "group": "features",
+      "section": "5.5",
+      "title": "极端值与变异系数",
+      "question": "缺考0分会改变什么？大象和蚂蚁谁更分散？",
+      "source": "probability/batch/outliers-and-cv"
+    },
+    {
+      "slug": "correlation-causation",
+      "group": "features",
+      "section": "5.6",
+      "title": "相关、独立与因果",
+      "question": "相关系数是0，两个数就互不相干吗？",
+      "source": "probability/batch/correlation-causation"
+    },
+    {
+      "slug": "binomial-hypergeometric",
+      "group": "distributions",
+      "section": "6.2、6.4",
+      "title": "二项与超几何分布",
+      "question": "抽完放回与不放回，中奖概率差在哪儿？",
+      "source": "probability/batch/binomial-hypergeometric"
+    },
+    {
+      "slug": "poisson-distribution",
+      "group": "distributions",
+      "section": "6.3",
+      "title": "泊松分布",
+      "question": "平均每小时3通电话，实际会来几通？",
+      "source": "probability/batch/poisson-distribution"
+    },
+    {
+      "slug": "geometric-distribution",
+      "group": "distributions",
+      "section": "6.5",
+      "title": "几何分布",
+      "question": "平均20抽出金，前20抽就一定能出吗？",
+      "source": "probability/batch/geometric-distribution"
+    },
+    {
+      "slug": "exponential",
+      "group": "distributions",
+      "section": "7.2",
+      "title": "指数分布",
+      "question": "已经等了一小时，再等一小时的概率会变吗？",
+      "source": "probability/batch/exponential"
+    },
+    {
+      "slug": "normal-distribution",
+      "group": "distributions",
+      "section": "7.3",
+      "title": "正态分布",
+      "question": "两门考试都考85分，表现一样好吗？",
+      "source": "probability/batch/normal-distribution"
+    },
+    {
+      "slug": "beta",
+      "group": "distributions",
+      "section": "7.5",
+      "title": "贝塔分布",
+      "question": "看到正反面结果后，对未知概率的猜测怎样改变？",
+      "source": "probability/batch/beta"
+    },
+    {
+      "slug": "power-law",
+      "group": "distributions",
+      "section": "7.7",
+      "title": "幂律分布",
+      "question": "长尾到底有多长？把两种尾部放在一起看",
+      "source": "probability/batch/power-law"
+    },
+    {
+      "slug": "joint-distributions",
+      "group": "distributions",
+      "section": "9.1—9.4",
+      "title": "联合、边际与条件分布",
+      "question": "知道两件事在一起，怎样只看其中一件？",
+      "source": "probability/batch/joint-distributions"
+    },
+    {
+      "slug": "large-numbers",
+      "group": "limits",
+      "section": "12.1",
+      "title": "大数定律",
+      "question": "抛的次数多了，正面频率会怎样变化？",
+      "source": "probability/batch/large-numbers"
+    },
+    {
+      "slug": "central-limit",
+      "group": "limits",
+      "section": "12.4",
+      "title": "中心极限定理",
+      "question": "一组数取平均，重复很多组后会长什么样？",
+      "source": "probability/batch/central-limit"
+    },
+    {
+      "slug": "clustering-illusion",
+      "group": "limits",
+      "section": "14.1",
+      "title": "小数定律与聚类错觉",
+      "question": "完全随机的结果，为什么也会有偏差和扎堆？",
+      "source": "probability/batch/clustering-illusion"
+    },
+    {
+      "slug": "gamblers-ruin",
+      "group": "limits",
+      "section": "14.2",
+      "title": "赌徒谬误与赌徒输光定理",
+      "question": "本金有限，反复玩下去会怎样？",
+      "source": "probability/batch/gamblers-ruin"
+    },
+    {
+      "slug": "entropy",
+      "group": "information",
+      "section": "15.1",
+      "title": "信息熵",
+      "question": "四种结果，什么时候最难猜？",
+      "source": "probability/batch/entropy"
+    },
+    {
+      "slug": "mutual-information",
+      "group": "information",
+      "section": "15.2",
+      "title": "联合熵、条件熵与互信息",
+      "question": "知道硬币结果，消息还剩多少不确定性？",
+      "source": "probability/batch/mutual-information"
+    },
+    {
+      "slug": "kl-divergence",
+      "group": "information",
+      "section": "15.3",
+      "title": "交叉熵与KL散度",
+      "question": "换一个方向算，信息代价为什么会不同？",
+      "source": "probability/batch/kl-divergence"
+    },
+    {
+      "slug": "sample-variance-n-minus-1",
+      "group": "inference",
+      "section": "16.2",
+      "title": "样本方差为什么除以n−1",
+      "question": "用这几个人的平均数算方差，为什么会偏小？",
+      "source": "probability/batch/sample-variance-n-minus-1"
+    },
+    {
+      "slug": "maximum-likelihood",
+      "group": "inference",
+      "section": "17.2",
+      "title": "最大似然估计",
+      "question": "已经看到几次正面，怎样反过来猜硬币？",
+      "source": "probability/batch/maximum-likelihood"
+    },
+    {
+      "slug": "estimator-criteria-tank",
+      "group": "inference",
+      "section": "17.3",
+      "title": "估计评价与猜上限",
+      "question": "只看到几个数，怎样猜出原来的上限？",
+      "source": "probability/batch/estimator-criteria-tank"
+    },
+    {
+      "slug": "confidence-interval",
+      "group": "inference",
+      "section": "17.4",
+      "title": "置信区间",
+      "question": "95%置信区间里的95%，指的是什么？",
+      "source": "probability/batch/confidence-interval"
+    },
+    {
+      "slug": "hypothesis-testing",
+      "group": "inference",
+      "section": "18.1",
+      "title": "假设检验与p-hacking",
+      "question": "一轮显著和反复测试后挑一轮，有什么区别？",
+      "source": "probability/batch/hypothesis-testing"
+    },
+    {
+      "slug": "chi-square-independence",
+      "group": "inference",
+      "section": "18.2",
+      "title": "卡方独立性检验",
+      "question": "喝咖啡和加班，在这张调查表里有没有关联？",
+      "source": "probability/batch/chi-square-independence"
+    },
+    {
+      "slug": "one-way-anova",
+      "group": "inference",
+      "section": "19.1",
+      "title": "方差分析ANOVA",
+      "question": "三个班的平均分不同，能认定教学方法有差别吗？",
+      "source": "probability/batch/one-way-anova"
+    },
+    {
+      "slug": "linear-regression",
+      "group": "inference",
+      "section": "19.2",
+      "title": "最小二乘法与线性回归",
+      "question": "自己调直线，能把六个误差的平方和压到多少？",
+      "source": "probability/batch/linear-regression"
+    },
+    {
+      "slug": "puzzle-broken-stick",
+      "group": "puzzles",
+      "section": "20.4A",
+      "title": "折木棍成三角形",
+      "question": "随机切两刀，三段能围成三角形的机会是多少？",
+      "source": "probability/batch/puzzle-broken-stick"
+    },
+    {
+      "slug": "puzzle-coupon-collector",
+      "group": "puzzles",
+      "section": "20.4B",
+      "title": "集齐盲盒卡片",
+      "question": "集齐5种等概率卡片，为什么平均要11盒多？",
+      "source": "probability/batch/puzzle-coupon-collector"
+    },
+    {
+      "slug": "puzzle-acute-triangle",
+      "group": "puzzles",
+      "section": "20.4C",
+      "title": "圆周三点成锐角",
+      "question": "圆周随机三点，连成锐角三角形的机会是多少？",
+      "source": "probability/batch/puzzle-acute-triangle"
+    }
+  ]
+}

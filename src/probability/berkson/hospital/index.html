@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="调整住院筛选的比例，看原本独立的两种病为什么在住院人群中出现关联。《大白话概率论》伯克森悖论交互实验。">
+  <title>只看住院的人，为什么结论变了？｜伯克森悖论交互实验</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <script src="model.js" defer></script>
+  <script src="../../batch/_probability/story.js" defer></script><script src="app.js" defer></script>
+<link rel="stylesheet" href="../../batch/_probability/story.css"><link rel="stylesheet" href="../../batch/_probability/workspace.css"><script src="../../batch/_probability/workspace.js" defer></script><link rel="stylesheet" href="../../batch/_probability/scroll-controls.css"><script src="../../batch/_probability/scroll-controls.js" defer></script></head>
+<body data-revised="2026-11-25-full" data-workspace-page="berkson-hospital">
+  <header class="shell masthead"><span class="brand"><span class="stamp" aria-hidden="true">武</span>武辰的概率论交互实验</span></header>
+  <main class="shell">
+    <p class="back-link"><a href="../index.html">返回散点图主实验</a></p>
+    <section class="intro" aria-labelledby="title">
+      <div class="book-reference">
+        <div><p>《大白话概率论》 · 第3章 条件概率与贝叶斯公式</p><p>第3.5节 条件独立、伯克森悖论和辛普森悖论 · <strong>3.5.2 伯克森悖论，纸书第90—92页</strong></p></div>
+        <a href="https://wuchen2018.github.io/probability-book/samples/conditional-independence-and-paradoxes.pdf#page=2">阅读公开样章（PDF）</a>
+      </div>
+      <h1 id="title">只看住院的人，为什么骨折组的肺炎比例更低？</h1>
+      <p class="lead" id="population-premise">假设医院在统计10万名居民，其中5%的人骨折，3%的人患肺炎。我们先让两种病互不相干：无论有没有骨折，患肺炎的比例都是3%。</p>
+      <p>现在，你只能看到住院患者的记录。在这群人里，骨折患者患肺炎的比例，竟然可能低于没有骨折的人。人的患病情况没变，只看其中一部分人，为什么会得到不同的比较结果？</p>
+    <p>骨折和肺炎原本是两件互不影响的事，为什么只统计住院病人的病历，反而显得“骨折的人更不容易得肺炎”？下面先让你看全体人群，再只留下住院的人来比。</p></section>
+
+    <section class="lab-workspace" data-feedback="#live-summary"><div class="lab-workspace-controls"><section class="controls-region workspace-control-stack" aria-labelledby="controls-title"><span class="operate-badge">你可以操作</span>
+      <h2 id="controls-title">改变住院筛选，看看比较结果怎样变</h2>
+      <p class="section-intro">现在假设，只要骨折或患肺炎就要住院，两种病都有的人也一样。两种病都没有的人，按你设置的比例住院，代表因为其他原因住院的人。起初这个比例是0%，所以这组人都不住院。</p>
+      
+      <div class="prevalence-settings">
+        <h3>全体人群中，有多少人骨折、多少人患肺炎？</h3>
+        <p>你可以改变下面两个比例。两种病在全体人群中保持独立，四组人数会按新比例重新计算。</p>
+        <div class="control-grid">
+          </div>
+      </div>
+      <p class="model-note">人数按比例推算；出现小数时，可以把它看作反复统计同样人群时的平均人数。</p>
+    <section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>可选操作项一：设置“两种病都没有的人”有多少也住进医院</h3><div class="admission-panel">
+        <div>
+          <h3>两种病都没有的人，有多少也住院？</h3>
+          <div class="input-heading"><label for="other-range">这组人的住院比例</label><span><input id="other-number" type="number" min="0" max="100" step="1" value="0" aria-label="两种病都没有的人的住院比例" aria-describedby="other-error"><span>%</span></span></div>
+          <input id="other-range" type="range" min="0" max="100" step="1" value="0" aria-describedby="other-calculation">
+          <div class="range-labels"><span>0%：这组全不住院</span><span>100%：这组全住院</span></div>
+          <p id="other-error" class="input-error" role="status"></p>
+        </div>
+        </div>
+      <p>对应影响下方：他们可能因为胃疼、阑尾炎等别的毛病住院；这里只改变这一组住院人数。</p></section><div class="admission-calculation" id="other-calculation"></div>
+      <section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>可选操作项二：调整全体10万人里的骨折比例与肺炎比例</h3><section class="parameter-card" aria-labelledby="fracture-title">
+            <h4 id="fracture-title">全体人群中的骨折比例</h4>
+            <div class="input-heading"><label for="fracture-range">骨折占多少？</label><span><input id="fracture-number" type="number" min="0" max="100" step="1" value="5" aria-label="全体人群中的骨折比例" aria-describedby="fracture-error"><span>%</span></span></div>
+            <input id="fracture-range" type="range" min="0" max="100" step="1" value="5" aria-describedby="fracture-calculation">
+            <p id="fracture-calculation" class="local-calculation"></p>
+            <p id="fracture-error" class="input-error" role="status"></p>
+          </section>
+          <section class="parameter-card" aria-labelledby="pneumonia-title">
+            <h4 id="pneumonia-title">全体人群中的肺炎比例</h4>
+            <div class="input-heading"><label for="pneumonia-range">肺炎占多少？</label><span><input id="pneumonia-number" type="number" min="0" max="100" step="1" value="3" aria-label="全体人群中的肺炎比例" aria-describedby="pneumonia-error"><span>%</span></span></div>
+            <input id="pneumonia-range" type="range" min="0" max="100" step="1" value="3" aria-describedby="pneumonia-calculation">
+            <p id="pneumonia-calculation" class="local-calculation"></p>
+            <p id="pneumonia-error" class="input-error" role="status"></p>
+          </section>
+        <p>对应影响下方：重新算出全体10万人的四组人数，以及全体、住院两张对比表。</p></section><section class="operate-widget operate-panel"><span class="operate-badge">你可以操作</span><h3>可选操作项三：一键试三种住院范围</h3><div class="presets"><button type="button" data-preset="initial" class="btn-secondary">恢复起始设置</button><button type="button" data-preset="everyone">让所有人都住院</button><button type="button" data-preset="diseases">只让这两种病的患者住院</button></div>
+      <p>对应影响下方：恢复起始、全体住院、只让这两种病的患者住院；按按钮上写的范围重新设置参数。</p></section></section><div class="try-again operate-panel"><span class="operate-badge">你可以操作</span>
+        <section class="operate-widget"><h3>可选操作项四：快捷对照：让所有人都住院再比一次</h3><p>把“两种病都没有的人的住院比例”改为100%。这样，所有人都住院，两种病的比例保持你现在的设置。看看住院人群和全体人群的比较结果是否一样。</p>
+        <div class="actions"><button type="button" data-preset="everyone">让所有人都住院</button>
+        
+      </div><p>对应影响下方：把住院范围改为所有人，比较筛选前后的两种比例。</p></section></div></div><div class="lab-workspace-stage"><output class="live-summary result" id="live-summary" aria-live="polite" aria-atomic="true" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化">
+        <span class="summary-label">住院者中，患肺炎的比例</span>
+        <span class="summary-rates"><span>骨折组 <strong id="summary-fracture"></strong></span><span>无骨折组 <strong id="summary-no-fracture"></strong></span></span>
+        <span id="summary-verdict"></span>
+      </output>
+
+    <div class="comparison-grid">
+        <section class="comparison-card" id="population-card" aria-labelledby="population-title" data-linked-label="只随「操作二（全体骨折与肺炎比例）」变化">
+          <h3 id="population-title">全体100,000人</h3>
+          <p class="card-intro">这组包含所有人，没有按住院情况筛选。</p>
+          <div id="population-table"></div>
+          <p class="comparison-conclusion" id="population-conclusion"></p>
+        </section>
+        <section class="comparison-card selected-card" id="hospital-card" aria-labelledby="hospital-title" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化">
+          <h3 id="hospital-title">只看住院的人</h3>
+          <p class="card-intro" id="hospital-count"></p>
+          <div id="hospital-table"></div>
+          <p class="excluded-note" id="excluded-note"></p>
+          <p class="comparison-conclusion" id="hospital-conclusion"></p>
+        </section>
+      </div>
+    </div></section><section class="lab-followup"><div class="rate-comparisons" id="population-rates"></div>
+          <div class="rate-comparisons" id="hospital-rates"></div>
+          </section><section class="lesson-section" aria-labelledby="calculation-title">
+      <h2 id="calculation-title">四组人数和住院人数，分别怎么算？</h2>
+      <p class="section-intro" id="multiplication-intro"></p>
+      <div class="calculation-grid" id="group-calculations" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化"></div>
+      <div class="total-calculation" id="hospital-total-equation"></div>
+    </section>
+
+    <section class="lesson-section" aria-labelledby="comparison-title">
+      <h2 id="comparison-title">先看全体人群，再只看住院的人</h2>
+      <p class="section-intro">四组人数已经算出来了。现在，我们分别在全体人群和住院人群中问同一个问题：骨折的人中，有多少比例患肺炎？没有骨折的人中，又有多少比例患肺炎？表格保留四种情况，后面的除法就用表格里的这些人数。</p>
+      </section>
+
+    <section class="lesson-section explanation-section" aria-labelledby="explanation-title">
+      <h2 id="explanation-title">筛选为什么改变了两种病的关系？</h2>
+      <div id="explanation" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化"></div>
+      <p id="everyone-result" role="status" aria-atomic="true" class="result" data-linked-label="随「操作一、二、三」或快捷对照「操作四」变化"></p>
+    </section>
+    <noscript><p>请启用JavaScript，才能调整比例并查看计算。</p></noscript>
+  </main>
+  <footer class="shell footer">《大白话概率论》第3.5.2节 · 武辰 · <a href="../index.html">返回散点图主实验</a></footer>
+
+
+</body></html>
