@@ -2,7 +2,7 @@
 
 **通过网页交互理解原理 · 武辰**
 
-39个免费的概率论与统计交互实验，另有1个医院补充例子。不用安装软件，也不用写代码，打开网页就能调整参数、拖动图形，观察计算结果怎样变化。
+40个概率论与统计例子。不用安装软件，也不用写代码，打开网页就能调整参数、拖动图形，观察计算结果怎样变化。
 
 **[打开全部交互实验](https://wuchen2018.github.io/visual-probability/)**
 
@@ -32,6 +32,7 @@
 | [检测阳性，患病概率是多少？](https://wuchen2018.github.io/visual-probability/bayes/) | 3.4 |
 | [用同一枚硬币连抛两次，先看清是哪种硬币，会改变判断吗？](https://wuchen2018.github.io/visual-probability/conditional-independence/) | 3.5.1 |
 | [筛选怎样改变散点图？](https://wuchen2018.github.io/visual-probability/berkson/) | 3.5.2 |
+| [只看住院的人，为什么骨折组的肺炎比例更低？](https://wuchen2018.github.io/visual-probability/berkson/hospital.html) | 3.5.2 |
 | [分组和合并比较为什么会反转？](https://wuchen2018.github.io/visual-probability/simpson/) | 3.5.3 |
 | [从至少一个男孩到星期二男孩，概率为什么从1/3变成13/27？](https://wuchen2018.github.io/visual-probability/tuesday-boy/) | 3.6 |
 | [只剩两扇关着的门，为什么换门更容易赢？](https://wuchen2018.github.io/visual-probability/monty-hall/) | 3.7 |
@@ -97,8 +98,6 @@
 | [集齐5种等概率卡片，为什么平均要11盒多？](https://wuchen2018.github.io/visual-probability/puzzle-coupon-collector/) | 20.4B |
 | [圆周随机三点，连成锐角三角形的机会是多少？](https://wuchen2018.github.io/visual-probability/puzzle-acute-triangle/) | 20.4C |
 
-另有[伯克森悖论的医院补充例子](https://wuchen2018.github.io/visual-probability/berkson/hospital.html)。
-
 ## 离线使用
 
 在仓库上方点击 Code，选择 Download ZIP，解压后双击 `docs/index.html` 就能打开目录。实验页面可以直接离线操作；样章PDF、GitHub等外部链接需要联网。
@@ -121,7 +120,7 @@ npm run preview
 
 ## 与《大白话概率论》的关系
 
-这些交互实验最初为《大白话概率论》制作，现以《看得见的概率论》作为独立项目免费公开。你可以直接使用网页，也可以配合纸书学习。
+这些交互实验最初为《大白话概率论》制作，现以《看得见的概率论》作为独立项目公开。你可以直接使用网页，也可以配合纸书学习。
 
 [图书介绍、目录与样章](https://github.com/wuchen2018/probability-book) · [书中的Python实验代码](https://github.com/wuchen2018/probability-book/tree/main/code)
 
